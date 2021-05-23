@@ -13,7 +13,11 @@ export class AuthenticatedOnlyGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.authStateService.isAuthenticated$.pipe(
       first(),
-      map(isAuthenticated => (isAuthenticated ? true : this.router.createUrlTree(['/', 'auth', 'login'])))
+      map(isAuthenticated => {
+        if (isAuthenticated) return true
+
+        return this.router.createUrlTree(['/', 'auth', 'login'], { queryParams: { returnUrl: route.url } })
+      })
     )
   }
 }
