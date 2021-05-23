@@ -1,16 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core'
+import { AuthStateService } from 'src/app/auth/auth-state.service'
 
 @Component({
   selector: 'app-sidebar-profile',
   templateUrl: './sidebar-profile.component.html',
   styleUrls: ['./sidebar-profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarProfileComponent implements OnInit {
+export class SidebarProfileComponent {
+  user$ = this.authStateService.user$
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  constructor(private authStateService: AuthStateService) {}
 }

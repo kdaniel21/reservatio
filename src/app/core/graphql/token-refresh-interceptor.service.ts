@@ -2,16 +2,14 @@ import { HttpEvent, HttpEventType, HttpHandler, HttpInterceptor, HttpRequest } f
 import { Injectable } from '@angular/core'
 import { Observable, of } from 'rxjs'
 import { concatMap } from 'rxjs/operators'
-import { AuthService } from 'src/app/auth/auth.service'
+import { AuthStateService } from 'src/app/auth/auth-state.service'
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class TokenRefreshInterceptorService implements HttpInterceptor {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authStateService: AuthStateService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const { accessToken } = this.authService
+    const { accessToken } = this.authStateService
     if (!accessToken) return next.handle(request)
 
     return next
@@ -31,7 +29,7 @@ export class TokenRefreshInterceptorService implements HttpInterceptor {
           const shouldAuthenticate = errors.some(e => e.extensions?.code === 'INVALID_ACCESS_TOKEN')
           if (!shouldAuthenticate) return of(event)
 
-          return this.authService
+          return this.authStateService
             .refreshAccessToken()
             .pipe(
               concatMap(newAccessToken =>

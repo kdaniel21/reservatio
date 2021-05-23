@@ -5,6 +5,11 @@ mutation login($email: String!, $password: String!) {
       id
       email
       isEmailConfirmed
+      customer {
+        id
+        name
+        role
+      }
     }
   }
 }

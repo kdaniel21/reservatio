@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
+import { AuthService } from 'src/app/auth/auth.service'
 
 interface MenuItem {
   text: string
@@ -18,6 +19,19 @@ export class SidebarMenuComponent {
     { text: 'Home', icon: 'tuiIconStopLarge' },
     { text: 'Calendar', icon: 'tuiIconCalendarLarge' },
     { text: 'Dashboard', icon: 'tuiIconStructureLarge' },
-    { text: 'Sign out', icon: 'tuiIconLogoutLarge' },
+    { text: 'Sign out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
   ]
+
+  constructor(private readonly authService: AuthService) {}
+
+  onMenuItemClick(itemText: string) {
+    const menuItem = this.menuItems.find(item => item.text === itemText)
+    if (!menuItem) return
+
+    if (typeof menuItem.action === 'function') menuItem.action()
+  }
+
+  onLogout() {
+    return this.authService.logout().subscribe()
+  }
 }

@@ -281,7 +281,22 @@ export type LoginMutation = (
     & { user: (
       { __typename?: 'GraphQLUser' }
       & Pick<GraphQlUser, 'id' | 'email' | 'isEmailConfirmed'>
+      & { customer?: Maybe<(
+        { __typename?: 'GraphQLCustomer' }
+        & Pick<GraphQlCustomer, 'id' | 'name' | 'role'>
+      )> }
     ) }
+  ) }
+);
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & { logout: (
+    { __typename?: 'MessageResponseDto' }
+    & Pick<MessageResponseDto, 'message'>
   ) }
 );
 
@@ -329,6 +344,11 @@ export const LoginDocument = gql`
       id
       email
       isEmailConfirmed
+      customer {
+        id
+        name
+        role
+      }
     }
   }
 }
@@ -339,6 +359,24 @@ export const LoginDocument = gql`
   })
   export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
     document = LoginDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LogoutDocument = gql`
+    mutation logout {
+  logout {
+    message
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LogoutGQL extends Apollo.Mutation<LogoutMutation, LogoutMutationVariables> {
+    document = LogoutDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

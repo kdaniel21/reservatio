@@ -2,7 +2,6 @@
   <tui-island [size]="'l'">
     <div class="tui-island__title tui-space_bottom-4">
       <span class="tui-text_h3 title">Login</span>
-      <pre>{{ authService.user$ | async | json }}</pre>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
