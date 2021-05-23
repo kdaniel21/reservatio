@@ -1,3 +1,8 @@
-<a *ngFor="let menuItem of menuItems" tuiAction [icon]="menuItem.icon" (click)="onMenuItemClick(menuItem.text)">
+<a
+  *ngFor="let menuItem of menuItems$ | async"
+  tuiAction
+  [icon]="menuItem.icon"
+  (click)="onMenuItemClick(menuItem.text)"
+>
   {{ menuItem.text }}
 </a>

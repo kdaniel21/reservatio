@@ -1,10 +1,12 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
+import { map } from 'rxjs/operators'
+import { AuthStateService } from 'src/app/auth/auth-state.service'
 import { AuthService } from 'src/app/auth/auth.service'
 
 interface MenuItem {
   text: string
   icon: string
-  route?: string
+  route?: string[]
   action?: () => void
 }
 
@@ -15,23 +17,32 @@ interface MenuItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarMenuComponent {
-  readonly menuItems: MenuItem[] = [
+  private readonly authenticatedMenuItems: MenuItem[] = [
     { text: 'Home', icon: 'tuiIconStopLarge' },
     { text: 'Calendar', icon: 'tuiIconCalendarLarge' },
     { text: 'Dashboard', icon: 'tuiIconStructureLarge' },
     { text: 'Sign out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
   ]
 
-  constructor(private readonly authService: AuthService) {}
+  private readonly guestMenuItems: MenuItem[] = [
+    { text: 'Login', icon: 'tuiIconLoginLarge', route: ['/', 'auth', 'login'] },
+  ]
+
+  readonly menuItems$ = this.authStateService.isAuthenticated$.pipe(
+    map(isAuthenticated => (isAuthenticated ? this.authenticatedMenuItems : this.guestMenuItems))
+  )
+
+  constructor(private readonly authService: AuthService, private readonly authStateService: AuthStateService) {}
 
   onMenuItemClick(itemText: string) {
-    const menuItem = this.menuItems.find(item => item.text === itemText)
+    const allMenuItems = [...this.authenticatedMenuItems, ...this.guestMenuItems]
+    const menuItem = allMenuItems.find(item => item.text === itemText)
     if (!menuItem) return
 
     if (typeof menuItem.action === 'function') menuItem.action()
   }
 
   onLogout() {
-    return this.authService.logout().subscribe()
+    this.authService.logout().subscribe()
   }
 }
