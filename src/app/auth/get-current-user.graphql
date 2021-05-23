@@ -1,0 +1,12 @@
+query getCurrentUser {
+  currentUser {
+    id
+    email
+    isEmailConfirmed
+    customer {
+      id
+      name
+      role
+    }
+  }
+}

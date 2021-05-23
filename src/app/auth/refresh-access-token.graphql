@@ -1,0 +1,5 @@
+query refreshAccessToken {
+  refreshAccessToken {
+    accessToken
+  }
+}
