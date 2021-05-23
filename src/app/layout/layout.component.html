@@ -1,0 +1,15 @@
+<tui-root>
+  <div
+    *ngIf="{ isMobile: isMobile$ | async } as data"
+    id="layout-container"
+    [ngStyle]="{ flexDirection: data.isMobile ? 'column' : 'row' }"
+  >
+    <app-mobile-navbar *ngIf="data.isMobile; else desktopSidebar"></app-mobile-navbar>
+
+    <ng-template #desktopSidebar>
+      <app-desktop-sidebar></app-desktop-sidebar>
+    </ng-template>
+
+    <router-outlet></router-outlet>
+  </div>
+</tui-root>

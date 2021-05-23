@@ -4,10 +4,11 @@ import { TuiRootModule } from '@taiga-ui/core'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { CoreModule } from './core/core.module'
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, TuiRootModule],
+  imports: [BrowserModule, AppRoutingModule, TuiRootModule, CoreModule],
   providers: [],
   bootstrap: [AppComponent],
 })
