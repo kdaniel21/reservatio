@@ -1,8 +1,12 @@
 // TODO: Select list items better
 ::ng-deep {
-  & a[tuiaction] > .wrapper {
-    margin-top: auto;
-    margin-bottom: auto;
-    font: var(--tui-font-heading-5);
+  & a[tuiaction] {
+    margin-bottom: 0.75rem;
+
+    > .wrapper {
+      margin-top: auto;
+      margin-bottom: auto;
+      font: var(--tui-font-heading-5);
+    }
   }
 }
