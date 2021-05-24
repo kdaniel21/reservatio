@@ -31,7 +31,7 @@ export class LoginComponent {
     this.authService.login(email, password).subscribe({
       next: () => {
         const { returnUrl } = this.route.snapshot.queryParams
-        this.router.navigateByUrl(returnUrl)
+        this.router.navigateByUrl(returnUrl || '/')
       },
     })
   }

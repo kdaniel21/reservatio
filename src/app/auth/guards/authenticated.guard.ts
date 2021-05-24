@@ -7,8 +7,8 @@ import { AuthStateService } from '../auth-state.service'
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticatedOnlyGuard implements CanActivate {
-  constructor(private authStateService: AuthStateService, private router: Router) {}
+export class AuthenticatedGuard implements CanActivate {
+  constructor(private readonly authStateService: AuthStateService, private readonly router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.authStateService.isAuthenticated$.pipe(
