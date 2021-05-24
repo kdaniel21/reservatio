@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, GraphqlModule, BrowserAnimationsModule],
+  imports: [CommonModule, BrowserAnimationsModule, GraphqlModule],
   exports: [GraphqlModule],
 })
 export class CoreModule {}

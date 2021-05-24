@@ -10,7 +10,7 @@ export class TokenRefreshInterceptorService implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { accessToken } = this.authStateService
-    if (!accessToken) return next.handle(request)
+    if (!accessToken) return next.handle(request.clone({ withCredentials: true }))
 
     return next
       .handle(request.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` }, withCredentials: true }))

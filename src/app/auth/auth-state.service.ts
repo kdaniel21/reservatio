@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, EMPTY, asapScheduler, asyncScheduler, queueScheduler, concat, defer } from 'rxjs'
-import { distinctUntilChanged, map, tap, catchError, switchMapTo, finalize } from 'rxjs/operators'
+import { BehaviorSubject, Observable, EMPTY, asapScheduler, concat } from 'rxjs'
+import { distinctUntilChanged, map, tap, catchError } from 'rxjs/operators'
+import { GraphqlContext } from '../core/graphql/error-handler'
 import { GetCurrentUserGQL, GetCurrentUserQuery, RefreshAccessTokenGQL } from '../core/graphql/generated'
 
 export type RedactedUser = GetCurrentUserQuery['currentUser']
@@ -35,22 +36,24 @@ export class AuthStateService {
   }
 
   initAuthState() {
-    concat(this.refreshAccessToken(), this.fetchCurrentUser()).subscribe()
+    concat(this.refreshAccessToken(), this.fetchCurrentUser())
+      .pipe(catchError(() => EMPTY))
+      .subscribe()
   }
 
   refreshAccessToken(): Observable<string> {
-    return this.refreshAccessTokenGQL.fetch().pipe(
-      map(res => res.data.refreshAccessToken.accessToken),
-      tap(newAccessToken => this.accessTokenSubject.next(newAccessToken)),
-      catchError(() => EMPTY)
-    )
+    return this.refreshAccessTokenGQL
+      .fetch(undefined, { context: { avoidErrorNotification: true } as GraphqlContext })
+      .pipe(
+        map(res => res.data.refreshAccessToken.accessToken),
+        tap(newAccessToken => this.accessTokenSubject.next(newAccessToken))
+      )
   }
 
   fetchCurrentUser(): Observable<RedactedUser> {
-    return this.getCurrentUserGQL.fetch(undefined).pipe(
+    return this.getCurrentUserGQL.fetch().pipe(
       map(res => res.data.currentUser),
-      tap(currentUser => this.userSubject.next(currentUser)),
-      catchError(() => EMPTY)
+      tap(currentUser => this.userSubject.next(currentUser))
     )
   }
 
