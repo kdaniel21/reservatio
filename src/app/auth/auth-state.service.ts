@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, EMPTY, asapScheduler, concat } from 'rxjs'
-import { distinctUntilChanged, map, tap, catchError } from 'rxjs/operators'
+import { distinctUntilChanged, map, tap, catchError, finalize, switchMapTo, skipWhile, filter } from 'rxjs/operators'
 import { GraphqlContext } from '../core/graphql/error-handler'
 import { GetCurrentUserGQL, GetCurrentUserQuery, RefreshAccessTokenGQL } from '../core/graphql/generated'
 
@@ -8,9 +8,14 @@ export type RedactedUser = GetCurrentUserQuery['currentUser']
 
 @Injectable({ providedIn: 'root' })
 export class AuthStateService {
-  private readonly userSubject = new BehaviorSubject<RedactedUser | undefined>(undefined)
-  readonly user$: Observable<RedactedUser | undefined> = this.userSubject.pipe(distinctUntilChanged())
-  get user(): RedactedUser | undefined {
+  private hasAttemptedAuthenticationSubject = new BehaviorSubject<boolean>(undefined)
+  private hasAttemptedAuthentication$ = this.hasAttemptedAuthenticationSubject.pipe(
+    filter(val => typeof val === 'boolean')
+  )
+
+  private readonly userSubject = new BehaviorSubject<RedactedUser>(undefined)
+  readonly user$: Observable<RedactedUser> = this.hasAttemptedAuthentication$.pipe(switchMapTo(this.userSubject))
+  get user(): RedactedUser {
     return this.userSubject.getValue()
   }
 
@@ -22,9 +27,9 @@ export class AuthStateService {
     return !!this.user
   }
 
-  private readonly accessTokenSubject = new BehaviorSubject<string | undefined>(undefined)
-  accessToken$: Observable<string | undefined> = this.accessTokenSubject.asObservable()
-  get accessToken(): string | undefined {
+  private readonly accessTokenSubject = new BehaviorSubject<string>(undefined)
+  accessToken$: Observable<string> = this.accessTokenSubject.asObservable()
+  get accessToken(): string {
     return this.accessTokenSubject.getValue()
   }
 
@@ -37,7 +42,10 @@ export class AuthStateService {
 
   initAuthState() {
     concat(this.refreshAccessToken(), this.fetchCurrentUser())
-      .pipe(catchError(() => EMPTY))
+      .pipe(
+        finalize(() => this.hasAttemptedAuthenticationSubject.next(true)),
+        catchError(() => EMPTY)
+      )
       .subscribe()
   }
 

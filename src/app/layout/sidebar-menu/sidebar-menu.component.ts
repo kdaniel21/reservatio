@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
+import { Router } from '@angular/router'
 import { map } from 'rxjs/operators'
 import { AuthStateService } from 'src/app/auth/auth-state.service'
 import { AuthService } from 'src/app/auth/auth.service'
@@ -19,7 +20,7 @@ interface MenuItem {
 export class SidebarMenuComponent {
   private readonly authenticatedMenuItems: MenuItem[] = [
     { text: 'Home', icon: 'tuiIconStopLarge' },
-    { text: 'Calendar', icon: 'tuiIconCalendarLarge' },
+    { text: 'Calendar', icon: 'tuiIconCalendarLarge', route: ['/', 'calendar'] },
     { text: 'Dashboard', icon: 'tuiIconStructureLarge' },
     { text: 'Sign out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
   ]
@@ -32,7 +33,11 @@ export class SidebarMenuComponent {
     map(isAuthenticated => (isAuthenticated ? this.authenticatedMenuItems : this.guestMenuItems))
   )
 
-  constructor(private readonly authService: AuthService, private readonly authStateService: AuthStateService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly authStateService: AuthStateService,
+    private readonly router: Router
+  ) {}
 
   onMenuItemClick(itemText: string) {
     const allMenuItems = [...this.authenticatedMenuItems, ...this.guestMenuItems]
@@ -43,6 +48,6 @@ export class SidebarMenuComponent {
   }
 
   onLogout() {
-    this.authService.logout().subscribe()
+    this.authService.logout().subscribe({ next: () => this.router.navigate(['/']) })
   }
 }

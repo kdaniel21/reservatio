@@ -3,10 +3,14 @@
   & a[tuiaction] {
     margin-bottom: 0.75rem;
 
-    > .wrapper {
+    & > .wrapper {
       margin-top: auto;
       margin-bottom: auto;
       font: var(--tui-font-heading-5);
+    }
+
+    &.active > .wrapper {
+      text-decoration: underline;
     }
   }
 }

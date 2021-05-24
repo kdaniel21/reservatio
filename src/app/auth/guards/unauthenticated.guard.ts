@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { CanActivate, Router, UrlTree } from '@angular/router'
 import { Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { first, map } from 'rxjs/operators'
 import { AuthStateService } from '../auth-state.service'
 
 @Injectable({
@@ -12,6 +12,7 @@ export class UnauthenticatedGuard implements CanActivate {
 
   canActivate(): Observable<boolean | UrlTree> {
     return this.authStateService.isAuthenticated$.pipe(
+      first(),
       map(isAuthenticated => {
         if (!isAuthenticated) return true
 

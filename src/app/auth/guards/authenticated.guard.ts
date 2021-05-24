@@ -14,6 +14,7 @@ export class AuthenticatedGuard implements CanActivate {
     return this.authStateService.isAuthenticated$.pipe(
       first(),
       map(isAuthenticated => {
+        console.log(isAuthenticated)
         if (isAuthenticated) return true
 
         return this.router.createUrlTree(['/', 'auth', 'login'], { queryParams: { returnUrl: route.url } })

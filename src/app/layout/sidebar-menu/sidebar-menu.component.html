@@ -2,6 +2,8 @@
   *ngFor="let menuItem of menuItems$ | async"
   tuiAction
   [icon]="menuItem.icon"
+  [routerLink]="menuItem.route"
+  [routerLinkActive]="menuItem.route ? 'active' : ''"
   (click)="onMenuItemClick(menuItem.text)"
 >
   {{ menuItem.text }}
