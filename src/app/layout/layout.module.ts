@@ -9,6 +9,7 @@ import { SidebarMenuComponent } from './sidebar-menu/sidebar-menu.component'
 import { SidebarProfileComponent } from './sidebar-profile/sidebar-profile.component'
 import { RouterModule } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { CoreModule } from '../core/core.module'
 
 @NgModule({
   declarations: [
@@ -19,6 +20,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     SidebarMenuComponent,
     SidebarProfileComponent,
   ],
-  imports: [CommonModule, LayoutTaigaModule, RouterModule, BrowserAnimationsModule],
+  imports: [CommonModule, LayoutTaigaModule, RouterModule, BrowserAnimationsModule, CoreModule],
 })
 export class LayoutModule {}
