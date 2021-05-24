@@ -1,7 +1,6 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core'
+import { Component, ChangeDetectionStrategy } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { TuiNotificationsService } from '@taiga-ui/core'
 import { BehaviorSubject } from 'rxjs'
 import { AuthService } from '../auth.service'
 

@@ -12,7 +12,7 @@ export const errorHandler = (injector: Injector) =>
     const context: GraphqlContext = operation.getContext()
     if (context.avoidErrorNotification) return
 
-    const notificationService = injector.get(TuiNotificationsService)
+    const notificationsService = injector.get(TuiNotificationsService)
 
     let errorCode: string
 
@@ -20,5 +20,5 @@ export const errorHandler = (injector: Injector) =>
     else if (networkError) errorCode = 'NETWORK_ERROR'
 
     const errorMessage = errorMap.get(errorCode) || errorMap.get('DEFAULT')
-    notificationService.show(errorMessage, { status: TuiNotification.Error }).subscribe()
+    notificationsService.show(errorMessage, { status: TuiNotification.Error }).subscribe()
   })
