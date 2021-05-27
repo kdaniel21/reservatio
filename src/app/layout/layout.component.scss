@@ -8,12 +8,18 @@
   height: 100%;
   width: 100%;
 
-  & > .tui-container {
-    display: flex;
-    flex-direction: column;
+  & > #outlet-container {
+    height: 100vh;
+    flex-grow: 1;
+    overflow: auto;
 
-    router-outlet::ng-deep + * {
-      flex-grow: 1;
+    & > .tui-container {
+      flex-direction: column;
+      display: flex;
+
+      router-outlet::ng-deep + * {
+        flex-grow: 1;
+      }
     }
   }
 }

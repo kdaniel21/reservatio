@@ -1,0 +1,14 @@
+query getReservations($startDate: DateTime!, $endDate: DateTime!) {
+  reservations(startDate: $startDate, endDate: $endDate) {
+    id
+    recurringId
+    name
+    isActive
+    startTime
+    endTime
+    locations {
+      tableTennis
+      badminton
+    }
+  }
+}

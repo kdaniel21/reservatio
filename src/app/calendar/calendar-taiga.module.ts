@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { TuiOverscrollModule } from '@taiga-ui/cdk'
+import { TuiButtonModule } from '@taiga-ui/core'
+import { TuiIslandModule } from '@taiga-ui/kit'
 
-const taigaModules = []
+const taigaModules = [TuiOverscrollModule, TuiIslandModule, TuiButtonModule]
 
 @NgModule({
   imports: taigaModules,

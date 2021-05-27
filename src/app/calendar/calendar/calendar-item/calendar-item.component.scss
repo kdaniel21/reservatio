@@ -1,0 +1,7 @@
+:host > tui-island::ng-deep {
+  padding: 0;
+
+  & > .tui-island__category {
+    padding: 0.75rem;
+  }
+}

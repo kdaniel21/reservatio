@@ -311,6 +311,24 @@ export type RefreshAccessTokenQuery = (
   ) }
 );
 
+export type GetReservationsQueryVariables = Exact<{
+  startDate: Scalars['DateTime'];
+  endDate: Scalars['DateTime'];
+}>;
+
+
+export type GetReservationsQuery = (
+  { __typename?: 'Query' }
+  & { reservations: Array<(
+    { __typename?: 'GraphQLReservation' }
+    & Pick<GraphQlReservation, 'id' | 'recurringId' | 'name' | 'isActive' | 'startTime' | 'endTime'>
+    & { locations: (
+      { __typename?: 'GraphQLReservationLocationOutput' }
+      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
+    ) }
+  )> }
+);
+
 export const GetCurrentUserDocument = gql`
     query getCurrentUser {
   currentUser {
@@ -395,6 +413,33 @@ export const RefreshAccessTokenDocument = gql`
   })
   export class RefreshAccessTokenGQL extends Apollo.Query<RefreshAccessTokenQuery, RefreshAccessTokenQueryVariables> {
     document = RefreshAccessTokenDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetReservationsDocument = gql`
+    query getReservations($startDate: DateTime!, $endDate: DateTime!) {
+  reservations(startDate: $startDate, endDate: $endDate) {
+    id
+    recurringId
+    name
+    isActive
+    startTime
+    endTime
+    locations {
+      tableTennis
+      badminton
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetReservationsGQL extends Apollo.Query<GetReservationsQuery, GetReservationsQueryVariables> {
+    document = GetReservationsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

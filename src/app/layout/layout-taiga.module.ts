@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core'
 import { TuiElasticStickyModule, TuiSidebarModule } from '@taiga-ui/addon-mobile'
 import { TuiActiveZoneModule } from '@taiga-ui/cdk'
-import { TuiButtonModule, TuiRootModule } from '@taiga-ui/core'
+import { TuiButtonModule, TuiRootModule, TuiScrollbarModule } from '@taiga-ui/core'
 import { TuiActionModule, TuiAvatarModule } from '@taiga-ui/kit'
 
 const taigaModules = [
@@ -12,6 +12,7 @@ const taigaModules = [
   TuiSidebarModule,
   TuiActionModule,
   TuiAvatarModule,
+  TuiScrollbarModule,
 ]
 
 @NgModule({

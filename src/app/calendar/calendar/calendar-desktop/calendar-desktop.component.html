@@ -1,0 +1,42 @@
+<ng-container
+  *ngIf="{
+    daysInWeek: displayedNumOfDays$ | async,
+    selectedTimePeriod: selectedTimePeriod$ | async,
+    calendarEvents: reservationCalendarEvents$ | async
+  } as data"
+>
+  <div tuiOverscroll="scroll" class="tui-space_vertical-5">
+    <mwl-calendar-week-view
+      precision="minutes"
+      [viewDate]="data.selectedTimePeriod?.startDate"
+      [events]="data.calendarEvents"
+      [daysInWeek]="data.daysInWeek"
+      [weekStartsOn]="1"
+      [eventTemplate]="customEvent"
+    ></mwl-calendar-week-view>
+  </div>
+
+  <ng-template #customEvent let-weekEvent="weekEvent">
+    <app-calendar-item [calendarEvent]="weekEvent.event" [height]="weekEvent.height"></app-calendar-item>
+  </ng-template>
+
+  <div id="action-buttons">
+    <button
+      tuiIconButton
+      type="button"
+      icon="tuiIconArrowLeftLarge"
+      shape="rounded"
+      class="tui-space_horizontal-1"
+      (click)="onPrevious()"
+    ></button>
+    <button
+      tuiIconButton
+      type="button"
+      icon="tuiIconArrowRightLarge"
+      shape="rounded"
+      class="tui-space_right-3"
+      (click)="onNext()"
+    ></button>
+    <button tuiIconButton type="button" icon="tuiIconPlusLarge" shape="rounded"></button>
+  </div>
+</ng-container>

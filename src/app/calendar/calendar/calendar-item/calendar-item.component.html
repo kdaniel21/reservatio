@@ -1,0 +1,11 @@
+<tui-island
+  class="tui-space_vertical-1 tui-space_horizontal-1"
+  size="s"
+  [ngStyle]="{ height: height + 'px' }"
+  [hoverable]="true"
+>
+  <div class="tui-island__category">
+    <div>{{ reservation.name }}</div>
+    <div>{{ reservation.startTime | date: 'HH:mm' }} - {{ reservation.endTime | date: 'HH:mm' }}</div>
+  </div>
+</tui-island>
