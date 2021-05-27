@@ -2,9 +2,10 @@ import { Component, ChangeDetectionStrategy, ElementRef, Inject, OnInit } from '
 import { ActivatedRoute, Router } from '@angular/router'
 import { WINDOW } from '@ng-web-apis/common'
 import { CalendarEventTitleFormatter } from 'angular-calendar'
-import { addDays, format } from 'date-fns'
+import { addDays, format, isPast } from 'date-fns'
 import { combineLatest, fromEvent, Observable } from 'rxjs'
 import { distinctUntilChanged, map, startWith, take, tap } from 'rxjs/operators'
+import { AuthStateService } from 'src/app/auth/auth-state.service'
 import { AngularCalendarUtilsService } from '../../angular-calendar-utils.service'
 import { CalendarService } from '../calendar.service'
 import { CustomEventTitleFormatterService } from './custom-event-title-formatter.service'
@@ -17,7 +18,7 @@ import { CustomEventTitleFormatterService } from './custom-event-title-formatter
   providers: [{ provide: CalendarEventTitleFormatter, useClass: CustomEventTitleFormatterService }],
 })
 export class CalendarDesktopComponent implements OnInit {
-  private readonly DAY_WIDTH_PX = 120
+  private readonly DAY_WIDTH_PX = 140
 
   readonly displayedNumOfDays$: Observable<number> = fromEvent(this.window, 'resize').pipe(
     startWith(''),
@@ -40,13 +41,25 @@ export class CalendarDesktopComponent implements OnInit {
     map(reservations => reservations.map(this.angularCalendarUtils.convertReservationToCalendarEvent))
   )
 
+  isAllowedToGoBackInTime$: Observable<boolean> = combineLatest([
+    this.selectedTimePeriod$,
+    this.authStateService.isAdmin$,
+  ]).pipe(
+    map(([selectedTimePeriod, isAdmin]) => {
+      const previousEndDate = addDays(selectedTimePeriod.startDate, -1)
+      const isInPast = isPast(previousEndDate)
+      return !isInPast || isAdmin
+    })
+  )
+
   constructor(
     private readonly elementRef: ElementRef,
     @Inject(WINDOW) private readonly window: Window,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly calendarService: CalendarService,
-    private readonly angularCalendarUtils: AngularCalendarUtilsService
+    private readonly angularCalendarUtils: AngularCalendarUtilsService,
+    private readonly authStateService: AuthStateService
   ) {}
 
   ngOnInit() {

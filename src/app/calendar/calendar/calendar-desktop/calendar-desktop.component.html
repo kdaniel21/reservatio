@@ -2,7 +2,8 @@
   *ngIf="{
     daysInWeek: displayedNumOfDays$ | async,
     selectedTimePeriod: selectedTimePeriod$ | async,
-    calendarEvents: reservationCalendarEvents$ | async
+    calendarEvents: reservationCalendarEvents$ | async,
+    isAllowedToGoBackInTime: isAllowedToGoBackInTime$ | async
   } as data"
 >
   <div tuiOverscroll="scroll" class="tui-space_vertical-5">
@@ -27,6 +28,7 @@
       icon="tuiIconArrowLeftLarge"
       shape="rounded"
       class="tui-space_horizontal-1"
+      [disabled]="!data.isAllowedToGoBackInTime"
       (click)="onPrevious()"
     ></button>
     <button

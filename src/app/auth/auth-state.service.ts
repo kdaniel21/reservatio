@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, EMPTY, asapScheduler, concat } from 'rxjs'
 import { distinctUntilChanged, map, tap, catchError, finalize, switchMapTo, skipWhile, filter } from 'rxjs/operators'
 import { GraphqlContext } from '../core/graphql/error-handler'
-import { GetCurrentUserGQL, GetCurrentUserQuery, RefreshAccessTokenGQL } from '../core/graphql/generated'
+import { GetCurrentUserGQL, GetCurrentUserQuery, RefreshAccessTokenGQL, Role } from '../core/graphql/generated'
 
 export type RedactedUser = GetCurrentUserQuery['currentUser']
 
@@ -25,6 +25,11 @@ export class AuthStateService {
   )
   get isAuthenticated(): boolean {
     return !!this.user
+  }
+
+  readonly isAdmin$: Observable<boolean> = this.user$.pipe(map(user => user.customer.role === Role.Admin))
+  get isAdmin(): boolean {
+    return this.user.customer.role === Role.Admin
   }
 
   private readonly accessTokenSubject = new BehaviorSubject<string>(undefined)
