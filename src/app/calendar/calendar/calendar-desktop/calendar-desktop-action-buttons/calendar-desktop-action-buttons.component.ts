@@ -1,10 +1,9 @@
 import { Component, ChangeDetectionStrategy, Input, OnInit, OnDestroy } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import { TuiDay } from '@taiga-ui/cdk'
-import { addDays, isPast } from 'date-fns'
-import { combineLatest, Observable, Subject, merge } from 'rxjs'
+import { addDays } from 'date-fns'
+import { Subject, merge } from 'rxjs'
 import { map, take, takeUntil, tap } from 'rxjs/operators'
-import { AuthStateService } from 'src/app/auth/auth-state.service'
 import { CalendarService } from '../../calendar.service'
 
 @Component({
@@ -21,21 +20,6 @@ export class CalendarDesktopActionButtonsComponent implements OnInit, OnDestroy 
   private readonly selectedTimePeriod$ = this.calendarService.selectedTimePeriod$
   readonly selectedTuiDay$ = this.selectedTimePeriod$.pipe(
     map(({ startDate }) => TuiDay.fromLocalNativeDate(startDate))
-  )
-
-  readonly isAllowedToGoBackInTime$: Observable<boolean> = combineLatest([
-    this.selectedTimePeriod$,
-    this.authStateService.isAdmin$,
-  ]).pipe(
-    map(([selectedTimePeriod, isAdmin]) => {
-      const previousEndDate = addDays(selectedTimePeriod.startDate, -1)
-      const isInPast = isPast(previousEndDate)
-      return !isInPast || isAdmin
-    })
-  )
-
-  readonly minSelectableDate$: Observable<TuiDay> = this.isAllowedToGoBackInTime$.pipe(
-    map(isAllowedToGoBackInTime => (isAllowedToGoBackInTime ? undefined : TuiDay.fromLocalNativeDate(new Date())))
   )
 
   readonly customSettingsForm = this.formBuilder.group({
@@ -62,11 +46,7 @@ export class CalendarDesktopActionButtonsComponent implements OnInit, OnDestroy 
 
   isExpanded = false
 
-  constructor(
-    private readonly calendarService: CalendarService,
-    private readonly authStateService: AuthStateService,
-    private readonly formBuilder: FormBuilder
-  ) {}
+  constructor(private readonly calendarService: CalendarService, private readonly formBuilder: FormBuilder) {}
 
   ngOnInit() {
     merge(this.updateFormAction$, this.updateLocationAction$, this.updateSelectedTimeAction$)
