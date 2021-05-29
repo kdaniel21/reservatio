@@ -35,8 +35,6 @@ export class CalendarDesktopComponent implements OnInit {
     map(reservations => reservations.map(this.angularCalendarUtils.convertReservationToCalendarEvent))
   )
 
-  isSettingsButtonOpen = false
-
   constructor(
     private readonly elementRef: ElementRef,
     @Inject(WINDOW) private readonly window: Window,
