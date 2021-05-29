@@ -1,0 +1,66 @@
+<ng-container *ngIf="{ isAllowedToGoBackInTime: isAllowedToGoBackInTime$ | async } as data">
+  <button
+    tuiIconButton
+    type="button"
+    icon="tuiIconArrowLeftLarge"
+    shape="rounded"
+    class="tui-space_right-2"
+    [disabled]="!data.isAllowedToGoBackInTime"
+    (click)="onPrevious()"
+  ></button>
+  <button
+    tuiIconButton
+    type="button"
+    icon="tuiIconArrowRightLarge"
+    shape="rounded"
+    class="tui-space_right-2"
+    (click)="onNext()"
+  ></button>
+
+  <div>
+    <button
+      tuiIconButton
+      type="button"
+      [icon]="isExpanded ? 'tuiIconChevronDownLarge' : 'tuiIconChevronUpLarge'"
+      shape="rounded"
+      (click)="toggleExpand()"
+    ></button>
+    <tui-expand [expanded]="isExpanded">
+      <ng-template tuiExpandContent>
+        <tui-hosted-dropdown [content]="settings">
+          <button
+            tuiIconButton
+            type="button"
+            icon="tuiIconSettingsLarge"
+            shape="rounded"
+            class="tui-space_top-2"
+          ></button>
+        </tui-hosted-dropdown>
+
+        <ng-template #settings>
+          <form tuiGroup [formGroup]="customSettingsForm" class="tui-space_vertical-3 tui-space_horizontal-4">
+            <ng-container formGroupName="locations">
+              <h5 class="tui-text_h5 tui-space_vertical-4">Locations</h5>
+              <tui-checkbox-labeled formControlName="badminton" size="l" class="tui-space_bottom-2">
+                Badminton
+              </tui-checkbox-labeled>
+              <tui-checkbox-labeled formControlName="tableTennis" size="l">Table tennis</tui-checkbox-labeled>
+            </ng-container>
+
+            <div id="date-title">
+              <h5 class="tui-text_h5 tui-space_vertical-4">Date</h5>
+
+              <button tuiButton size="s" appearance="secondary" (click)="onSelectToday()">Today</button>
+            </div>
+            <tui-calendar
+              [value]="customSettingsForm.value.startDate"
+              (dayClick)="onCalendarDateSelect($event)"
+            ></tui-calendar>
+          </form>
+        </ng-template>
+
+        <button tuiIconButton type="button" icon="tuiIconPlusLarge" shape="rounded" class="tui-space_top-2"></button>
+      </ng-template>
+    </tui-expand>
+  </div>
+</ng-container>

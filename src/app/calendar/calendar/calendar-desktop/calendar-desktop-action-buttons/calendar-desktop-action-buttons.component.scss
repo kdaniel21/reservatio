@@ -1,0 +1,29 @@
+:host {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  margin-right: 1rem;
+  margin-bottom: 1.5rem;
+
+  h5.tui-text_h5 {
+    margin-bottom: 0;
+  }
+
+  display: flex;
+  align-items: flex-end;
+
+  tui-expand::ng-deep > .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+::ng-deep tui-dropdown-box {
+  #date-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

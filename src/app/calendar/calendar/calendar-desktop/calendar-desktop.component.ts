@@ -1,26 +1,25 @@
 import { Component, ChangeDetectionStrategy, ElementRef, Inject, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 import { WINDOW } from '@ng-web-apis/common'
 import { CalendarEventTitleFormatter } from 'angular-calendar'
-import { addDays, format, isPast } from 'date-fns'
-import { combineLatest, fromEvent, Observable } from 'rxjs'
-import { distinctUntilChanged, map, startWith, take, tap } from 'rxjs/operators'
-import { AuthStateService } from 'src/app/auth/auth-state.service'
+import { addDays } from 'date-fns'
+import { fromEvent, Observable } from 'rxjs'
+import { distinctUntilChanged, map, startWith, take } from 'rxjs/operators'
 import { AngularCalendarUtilsService } from '../../angular-calendar-utils.service'
 import { CalendarService } from '../calendar.service'
-import { CustomEventTitleFormatterService } from './custom-event-title-formatter.service'
+import { CustomEventTitleFormatter } from '../../angular-calendar-utils/custom-event-title-formatter'
 
 @Component({
   selector: 'app-calendar-desktop',
   templateUrl: './calendar-desktop.component.html',
   styleUrls: ['./calendar-desktop.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{ provide: CalendarEventTitleFormatter, useClass: CustomEventTitleFormatterService }],
+  providers: [{ provide: CalendarEventTitleFormatter, useClass: CustomEventTitleFormatter }],
 })
 export class CalendarDesktopComponent implements OnInit {
   private readonly DAY_WIDTH_PX = 140
 
-  readonly displayedNumOfDays$: Observable<number> = fromEvent(this.window, 'resize').pipe(
+  readonly numOfDisplayedDays$: Observable<number> = fromEvent(this.window, 'resize').pipe(
     startWith(''),
     map(() => this.elementRef.nativeElement.offsetWidth),
     map(hostElementWidth => {
@@ -30,36 +29,20 @@ export class CalendarDesktopComponent implements OnInit {
     distinctUntilChanged()
   )
 
-  readonly selectedTimePeriod$ = this.calendarService.selectedTimePeriod$.pipe(
-    tap(selectedTimePeriod => {
-      const { startDate } = selectedTimePeriod
-      this.router.navigate([], { queryParams: { startDate: format(startDate, 'YYYY-MM-DD') } })
-    })
-  )
+  readonly selectedTimePeriod$ = this.calendarService.selectedTimePeriod$
 
   readonly reservationCalendarEvents$ = this.calendarService.reservations$.pipe(
     map(reservations => reservations.map(this.angularCalendarUtils.convertReservationToCalendarEvent))
   )
 
-  isAllowedToGoBackInTime$: Observable<boolean> = combineLatest([
-    this.selectedTimePeriod$,
-    this.authStateService.isAdmin$,
-  ]).pipe(
-    map(([selectedTimePeriod, isAdmin]) => {
-      const previousEndDate = addDays(selectedTimePeriod.startDate, -1)
-      const isInPast = isPast(previousEndDate)
-      return !isInPast || isAdmin
-    })
-  )
+  isSettingsButtonOpen = false
 
   constructor(
     private readonly elementRef: ElementRef,
     @Inject(WINDOW) private readonly window: Window,
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly calendarService: CalendarService,
-    private readonly angularCalendarUtils: AngularCalendarUtilsService,
-    private readonly authStateService: AuthStateService
+    private readonly angularCalendarUtils: AngularCalendarUtilsService
   ) {}
 
   ngOnInit() {
@@ -69,35 +52,11 @@ export class CalendarDesktopComponent implements OnInit {
   initStartDateFromRoute() {
     const startDateString = this.route.snapshot.queryParamMap.get('startDate')
     const selectedTimePeriodStartDate = startDateString ? new Date(startDateString) : new Date()
-    this.displayedNumOfDays$.pipe(take(1)).subscribe({
+    this.numOfDisplayedDays$.pipe(take(1)).subscribe({
       next: displayedNumOfDays => {
         const newEndDate = addDays(selectedTimePeriodStartDate, displayedNumOfDays - 1)
         this.calendarService.setTimePeriod(selectedTimePeriodStartDate, newEndDate)
       },
     })
-  }
-
-  onNext() {
-    combineLatest([this.selectedTimePeriod$, this.displayedNumOfDays$])
-      .pipe(take(1))
-      .subscribe({
-        next: ([selectedTimePeriod, displayedNumOfDays]) => {
-          const newStartDate = addDays(selectedTimePeriod.startDate, displayedNumOfDays)
-          const newEndDate = addDays(newStartDate, displayedNumOfDays - 1)
-          this.calendarService.setTimePeriod(newStartDate, newEndDate)
-        },
-      })
-  }
-
-  onPrevious() {
-    combineLatest([this.selectedTimePeriod$, this.displayedNumOfDays$])
-      .pipe(take(1))
-      .subscribe({
-        next: ([selectedTimePeriod, displayedNumOfDays]) => {
-          const newStartDate = addDays(selectedTimePeriod.startDate, displayedNumOfDays * -1)
-          const newEndDate = addDays(newStartDate, displayedNumOfDays - 1)
-          this.calendarService.setTimePeriod(newStartDate, newEndDate)
-        },
-      })
   }
 }
