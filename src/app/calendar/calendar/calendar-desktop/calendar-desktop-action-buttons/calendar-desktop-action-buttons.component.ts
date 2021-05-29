@@ -34,6 +34,10 @@ export class CalendarDesktopActionButtonsComponent implements OnInit, OnDestroy 
     })
   )
 
+  readonly minSelectableDate$: Observable<TuiDay> = this.isAllowedToGoBackInTime$.pipe(
+    map(isAllowedToGoBackInTime => (isAllowedToGoBackInTime ? undefined : TuiDay.fromLocalNativeDate(new Date())))
+  )
+
   readonly customSettingsForm = this.formBuilder.group({
     locations: this.formBuilder.group({
       tableTennis: [true],

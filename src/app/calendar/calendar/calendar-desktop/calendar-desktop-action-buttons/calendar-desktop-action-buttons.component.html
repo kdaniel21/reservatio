@@ -1,4 +1,9 @@
-<ng-container *ngIf="{ isAllowedToGoBackInTime: isAllowedToGoBackInTime$ | async } as data">
+<ng-container
+  *ngIf="{
+    isAllowedToGoBackInTime: isAllowedToGoBackInTime$ | async,
+    minSelectableDate: minSelectableDate$ | async
+  } as data"
+>
   <button
     tuiIconButton
     type="button"
@@ -54,6 +59,7 @@
             </div>
             <tui-calendar
               [value]="customSettingsForm.value.startDate"
+              [min]="data.minSelectableDate"
               (dayClick)="onCalendarDateSelect($event)"
             ></tui-calendar>
           </form>

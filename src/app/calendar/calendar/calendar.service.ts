@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core'
+import { Injectable, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { format } from 'date-fns'
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs'
@@ -18,9 +18,7 @@ export type ReservationLocations = Omit<GraphQlReservationLocationOutput, '__typ
 
 export type ReservationListItem = GetReservationsQuery['reservations'][number]
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class CalendarService implements OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
