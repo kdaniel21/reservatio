@@ -5,7 +5,7 @@
     maxStartTuiDate: maxStartTuiDate$ | async,
     minEndTuiDate: minEndTuiDate$ | async
   } as data"
-  [formGroup]="createReservationForm"
+  [formGroup]="createReservationForm.get('time')"
 >
   <h3 class="tui-form__header">Time</h3>
   <tui-notification

@@ -1,15 +1,15 @@
 import { AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms'
 import { Observable, of } from 'rxjs'
-import { debounceTime, catchError, map, finalize } from 'rxjs/operators'
+import { debounceTime, catchError, map } from 'rxjs/operators'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
 import { CreateReservationService } from '../create-reservation.service'
 
 export const timeAvailabilityValidator = (createReservationService: CreateReservationService): AsyncValidatorFn => {
   return (group: FormGroup): Observable<ValidationErrors> => {
-    const { locations, startTime: tuiStartTime, endTime: tuiEndTime } = group.value
+    const { locations, time } = group.value
 
-    const startTime = TaigaUtils.convertDateTimeToNativeDate(tuiStartTime)
-    const endTime = TaigaUtils.convertDateTimeToNativeDate(tuiEndTime)
+    const startTime = TaigaUtils.convertDateTimeToNativeDate(time.startTime)
+    const endTime = TaigaUtils.convertDateTimeToNativeDate(time.endTime)
 
     return createReservationService.isTimeAvailable({ startTime, endTime, locations }).pipe(
       debounceTime(500),

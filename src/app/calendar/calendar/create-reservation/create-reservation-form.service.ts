@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core'
 import { AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms'
 import { BehaviorSubject, merge, Observable, of, Subject } from 'rxjs'
 import { distinctUntilChanged, map, startWith, takeUntil, tap } from 'rxjs/operators'
+import { tuiDateTimeFutureOnly } from 'src/app/core/form-validators/tui-date-time-future-only.validator'
 import { tuiDateTimeRequired } from 'src/app/core/form-validators/tui-date-time-required.validator'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
 import { CreateReservationService } from './create-reservation.service'
 import { locationValidator } from './validators/location.validator'
 import { recurringValidator } from './validators/recurring.validator'
 import { timeAvailabilityValidator } from './validators/time-availability.validator'
+import { timeValidator } from './validators/time.validator'
 
 @Injectable()
 export class CreateReservationFormService {
@@ -32,8 +34,13 @@ export class CreateReservationFormService {
       },
       { validators: [recurringValidator] },
     ),
-    startTime: [undefined, tuiDateTimeRequired],
-    endTime: [undefined, tuiDateTimeRequired],
+    time: this.formBuilder.group(
+      {
+        startTime: [undefined, [tuiDateTimeRequired, tuiDateTimeFutureOnly]],
+        endTime: [undefined, [tuiDateTimeRequired, tuiDateTimeFutureOnly]],
+      },
+      { validators: [timeValidator] },
+    ),
   })
 
   private readonly availableTimesSubject = new BehaviorSubject<Date[]>([])
@@ -98,10 +105,10 @@ export class CreateReservationFormService {
       const hasStillUnavailableTimes = !!this.unavailableTimesSubject.getValue().length
       if (hasStillUnavailableTimes) return of({ recurringTimeAvailability: false })
 
-      const { locations, recurring, startTime: tuiStartTime, endTime: tuiEndTime } = group.value
+      const { locations, recurring, time } = group.value
 
-      const startTime = TaigaUtils.convertDateTimeToNativeDate(tuiStartTime)
-      const endTime = TaigaUtils.convertDateTimeToNativeDate(tuiEndTime)
+      const startTime = TaigaUtils.convertDateTimeToNativeDate(time.startTime)
+      const endTime = TaigaUtils.convertDateTimeToNativeDate(time.endTime)
 
       return this.createReservationService
         .isRecurringTimeAvailable({ startTime, endTime, locations, ...recurring })

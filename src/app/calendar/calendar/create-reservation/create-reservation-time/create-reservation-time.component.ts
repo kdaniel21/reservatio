@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core'
 import { TuiDay, TuiDestroyService } from '@taiga-ui/cdk'
 import { add } from 'date-fns'
-import { Observable, merge } from 'rxjs'
+import { merge, Observable } from 'rxjs'
 import { filter, map, mapTo, startWith, takeUntil, tap } from 'rxjs/operators'
 import { CreateReservationBaseComponent } from '../create-reservation-base/create-reservation-base.component'
 import { CreateReservationFormService } from '../create-reservation-form.service'
@@ -24,12 +24,12 @@ export class CreateReservationTimeComponent extends CreateReservationBaseCompone
   readonly todayTuiDate: TuiDay = TuiDay.currentLocal()
   readonly oneYearFromNowTuiDate: TuiDay = TuiDay.fromLocalNativeDate(add(new Date(), { years: 1 }))
 
-  readonly minEndTuiDate$: Observable<TuiDay> = this.createReservationForm.get('startTime').valueChanges.pipe(
+  readonly minEndTuiDate$: Observable<TuiDay> = this.createReservationForm.get('time.startTime').valueChanges.pipe(
     filter(startTuiDateTime => startTuiDateTime && startTuiDateTime[0]),
     map(startTuiDateTime => startTuiDateTime[0]),
     startWith(this.todayTuiDate),
   )
-  readonly maxStartTuiDate$: Observable<TuiDay> = this.createReservationForm.get('endTime').valueChanges.pipe(
+  readonly maxStartTuiDate$: Observable<TuiDay> = this.createReservationForm.get('time.endTime').valueChanges.pipe(
     filter(endTuiDateTime => endTuiDateTime && endTuiDateTime[0]),
     map(endTuiDateTime => endTuiDateTime[0]),
     startWith(this.oneYearFromNowTuiDate),
