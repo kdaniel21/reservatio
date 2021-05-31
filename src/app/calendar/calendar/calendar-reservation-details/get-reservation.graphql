@@ -1,0 +1,19 @@
+query getReservation($id: ID!) {
+  reservation(id: $id) {
+    id
+    recurringId
+    name
+    isActive
+    startTime
+    endTime
+    locations {
+      tableTennis
+      badminton
+    }
+    createdAt
+    updatedAt
+    customer {
+      name
+    }
+  }
+}

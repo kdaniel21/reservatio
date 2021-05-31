@@ -311,6 +311,26 @@ export type RefreshAccessTokenQuery = (
   ) }
 );
 
+export type GetReservationQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetReservationQuery = (
+  { __typename?: 'Query' }
+  & { reservation: (
+    { __typename?: 'GraphQLReservation' }
+    & Pick<GraphQlReservation, 'id' | 'recurringId' | 'name' | 'isActive' | 'startTime' | 'endTime' | 'createdAt' | 'updatedAt'>
+    & { locations: (
+      { __typename?: 'GraphQLReservationLocationOutput' }
+      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
+    ), customer: (
+      { __typename?: 'GraphQLCustomer' }
+      & Pick<GraphQlCustomer, 'name'>
+    ) }
+  ) }
+);
+
 export type CreateRecurringReservationMutationVariables = Exact<{
   name: Scalars['String'];
   startTime: Scalars['DateTime'];
@@ -487,6 +507,38 @@ export const RefreshAccessTokenDocument = gql`
   })
   export class RefreshAccessTokenGQL extends Apollo.Query<RefreshAccessTokenQuery, RefreshAccessTokenQueryVariables> {
     document = RefreshAccessTokenDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetReservationDocument = gql`
+    query getReservation($id: ID!) {
+  reservation(id: $id) {
+    id
+    recurringId
+    name
+    isActive
+    startTime
+    endTime
+    locations {
+      tableTennis
+      badminton
+    }
+    createdAt
+    updatedAt
+    customer {
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetReservationGQL extends Apollo.Query<GetReservationQuery, GetReservationQueryVariables> {
+    document = GetReservationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

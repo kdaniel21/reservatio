@@ -1,1 +1,57 @@
-<p>calendar-reservation-details works!</p>
+<ng-container
+  *ngIf="{ reservation: reservation$ | async, canEdit: canEdit$ | async, isLoading: isLoading$ | async } as data"
+>
+  <tui-notification *ngIf="data.reservation?.isActive === false" status="error">
+    This notification has been deleted and therefore is not active anymore.
+  </tui-notification>
+
+  <h3 class="tui-header_h3">
+    <div [class.tui-skeleton]="data.isLoading" [class.tui-skeleton_text]="data.isLoading">
+      <tui-svg src="tuiIconInfo"></tui-svg> {{ data.reservation?.name }} (ID: {{ data.reservation?.id }})
+    </div>
+    <div [class.tui-skeleton]="data.isLoading" [class.tui-skeleton_text]="data.isLoading">
+      <tui-svg src="tuiIconUser"></tui-svg>{{ data.reservation?.customer.name }}
+    </div>
+    <div [class.tui-skeleton]="data.isLoading" [class.tui-skeleton_text]="data.isLoading">
+      <tui-svg src="tuiIconCalendar"></tui-svg>
+      {{ data.reservation?.startTime | date: 'short' }} - {{ data.reservation?.endTime | date: 'short' }}
+    </div>
+    <div *ngIf="data.reservation?.recurringId"><tui-svg src="tuiIconUndo"></tui-svg>Recurring reservation</div>
+
+    <div [class.tui-skeleton]="data.isLoading" [class.tui-skeleton_text]="data.isLoading">
+      <tui-svg src="tuiIconCheckList"></tui-svg>{{ data.reservation?.createdAt | date: 'short' }} (Created)
+    </div>
+    <div *ngIf="data.reservation?.updatedAt !== data.reservation?.createdAt">
+      <tui-svg src="tuiIconEdit"></tui-svg>{{ data.reservation?.updatedAt | date: 'short' }} (Last updated)
+    </div>
+  </h3>
+
+  <h2 class="tui-header_h2">Locations</h2>
+
+  <app-reservation-locations-select
+    [locations]="data.reservation?.locations"
+    [isDisabled]="true"
+    [isLoading]="data.isLoading"
+  ></app-reservation-locations-select>
+
+  <div class="buttons tui-space_top-5">
+    <button
+      tuiButton
+      appearance="outline"
+      [class.tui-skeleton]="data.isLoading"
+      class="tui-space_right-2"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+    <button
+      tuiButton
+      icon="tuiIconDraft"
+      [disabled]="!data.canEdit"
+      [class.tui-skeleton]="data.isLoading"
+      (click)="onEdit()"
+    >
+      Edit
+    </button>
+  </div>
+</ng-container>

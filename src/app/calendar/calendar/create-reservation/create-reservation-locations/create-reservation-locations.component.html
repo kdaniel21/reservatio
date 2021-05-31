@@ -1,24 +1,10 @@
 <h3 class="tui-form__header">Locations</h3>
-<div tuiGroup class="group">
-  <button
-    tuiButton
-    [appearance]="locationsControl.value.badminton ? 'primary' : 'outline'"
-    size="xl"
-    icon="tuiIconCallLarge"
-    (click)="onToggleLocation('badminton')"
-  >
-    Badminton
-  </button>
-  <button
-    tuiButton
-    [appearance]="locationsControl.value.tableTennis ? 'primary' : 'outline'"
-    size="xl"
-    icon="tuiIconCallLarge"
-    (click)="onToggleLocation('tableTennis')"
-  >
-    Table tennis
-  </button>
-</div>
+
+<app-reservation-locations-select
+  [locations]="locationsControl.value"
+  (toggleLocation)="onToggleLocation($event)"
+></app-reservation-locations-select>
+
 <tui-error
   *ngIf="locationsControl.touched && locationsControl?.errors?.locationNotSelected as error"
   [error]="{ message: error }"

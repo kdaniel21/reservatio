@@ -8,13 +8,14 @@ import { distinctUntilChanged, map, startWith, take } from 'rxjs/operators'
 import { AngularCalendarUtilsService } from '../../angular-calendar-utils.service'
 import { CalendarService } from '../calendar.service'
 import { CustomEventTitleFormatter } from '../../angular-calendar-utils/custom-event-title-formatter'
+import { ReservationDetailsService } from '../calendar-reservation-details/reservation-details.service'
 
 @Component({
   selector: 'app-calendar-desktop',
   templateUrl: './calendar-desktop.component.html',
   styleUrls: ['./calendar-desktop.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{ provide: CalendarEventTitleFormatter, useClass: CustomEventTitleFormatter }],
+  providers: [{ provide: CalendarEventTitleFormatter, useClass: CustomEventTitleFormatter }, ReservationDetailsService],
 })
 export class CalendarDesktopComponent implements OnInit {
   private readonly DAY_WIDTH_PX = 140
@@ -26,13 +27,13 @@ export class CalendarDesktopComponent implements OnInit {
       const maxAmountToDisplay = Math.floor(hostElementWidth / this.DAY_WIDTH_PX)
       return Math.min(maxAmountToDisplay, 7)
     }),
-    distinctUntilChanged()
+    distinctUntilChanged(),
   )
 
   readonly selectedTimePeriod$ = this.calendarService.selectedTimePeriod$
 
   readonly reservationCalendarEvents$ = this.calendarService.reservations$.pipe(
-    map(reservations => reservations.map(this.angularCalendarUtils.convertReservationToCalendarEvent))
+    map(reservations => reservations.map(this.angularCalendarUtils.convertReservationToCalendarEvent)),
   )
 
   constructor(
@@ -40,7 +41,7 @@ export class CalendarDesktopComponent implements OnInit {
     @Inject(WINDOW) private readonly window: Window,
     private readonly route: ActivatedRoute,
     private readonly calendarService: CalendarService,
-    private readonly angularCalendarUtils: AngularCalendarUtilsService
+    private readonly angularCalendarUtils: AngularCalendarUtilsService,
   ) {}
 
   ngOnInit() {

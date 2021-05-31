@@ -1,0 +1,14 @@
+<div tuiGroup class="group">
+  <button
+    *ngFor="let option of locationOptions"
+    tuiButton
+    size="xl"
+    icon="tuiIconCallLarge"
+    [appearance]="locations && locations[option.value] ? 'primary' : 'outline'"
+    [disabled]="isLoading || isDisabled"
+    [class.tui-skeleton]="isLoading"
+    (click)="onToggleLocation(option.value)"
+  >
+    {{ option.name }}
+  </button>
+</div>

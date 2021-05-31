@@ -3,6 +3,7 @@
   size="s"
   [ngStyle]="{ height: height + 'px' }"
   [hoverable]="true"
+  (click)="onShowReservationDetails()"
 >
   <div class="tui-island__category">
     <div>{{ reservation.name }}</div>

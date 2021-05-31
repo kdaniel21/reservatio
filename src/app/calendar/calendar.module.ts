@@ -20,7 +20,8 @@ import { CreateReservationTimeComponent } from './calendar/create-reservation/cr
 import { ScheduleItemComponent } from './calendar/create-reservation/create-reservation-time/schedule-item/schedule-item.component'
 import { CreateReservationGeneralComponent } from './calendar/create-reservation/create-reservation-general/create-reservation-general.component'
 import { CreateReservationBaseComponent } from './calendar/create-reservation/create-reservation-base/create-reservation-base.component'
-import { CreateReservationRecurringComponent } from './calendar/create-reservation/create-reservation-recurring/create-reservation-recurring.component'
+import { CreateReservationRecurringComponent } from './calendar/create-reservation/create-reservation-recurring/create-reservation-recurring.component';
+import { ReservationLocationsSelectComponent } from './calendar/create-reservation/create-reservation-locations/reservation-locations-select/reservation-locations-select.component'
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CreateReservationRecurringComponent } from './calendar/create-reservati
     CreateReservationGeneralComponent,
     CreateReservationBaseComponent,
     CreateReservationRecurringComponent,
+    ReservationLocationsSelectComponent,
   ],
   imports: [
     CommonModule,
