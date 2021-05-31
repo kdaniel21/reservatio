@@ -1,8 +1,8 @@
-import { Component, ChangeDetectionStrategy, Input, OnInit, OnDestroy } from '@angular/core'
+import { Component, ChangeDetectionStrategy, Input, OnInit } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
-import { TuiDay } from '@taiga-ui/cdk'
+import { TuiDay, TuiDestroyService } from '@taiga-ui/cdk'
 import { addDays } from 'date-fns'
-import { Subject, merge } from 'rxjs'
+import { merge } from 'rxjs'
 import { map, take, takeUntil, tap } from 'rxjs/operators'
 import { CalendarService } from '../../calendar.service'
 
@@ -11,15 +11,14 @@ import { CalendarService } from '../../calendar.service'
   templateUrl: './calendar-desktop-action-buttons.component.html',
   styleUrls: ['./calendar-desktop-action-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [TuiDestroyService],
 })
-export class CalendarDesktopActionButtonsComponent implements OnInit, OnDestroy {
+export class CalendarDesktopActionButtonsComponent implements OnInit {
   @Input() numOfDisplayedDays: number = 7
-
-  private readonly destroyComponent$ = new Subject<void>()
 
   private readonly selectedTimePeriod$ = this.calendarService.selectedTimePeriod$
   readonly selectedTuiDay$ = this.selectedTimePeriod$.pipe(
-    map(({ startDate }) => TuiDay.fromLocalNativeDate(startDate))
+    map(({ startDate }) => TuiDay.fromLocalNativeDate(startDate)),
   )
 
   readonly customSettingsForm = this.formBuilder.group({
@@ -32,25 +31,29 @@ export class CalendarDesktopActionButtonsComponent implements OnInit, OnDestroy 
 
   private readonly updateFormAction$ = merge(
     this.selectedTimePeriod$.pipe(map(({ startDate }) => ({ startDate: TuiDay.fromLocalNativeDate(startDate) }))),
-    this.calendarService.selectedLocations$.pipe(map(locations => ({ locations })))
+    this.calendarService.selectedLocations$.pipe(map(locations => ({ locations }))),
   ).pipe(tap(val => this.customSettingsForm.patchValue(val, { emitEvent: false })))
 
   private readonly updateLocationAction$ = this.customSettingsForm.controls.locations.valueChanges.pipe(
-    tap(selectedLocation => this.calendarService.setLocations(selectedLocation))
+    tap(selectedLocation => this.calendarService.setLocations(selectedLocation)),
   )
   private readonly updateSelectedTimeAction$ = this.customSettingsForm.controls.startDate.valueChanges.pipe(
     map((tuiStartDate: TuiDay) => tuiStartDate.toLocalNativeDate()),
     tap(startDate => this.calendarService.setTimePeriod(startDate, addDays(startDate, this.numOfDisplayedDays - 1))),
-    tap(() => this.toggleExpand())
+    tap(() => this.toggleExpand()),
   )
 
   isExpanded = false
 
-  constructor(private readonly calendarService: CalendarService, private readonly formBuilder: FormBuilder) {}
+  constructor(
+    private readonly calendarService: CalendarService,
+    private readonly formBuilder: FormBuilder,
+    private readonly destroy$: TuiDestroyService,
+  ) {}
 
   ngOnInit() {
     merge(this.updateFormAction$, this.updateLocationAction$, this.updateSelectedTimeAction$)
-      .pipe(takeUntil(this.destroyComponent$))
+      .pipe(takeUntil(this.destroy$))
       .subscribe()
   }
 
@@ -84,10 +87,5 @@ export class CalendarDesktopActionButtonsComponent implements OnInit, OnDestroy 
 
   toggleExpand() {
     this.isExpanded = !this.isExpanded
-  }
-
-  ngOnDestroy() {
-    this.destroyComponent$.next()
-    this.destroyComponent$.complete()
   }
 }

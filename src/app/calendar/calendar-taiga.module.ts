@@ -4,11 +4,29 @@ import {
   TuiButtonModule,
   TuiCalendarModule,
   TuiDataListModule,
+  TuiDialogModule,
+  TuiErrorModule,
   TuiExpandModule,
+  TuiGroupModule,
   TuiHostedDropdownModule,
+  TuiNotificationModule,
   TuiSvgModule,
+  TuiTooltipModule,
 } from '@taiga-ui/core'
-import { TuiCheckboxLabeledModule, TuiInputDateModule, TuiIslandModule, TuiMultiSelectModule } from '@taiga-ui/kit'
+import {
+  TuiCheckboxLabeledModule,
+  TuiDataListWrapperModule,
+  TuiFieldErrorModule,
+  TuiInputDateTimeModule,
+  TuiInputModule,
+  TuiInputTimeModule,
+  TuiIslandModule,
+  TuiMarkerIconModule,
+  TuiSelectModule,
+  TuiStepperModule,
+  TuiToggleModule,
+} from '@taiga-ui/kit'
+import { PolymorpheusModule } from '@tinkoff/ng-polymorpheus'
 
 const taigaModules = [
   TuiOverscrollModule,
@@ -16,12 +34,24 @@ const taigaModules = [
   TuiButtonModule,
   TuiSvgModule,
   TuiHostedDropdownModule,
-  TuiDataListModule,
-  TuiMultiSelectModule,
-  TuiInputDateModule,
   TuiCalendarModule,
   TuiCheckboxLabeledModule,
   TuiExpandModule,
+  TuiStepperModule,
+  TuiInputModule,
+  TuiFieldErrorModule,
+  TuiToggleModule,
+  TuiTooltipModule,
+  TuiSelectModule,
+  TuiDataListModule,
+  TuiDataListWrapperModule,
+  TuiMarkerIconModule,
+  TuiGroupModule,
+  TuiInputTimeModule,
+  TuiNotificationModule,
+  TuiErrorModule,
+  TuiInputDateTimeModule,
+  PolymorpheusModule,
 ]
 
 @NgModule({

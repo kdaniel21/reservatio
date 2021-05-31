@@ -1,0 +1,24 @@
+mutation createRecurringReservation(
+  $name: String!
+  $startTime: DateTime!
+  $endTime: DateTime!
+  $includedDates: [DateTime!]
+  $excludedDates: [DateTime!]
+  $locations: GraphQLReservationLocationInput!
+  $recurrence: Recurrence!
+  $timePeriod: TimePeriod!
+) {
+  createRecurringReservation(
+    name: $name
+    startTime: $startTime
+    endTime: $endTime
+    includedDates: $includedDates
+    excludedDates: $excludedDates
+    locations: $locations
+    recurrence: $recurrence
+    timePeriod: $timePeriod
+  ) {
+    count
+    recurringId
+  }
+}

@@ -1,0 +1,22 @@
+query isRecurringTimeAvailable(
+  $startTime: DateTime!
+  $endTime: DateTime!
+  $includedDates: [DateTime!]
+  $excludedDates: [DateTime!]
+  $locations: GraphQLReservationLocationInput!
+  $recurrence: Recurrence!
+  $timePeriod: TimePeriod!
+) {
+  isRecurringTimeAvailable(
+    startTime: $startTime
+    endTime: $endTime
+    includedDates: $includedDates
+    excludedDates: $excludedDates
+    locations: $locations
+    recurrence: $recurrence
+    timePeriod: $timePeriod
+  ) {
+    availableTimes
+    unavailableTimes
+  }
+}

@@ -1,0 +1,25 @@
+<h3 class="tui-form__header">Locations</h3>
+<div tuiGroup class="group">
+  <button
+    tuiButton
+    [appearance]="locationsControl.value.badminton ? 'primary' : 'outline'"
+    size="xl"
+    icon="tuiIconCallLarge"
+    (click)="onToggleLocation('badminton')"
+  >
+    Badminton
+  </button>
+  <button
+    tuiButton
+    [appearance]="locationsControl.value.tableTennis ? 'primary' : 'outline'"
+    size="xl"
+    icon="tuiIconCallLarge"
+    (click)="onToggleLocation('tableTennis')"
+  >
+    Table tennis
+  </button>
+</div>
+<tui-error
+  *ngIf="locationsControl.touched && locationsControl?.errors?.locationNotSelected as error"
+  [error]="{ message: error }"
+></tui-error>

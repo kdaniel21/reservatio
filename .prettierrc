@@ -2,5 +2,6 @@
   "arrowParens": "avoid",
   "singleQuote": true,
   "semi": false,
-  "printWidth": 120
+  "printWidth": 120,
+  "trailingComma": "all"
 }

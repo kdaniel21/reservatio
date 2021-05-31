@@ -33,21 +33,21 @@ export class CalendarService implements OnDestroy {
 
   readonly reservations$: Observable<ReservationListItem[]> = this.selectedTimePeriod$.pipe(
     switchMap(({ startDate, endDate }) =>
-      combineLatest([this.getReservations(startDate, endDate), this.selectedLocations$])
+      combineLatest([this.getReservations(startDate, endDate), this.selectedLocations$]),
     ),
     map(([reservations, selectedLocations]) => this.filterReservationsByLocations(reservations, selectedLocations)),
-    shareReplay(1)
+    shareReplay(1),
   )
 
   private readonly updateQueryParamsAction$ = merge(
     this.selectedLocations$,
-    this.selectedTimePeriod$.pipe(map(({ startDate }) => ({ startDate: format(startDate, 'YYYY-MM-DD') })))
+    this.selectedTimePeriod$.pipe(map(({ startDate }) => ({ startDate: format(startDate, 'yyyy-MM-dd') }))),
   ).pipe(tap(queryParams => this.updateQueryParams(queryParams)))
 
   constructor(
     private readonly getReservationsGQL: GetReservationsGQL,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
   ) {
     this.loadLocationsQueryParams()
 
@@ -85,8 +85,8 @@ export class CalendarService implements OnDestroy {
           ...reservation,
           startTime: new Date(reservation.startTime),
           endTime: new Date(reservation.endTime),
-        }))
-      )
+        })),
+      ),
     )
   }
 
@@ -97,7 +97,7 @@ export class CalendarService implements OnDestroy {
     return reservations.filter(
       reservation =>
         reservation.locations.badminton === locations.badminton &&
-        reservation.locations.tableTennis === locations.tableTennis
+        reservation.locations.tableTennis === locations.tableTennis,
     )
   }
 

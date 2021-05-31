@@ -1,0 +1,54 @@
+<a tuiOption>
+  <div>{{ time | date: 'short' }} <tui-svg [src]="isAvailable ? 'tuiIconCheck' : 'tuiIconCancel'"></tui-svg></div>
+  <button
+    type="button"
+    tuiIconButton
+    size="s"
+    icon="tuiIconTimeLarge"
+    appearance="flat"
+    (click)="onOpenRescheduleDialog()"
+  ></button>
+</a>
+
+<ng-container *ngIf="{ newStartTime: newStartTime$ | async, newEndTime: newEndTime$ | async } as data">
+  <ng-template polymorpheus let-observer>
+    <tui-notification>
+      You can re-schedule a single reservation of a bigger recurring reservation very easily. It's super useful if it
+      would collide with an existing reservation otherwise or you just know that you won't be able to make it that week.
+    </tui-notification>
+
+    <h4 class="tui-header_h4">Original time: {{ time | date: 'short' }} - {{ endTime | date: 'short' }}</h4>
+
+    <tui-notification *ngIf="rescheduleForm.valid" status="success">
+      Good catch! This time period is available!
+    </tui-notification>
+
+    <form [formGroup]="rescheduleForm">
+      <div class="tui-form__row">
+        <tui-input-date-time formControlName="startTime" [min]="todayTuiDate" [max]="oneYearFromNowTuiDate">
+          New start time
+        </tui-input-date-time>
+      </div>
+
+      <h4 class="tui-header_h4" *ngIf="data.newEndTime">
+        New time: {{ data.newStartTime | date: 'short' }} - {{ data.newEndTime | date: 'short' }}
+      </h4>
+
+      <div class="tui-form__buttons tui-form__buttons_align_end">
+        <button tuiButton type="button" appearance="outline" class="tui-space_right-2" (click)="observer.complete()">
+          Cancel
+        </button>
+        <button
+          tuiButton
+          type="submit"
+          icon="tuiIconCheckLarge"
+          [disabled]="rescheduleForm.invalid"
+          [showLoader]="rescheduleForm.pending"
+          (click)="onReschedule(); observer.complete(); (false)"
+        >
+          Reschedule
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</ng-container>

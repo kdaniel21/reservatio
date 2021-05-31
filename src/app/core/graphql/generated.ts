@@ -311,6 +311,80 @@ export type RefreshAccessTokenQuery = (
   ) }
 );
 
+export type CreateRecurringReservationMutationVariables = Exact<{
+  name: Scalars['String'];
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  includedDates?: Maybe<Array<Scalars['DateTime']> | Scalars['DateTime']>;
+  excludedDates?: Maybe<Array<Scalars['DateTime']> | Scalars['DateTime']>;
+  locations: GraphQlReservationLocationInput;
+  recurrence: Recurrence;
+  timePeriod: TimePeriod;
+}>;
+
+
+export type CreateRecurringReservationMutation = (
+  { __typename?: 'Mutation' }
+  & { createRecurringReservation: (
+    { __typename?: 'CreateRecurringReservationResponseDto' }
+    & Pick<CreateRecurringReservationResponseDto, 'count' | 'recurringId'>
+  ) }
+);
+
+export type CreateReservationMutationVariables = Exact<{
+  name: Scalars['String'];
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  locations: GraphQlReservationLocationInput;
+}>;
+
+
+export type CreateReservationMutation = (
+  { __typename?: 'Mutation' }
+  & { createReservation: (
+    { __typename?: 'GraphQLReservation' }
+    & Pick<GraphQlReservation, 'id' | 'name' | 'isActive' | 'startTime'>
+    & { locations: (
+      { __typename?: 'GraphQLReservationLocationOutput' }
+      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
+    ) }
+  ) }
+);
+
+export type IsRecurringTimeAvailableQueryVariables = Exact<{
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  includedDates?: Maybe<Array<Scalars['DateTime']> | Scalars['DateTime']>;
+  excludedDates?: Maybe<Array<Scalars['DateTime']> | Scalars['DateTime']>;
+  locations: GraphQlReservationLocationInput;
+  recurrence: Recurrence;
+  timePeriod: TimePeriod;
+}>;
+
+
+export type IsRecurringTimeAvailableQuery = (
+  { __typename?: 'Query' }
+  & { isRecurringTimeAvailable: (
+    { __typename?: 'IsRecurringTimeAvailableResponseDto' }
+    & Pick<IsRecurringTimeAvailableResponseDto, 'availableTimes' | 'unavailableTimes'>
+  ) }
+);
+
+export type IsTimeAvailableQueryVariables = Exact<{
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  locations: GraphQlReservationLocationInput;
+}>;
+
+
+export type IsTimeAvailableQuery = (
+  { __typename?: 'Query' }
+  & { isTimeAvailable: (
+    { __typename?: 'IsTimeAvailableResponseDto' }
+    & Pick<IsTimeAvailableResponseDto, 'isTimeAvailable'>
+  ) }
+);
+
 export type GetReservationsQueryVariables = Exact<{
   startDate: Scalars['DateTime'];
   endDate: Scalars['DateTime'];
@@ -413,6 +487,109 @@ export const RefreshAccessTokenDocument = gql`
   })
   export class RefreshAccessTokenGQL extends Apollo.Query<RefreshAccessTokenQuery, RefreshAccessTokenQueryVariables> {
     document = RefreshAccessTokenDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateRecurringReservationDocument = gql`
+    mutation createRecurringReservation($name: String!, $startTime: DateTime!, $endTime: DateTime!, $includedDates: [DateTime!], $excludedDates: [DateTime!], $locations: GraphQLReservationLocationInput!, $recurrence: Recurrence!, $timePeriod: TimePeriod!) {
+  createRecurringReservation(
+    name: $name
+    startTime: $startTime
+    endTime: $endTime
+    includedDates: $includedDates
+    excludedDates: $excludedDates
+    locations: $locations
+    recurrence: $recurrence
+    timePeriod: $timePeriod
+  ) {
+    count
+    recurringId
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateRecurringReservationGQL extends Apollo.Mutation<CreateRecurringReservationMutation, CreateRecurringReservationMutationVariables> {
+    document = CreateRecurringReservationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateReservationDocument = gql`
+    mutation createReservation($name: String!, $startTime: DateTime!, $endTime: DateTime!, $locations: GraphQLReservationLocationInput!) {
+  createReservation(
+    name: $name
+    startTime: $startTime
+    endTime: $endTime
+    locations: $locations
+  ) {
+    id
+    name
+    isActive
+    startTime
+    locations {
+      tableTennis
+      badminton
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateReservationGQL extends Apollo.Mutation<CreateReservationMutation, CreateReservationMutationVariables> {
+    document = CreateReservationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const IsRecurringTimeAvailableDocument = gql`
+    query isRecurringTimeAvailable($startTime: DateTime!, $endTime: DateTime!, $includedDates: [DateTime!], $excludedDates: [DateTime!], $locations: GraphQLReservationLocationInput!, $recurrence: Recurrence!, $timePeriod: TimePeriod!) {
+  isRecurringTimeAvailable(
+    startTime: $startTime
+    endTime: $endTime
+    includedDates: $includedDates
+    excludedDates: $excludedDates
+    locations: $locations
+    recurrence: $recurrence
+    timePeriod: $timePeriod
+  ) {
+    availableTimes
+    unavailableTimes
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class IsRecurringTimeAvailableGQL extends Apollo.Query<IsRecurringTimeAvailableQuery, IsRecurringTimeAvailableQueryVariables> {
+    document = IsRecurringTimeAvailableDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const IsTimeAvailableDocument = gql`
+    query isTimeAvailable($startTime: DateTime!, $endTime: DateTime!, $locations: GraphQLReservationLocationInput!) {
+  isTimeAvailable(startTime: $startTime, endTime: $endTime, locations: $locations) {
+    isTimeAvailable
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class IsTimeAvailableGQL extends Apollo.Query<IsTimeAvailableQuery, IsTimeAvailableQueryVariables> {
+    document = IsTimeAvailableDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

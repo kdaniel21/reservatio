@@ -855,7 +855,7 @@
                     }
                   }
                 },
-                "defaultValue": null,
+                "defaultValue": "[]",
                 "isDeprecated": false,
                 "deprecationReason": null
               },
@@ -875,7 +875,7 @@
                     }
                   }
                 },
-                "defaultValue": null,
+                "defaultValue": "[]",
                 "isDeprecated": false,
                 "deprecationReason": null
               },
@@ -1441,7 +1441,7 @@
                     }
                   }
                 },
-                "defaultValue": null,
+                "defaultValue": "[]",
                 "isDeprecated": false,
                 "deprecationReason": null
               },
@@ -1461,7 +1461,7 @@
                     }
                   }
                 },
-                "defaultValue": null,
+                "defaultValue": "[]",
                 "isDeprecated": false,
                 "deprecationReason": null
               },

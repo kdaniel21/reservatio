@@ -1,0 +1,17 @@
+mutation createReservation(
+  $name: String!
+  $startTime: DateTime!
+  $endTime: DateTime!
+  $locations: GraphQLReservationLocationInput!
+) {
+  createReservation(name: $name, startTime: $startTime, endTime: $endTime, locations: $locations) {
+    id
+    name
+    isActive
+    startTime
+    locations {
+      tableTennis
+      badminton
+    }
+  }
+}

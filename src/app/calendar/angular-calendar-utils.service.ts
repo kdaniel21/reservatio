@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { CalendarEvent } from 'angular-calendar'
-import { GetReservationsGQL } from '../core/graphql/generated'
 import { ReservationListItem } from './calendar/calendar.service'
 
 export type ReservationCalendarEvent = CalendarEvent<{ reservation: ReservationListItem }>
