@@ -78,7 +78,8 @@ export class CalendarService implements OnDestroy {
   }
 
   private getReservations(startDate: Date, endDate: Date): Observable<ReservationListItem[]> {
-    return this.getReservationsGQL.fetch({ startDate, endDate }).pipe(
+    // TOOD: Implement better caching behavior
+    return this.getReservationsGQL.fetch({ startDate, endDate }, { fetchPolicy: 'network-only' }).pipe(
       map(res => res.data.reservations),
       map(reservations =>
         reservations.map(reservation => ({
