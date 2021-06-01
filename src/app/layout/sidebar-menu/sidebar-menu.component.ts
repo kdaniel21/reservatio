@@ -21,6 +21,7 @@ export class SidebarMenuComponent {
   private readonly authenticatedMenuItems: MenuItem[] = [
     { text: 'Home', icon: 'tuiIconStopLarge' },
     { text: 'Calendar', icon: 'tuiIconCalendarLarge', route: ['/', 'calendar'] },
+    { text: 'New reservation', icon: 'tuiIconPlusLarge', route: ['/', 'calendar', 'create'] },
     { text: 'Dashboard', icon: 'tuiIconStructureLarge' },
     { text: 'Sign out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
   ]
@@ -30,13 +31,13 @@ export class SidebarMenuComponent {
   ]
 
   readonly menuItems$ = this.authStateService.isAuthenticated$.pipe(
-    map(isAuthenticated => (isAuthenticated ? this.authenticatedMenuItems : this.guestMenuItems))
+    map(isAuthenticated => (isAuthenticated ? this.authenticatedMenuItems : this.guestMenuItems)),
   )
 
   constructor(
     private readonly authService: AuthService,
     private readonly authStateService: AuthStateService,
-    private readonly router: Router
+    private readonly router: Router,
   ) {}
 
   onMenuItemClick(itemText: string) {
