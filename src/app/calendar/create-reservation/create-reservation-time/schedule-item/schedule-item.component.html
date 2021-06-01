@@ -23,7 +23,7 @@
       Good catch! This time period is available!
     </tui-notification>
 
-    <form [formGroup]="rescheduleForm">
+    <form [formGroup]="rescheduleForm.get('time')">
       <div class="tui-form__row">
         <tui-input-date-time formControlName="startTime" [min]="todayTuiDate" [max]="oneYearFromNowTuiDate">
           New start time

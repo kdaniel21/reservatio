@@ -5,7 +5,8 @@ import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core'
 import { PolymorpheusTemplate } from '@tinkoff/ng-polymorpheus'
 import { add, addMilliseconds, differenceInMilliseconds } from 'date-fns'
 import { Observable } from 'rxjs'
-import { filter, map, mapTo, tap } from 'rxjs/operators'
+import { filter, map, tap } from 'rxjs/operators'
+import { tuiDateTimeFutureOnly } from 'src/app/core/form-validators/tui-date-time-future-only.validator'
 import { tuiDateTimeRequired } from 'src/app/core/form-validators/tui-date-time-required.validator'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
 import { CreateReservationFormService } from '../../create-reservation-form.service'
@@ -26,7 +27,7 @@ export class ScheduleItemComponent implements OnInit {
   readonly oneYearFromNowTuiDate: TuiDay = TuiDay.fromLocalNativeDate(add(new Date(), { years: 1 }))
 
   get originalReservationLengthMs(): number {
-    const { startTime: tuiStartTime, endTime: tuiEndTime } = this.createReservationFormService.form.value
+    const { startTime: tuiStartTime, endTime: tuiEndTime } = this.createReservationFormService.form.get('time').value
     const startTime = TaigaUtils.convertDateTimeToNativeDate(tuiStartTime)
     const endTime = TaigaUtils.convertDateTimeToNativeDate(tuiEndTime)
 
@@ -41,22 +42,24 @@ export class ScheduleItemComponent implements OnInit {
 
   readonly rescheduleForm = this.formBuilder.group(
     {
-      startTime: [undefined, tuiDateTimeRequired],
-      endTime: [undefined, tuiDateTimeRequired],
+      time: this.formBuilder.group({
+        startTime: [undefined, [tuiDateTimeRequired, tuiDateTimeFutureOnly]],
+        endTime: [undefined, [tuiDateTimeRequired, tuiDateTimeFutureOnly]],
+      }),
       locations: [undefined],
     },
     { asyncValidators: [timeAvailabilityValidator(this.createReservationService)] },
   )
 
-  readonly newStartTime$: Observable<Date> = this.rescheduleForm.get('startTime').valueChanges.pipe(
-    filter(() => this.rescheduleForm.get('startTime').valid),
+  readonly newStartTime$: Observable<Date> = this.rescheduleForm.get('time.startTime').valueChanges.pipe(
+    filter(() => this.rescheduleForm.get('time.startTime').valid),
     map((tuiStartTime: [TuiDay, TuiTime]) => TaigaUtils.convertDateTimeToNativeDate(tuiStartTime)),
   )
   readonly newEndTime$: Observable<Date> = this.newStartTime$.pipe(
     map(newStartTime => addMilliseconds(newStartTime, this.originalReservationLengthMs)),
     tap(endTime => {
       const tuiEndDateTime = TaigaUtils.convertNativeDateToDateTime(endTime)
-      this.rescheduleForm.patchValue({ endTime: tuiEndDateTime })
+      this.rescheduleForm.get('time').patchValue({ endTime: tuiEndDateTime })
     }),
   )
 
@@ -77,7 +80,7 @@ export class ScheduleItemComponent implements OnInit {
   }
 
   onReschedule(): void {
-    const { startTime: newTuiTime } = this.rescheduleForm.value
+    const { startTime: newTuiTime } = this.rescheduleForm.get('time').value
     const oldTime = this.time
     const newTime = TaigaUtils.convertDateTimeToNativeDate(newTuiTime)
 
