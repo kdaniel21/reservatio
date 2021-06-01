@@ -21,7 +21,7 @@ export class SidebarMenuComponent {
   private readonly authenticatedMenuItems: MenuItem[] = [
     { text: 'Home', icon: 'tuiIconStopLarge' },
     { text: 'Calendar', icon: 'tuiIconCalendarLarge', route: ['/', 'calendar'] },
-    { text: 'New reservation', icon: 'tuiIconPlusLarge', route: ['/', 'calendar', 'create'] },
+    { text: 'New reservation', icon: 'tuiIconPlusLarge', route: ['/', 'create'] },
     { text: 'Dashboard', icon: 'tuiIconStructureLarge' },
     { text: 'Sign out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
   ]

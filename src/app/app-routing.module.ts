@@ -20,6 +20,12 @@ const routes: Routes = [
         loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarModule),
         canActivate: [AuthenticatedGuard],
       },
+      {
+        path: 'create',
+        loadChildren: () =>
+          import('./create-reservation/create-reservation.module').then(m => m.CreateReservationModule),
+        canActivate: [AuthenticatedGuard],
+      },
     ],
   },
 ]

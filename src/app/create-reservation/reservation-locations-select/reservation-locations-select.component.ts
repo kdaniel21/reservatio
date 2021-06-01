@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core'
-import { ReservationLocations } from '../../calendar/calendar.service'
+import { ReservationLocations } from '../../calendar/calendar/calendar.service'
 
 interface LocationOption {
   icon: string
