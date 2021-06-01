@@ -5,26 +5,42 @@
     This notification has been deleted and therefore is not active anymore.
   </tui-notification>
 
-  <h3 class="tui-header_h3">
-    <div [class.tui-skeleton]="data.isLoading" [class.tui-skeleton_text]="data.isLoading">
-      <tui-svg src="tuiIconInfo"></tui-svg> {{ data.reservation?.name }} (ID: {{ data.reservation?.id }})
-    </div>
-    <div [class.tui-skeleton]="data.isLoading" [class.tui-skeleton_text]="data.isLoading">
-      <tui-svg src="tuiIconUser"></tui-svg>{{ data.reservation?.customer.name }}
-    </div>
-    <div [class.tui-skeleton]="data.isLoading" [class.tui-skeleton_text]="data.isLoading">
+  <tui-data-list>
+    <a tuiOption>
+      <tui-svg src="tuiIconInfo"></tui-svg>
+      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+        {{ data.reservation?.name }} (ID: {{ data.reservation?.id }})
+      </span>
+    </a>
+    <a tuiOption>
+      <tui-svg src="tuiIconUser"></tui-svg>
+      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+        {{ data.reservation?.customer.name }}
+      </span>
+    </a>
+    <a tuiOption>
       <tui-svg src="tuiIconCalendar"></tui-svg>
-      {{ data.reservation?.startTime | date: 'short' }} - {{ data.reservation?.endTime | date: 'short' }}
-    </div>
-    <div *ngIf="data.reservation?.recurringId"><tui-svg src="tuiIconUndo"></tui-svg>Recurring reservation</div>
-
-    <div [class.tui-skeleton]="data.isLoading" [class.tui-skeleton_text]="data.isLoading">
-      <tui-svg src="tuiIconCheckList"></tui-svg>{{ data.reservation?.createdAt | date: 'short' }} (Created)
-    </div>
-    <div *ngIf="data.reservation?.updatedAt !== data.reservation?.createdAt">
-      <tui-svg src="tuiIconEdit"></tui-svg>{{ data.reservation?.updatedAt | date: 'short' }} (Last updated)
-    </div>
-  </h3>
+      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+        {{ data.reservation?.startTime | date: 'short' }} - {{ data.reservation?.endTime | date: 'short' }}
+      </span>
+    </a>
+    <a *ngIf="data.reservation?.recurringId" tuiOption>
+      <tui-svg src="tuiIconUndo"></tui-svg>
+      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">Recurring reservation</span>
+    </a>
+    <a tuiOption>
+      <tui-svg src="tuiIconCheckList"></tui-svg>
+      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+        {{ data.reservation?.createdAt | date: 'short' }} (Created)
+      </span>
+    </a>
+    <a *ngIf="data.reservation?.updatedAt !== data.reservation?.createdAt" tuiOption>
+      <tui-svg src="tuiIconEdit"></tui-svg>
+      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+        {{ data.reservation?.updatedAt | date: 'short' }} (Last updated)
+      </span>
+    </a>
+  </tui-data-list>
 
   <h2 class="tui-header_h2">Locations</h2>
 

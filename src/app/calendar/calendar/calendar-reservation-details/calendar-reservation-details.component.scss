@@ -2,3 +2,13 @@
   display: flex;
   justify-content: flex-end;
 }
+
+a[tuiOption] {
+  outline: none;
+  justify-content: flex-start;
+  cursor: unset;
+
+  & > span.tui-skeleton_text {
+    min-width: 40%;
+  }
+}
