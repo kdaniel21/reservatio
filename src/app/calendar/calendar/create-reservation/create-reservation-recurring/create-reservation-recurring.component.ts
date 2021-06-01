@@ -10,7 +10,7 @@ const timePeriodOptions = {
 
 const recurrenceOptions = {
   [Recurrence.Weekly]: 'Every week on the same day',
-  [Recurrence.Monthly]: 'Every four weeks at the same day',
+  [Recurrence.Monthly]: 'Every four weeks on the same day',
 }
 
 @Component({
