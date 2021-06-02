@@ -1,0 +1,30 @@
+<ng-container *ngIf="{ isLoading: isLoading$ | async } as data">
+  <tui-island size="l" class="tui-space_horizontal-2">
+    <div class="tui-island_title tui-space_bottom-4">
+      <h3 class="tui-text_h3">Confirm email address</h3>
+    </div>
+
+    <p class="tui-island_paragraph">
+      As a last check before logging in for the first time, please confirm your email address. You can do so by clicking
+      the button below.
+    </p>
+
+    <!-- Add some real ToS -->
+    <form [formGroup]="tosForm">
+      <tui-toggle formControlName="isAccepted" size="l" class="tui-space_right-2"></tui-toggle>
+      I accept the terms of service.
+    </form>
+
+    <div id="confirm-wrapper" class="tui-space_top-5">
+      <button
+        tuiButton
+        icon="tuiIconCheckCircleLarge"
+        [disabled]="tosForm.invalid"
+        [showLoader]="data.isLoading"
+        (click)="onConfirmEmail()"
+      >
+        Confirm
+      </button>
+    </div>
+  </tui-island>
+</ng-container>

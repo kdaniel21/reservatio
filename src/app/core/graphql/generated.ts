@@ -252,6 +252,19 @@ export enum TimePeriod {
   CurrentYear = 'CurrentYear'
 }
 
+export type ConfirmEmailMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type ConfirmEmailMutation = (
+  { __typename?: 'Mutation' }
+  & { confirmEmail: (
+    { __typename?: 'MessageResponseDto' }
+    & Pick<MessageResponseDto, 'message'>
+  ) }
+);
+
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -331,6 +344,24 @@ export type GetReservationQuery = (
   ) }
 );
 
+export type GetReservationsQueryVariables = Exact<{
+  startDate: Scalars['DateTime'];
+  endDate: Scalars['DateTime'];
+}>;
+
+
+export type GetReservationsQuery = (
+  { __typename?: 'Query' }
+  & { reservations: Array<(
+    { __typename?: 'GraphQLReservation' }
+    & Pick<GraphQlReservation, 'id' | 'recurringId' | 'name' | 'isActive' | 'startTime' | 'endTime'>
+    & { locations: (
+      { __typename?: 'GraphQLReservationLocationOutput' }
+      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
+    ) }
+  )> }
+);
+
 export type CreateRecurringReservationMutationVariables = Exact<{
   name: Scalars['String'];
   startTime: Scalars['DateTime'];
@@ -405,24 +436,24 @@ export type IsTimeAvailableQuery = (
   ) }
 );
 
-export type GetReservationsQueryVariables = Exact<{
-  startDate: Scalars['DateTime'];
-  endDate: Scalars['DateTime'];
-}>;
+export const ConfirmEmailDocument = gql`
+    mutation confirmEmail($token: String!) {
+  confirmEmail(token: $token) {
+    message
+  }
+}
+    `;
 
-
-export type GetReservationsQuery = (
-  { __typename?: 'Query' }
-  & { reservations: Array<(
-    { __typename?: 'GraphQLReservation' }
-    & Pick<GraphQlReservation, 'id' | 'recurringId' | 'name' | 'isActive' | 'startTime' | 'endTime'>
-    & { locations: (
-      { __typename?: 'GraphQLReservationLocationOutput' }
-      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
-    ) }
-  )> }
-);
-
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ConfirmEmailGQL extends Apollo.Mutation<ConfirmEmailMutation, ConfirmEmailMutationVariables> {
+    document = ConfirmEmailDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const GetCurrentUserDocument = gql`
     query getCurrentUser {
   currentUser {
@@ -544,6 +575,33 @@ export const GetReservationDocument = gql`
       super(apollo);
     }
   }
+export const GetReservationsDocument = gql`
+    query getReservations($startDate: DateTime!, $endDate: DateTime!) {
+  reservations(startDate: $startDate, endDate: $endDate) {
+    id
+    recurringId
+    name
+    isActive
+    startTime
+    endTime
+    locations {
+      tableTennis
+      badminton
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetReservationsGQL extends Apollo.Query<GetReservationsQuery, GetReservationsQueryVariables> {
+    document = GetReservationsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const CreateRecurringReservationDocument = gql`
     mutation createRecurringReservation($name: String!, $startTime: DateTime!, $endTime: DateTime!, $includedDates: [DateTime!], $excludedDates: [DateTime!], $locations: GraphQLReservationLocationInput!, $recurrence: Recurrence!, $timePeriod: TimePeriod!) {
   createRecurringReservation(
@@ -642,33 +700,6 @@ export const IsTimeAvailableDocument = gql`
   })
   export class IsTimeAvailableGQL extends Apollo.Query<IsTimeAvailableQuery, IsTimeAvailableQueryVariables> {
     document = IsTimeAvailableDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const GetReservationsDocument = gql`
-    query getReservations($startDate: DateTime!, $endDate: DateTime!) {
-  reservations(startDate: $startDate, endDate: $endDate) {
-    id
-    recurringId
-    name
-    isActive
-    startTime
-    endTime
-    locations {
-      tableTennis
-      badminton
-    }
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class GetReservationsGQL extends Apollo.Query<GetReservationsQuery, GetReservationsQueryVariables> {
-    document = GetReservationsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
