@@ -60,7 +60,7 @@
     >
       Cancel
     </button>
-    <button
+    <!-- <button
       tuiButton
       icon="tuiIconDraft"
       [disabled]="!data.canEdit"
@@ -68,6 +68,13 @@
       (click)="onEdit()"
     >
       Edit
-    </button>
+    </button> -->
+    <button
+      tuiButton
+      icon="tuiIconTrashLarge"
+      [disabled]="!data.canEdit"
+      [class.tui-skeleton]="data.isLoading"
+      (click)="onDelete()"
+    >Delete</button>
   </div>
 </ng-container>

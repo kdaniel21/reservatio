@@ -34,6 +34,8 @@ export class CalendarReservationDetailsComponent {
     private readonly authStateService: AuthStateService,
   ) {}
 
+  onDelete() {}
+
   onEdit(): void {
     // TODO: Implement edit state
 
