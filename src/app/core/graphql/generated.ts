@@ -252,6 +252,21 @@ export enum TimePeriod {
   CurrentYear = 'CurrentYear'
 }
 
+export type ChangePasswordUsingTokenMutationVariables = Exact<{
+  token: Scalars['String'];
+  password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
+}>;
+
+
+export type ChangePasswordUsingTokenMutation = (
+  { __typename?: 'Mutation' }
+  & { changePasswordUsingToken: (
+    { __typename?: 'MessageResponseDto' }
+    & Pick<MessageResponseDto, 'message'>
+  ) }
+);
+
 export type ConfirmEmailMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
@@ -260,6 +275,19 @@ export type ConfirmEmailMutationVariables = Exact<{
 export type ConfirmEmailMutation = (
   { __typename?: 'Mutation' }
   & { confirmEmail: (
+    { __typename?: 'MessageResponseDto' }
+    & Pick<MessageResponseDto, 'message'>
+  ) }
+);
+
+export type ResetPasswordMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type ResetPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { resetPassword: (
     { __typename?: 'MessageResponseDto' }
     & Pick<MessageResponseDto, 'message'>
   ) }
@@ -436,6 +464,26 @@ export type IsTimeAvailableQuery = (
   ) }
 );
 
+export const ChangePasswordUsingTokenDocument = gql`
+    mutation changePasswordUsingToken($token: String!, $password: String!, $passwordConfirm: String!) {
+  changePasswordUsingToken(
+    params: {passwordResetToken: $token, password: $password, passwordConfirm: $passwordConfirm}
+  ) {
+    message
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ChangePasswordUsingTokenGQL extends Apollo.Mutation<ChangePasswordUsingTokenMutation, ChangePasswordUsingTokenMutationVariables> {
+    document = ChangePasswordUsingTokenDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const ConfirmEmailDocument = gql`
     mutation confirmEmail($token: String!) {
   confirmEmail(token: $token) {
@@ -449,6 +497,24 @@ export const ConfirmEmailDocument = gql`
   })
   export class ConfirmEmailGQL extends Apollo.Mutation<ConfirmEmailMutation, ConfirmEmailMutationVariables> {
     document = ConfirmEmailDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ResetPasswordDocument = gql`
+    mutation resetPassword($email: String!) {
+  resetPassword(email: $email) {
+    message
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ResetPasswordGQL extends Apollo.Mutation<ResetPasswordMutation, ResetPasswordMutationVariables> {
+    document = ResetPasswordDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

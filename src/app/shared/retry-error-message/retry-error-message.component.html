@@ -1,0 +1,9 @@
+<tui-marker-icon size="l" src="tuiIconAlertCircleLarge"></tui-marker-icon>
+
+<div>
+  <h6 class="tui-text_h6 tui-space_top-2 tui-space_bottom-3" [ngTemplateOutlet]="content">
+    {{ message }}
+  </h6>
+
+  <button tuiButton appearance="outline" (click)="onRetry()">Retry</button>
+</div>

@@ -4,7 +4,14 @@ tui-island {
   margin-left: auto;
   margin-right: auto;
 
-  & > form > button {
-    width: 100%;
+  & > form {
+    & > #forgot-password {
+      display: flex;
+      justify-content: right;
+    }
+
+    & > .tui-form__buttons > button {
+      width: 100%;
+    }
   }
 }

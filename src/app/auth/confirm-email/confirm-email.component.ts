@@ -1,9 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { BehaviorSubject } from 'rxjs'
-import { finalize } from 'rxjs/operators'
-import { ConfirmEmailGQL } from 'src/app/core/graphql/generated'
+import { ConfirmEmailService } from './confirm-email.service'
 
 @Component({
   selector: 'app-confirm-email',
@@ -12,8 +10,8 @@ import { ConfirmEmailGQL } from 'src/app/core/graphql/generated'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmEmailComponent {
-  private readonly isLoadingSubject = new BehaviorSubject<boolean>(false)
-  readonly isLoading$ = this.isLoadingSubject.asObservable()
+  readonly isLoading$ = this.confirmEmailService.loader.isLoading$
+  readonly errorMessage$ = this.confirmEmailService.retryHandler.message$
 
   readonly tosForm = this.formBuilder.group({
     isAccepted: [false, Validators.requiredTrue],
@@ -21,21 +19,22 @@ export class ConfirmEmailComponent {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly confirmEmailGQL: ConfirmEmailGQL,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly confirmEmailService: ConfirmEmailService,
   ) {}
 
   onConfirmEmail() {
-    this.isLoadingSubject.next(true)
-
     const confirmationToken = this.route.snapshot.paramMap.get('token')
 
-    this.confirmEmailGQL
-      .mutate({ token: confirmationToken })
-      .pipe(finalize(() => this.isLoadingSubject.next(false)))
-      .subscribe({
-        next: () => this.router.navigate(['/', 'auth', 'login']),
-      })
+    this.confirmEmailService.confirmEmail(confirmationToken).subscribe({
+      next: () => {
+        this.router.navigate(['/', 'auth', 'login'])
+      },
+    })
+  }
+
+  onRetry() {
+    this.confirmEmailService.retryHandler.retryAfterError()
   }
 }

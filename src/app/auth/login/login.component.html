@@ -4,12 +4,18 @@
       <span class="tui-text_h3 title">Login</span>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <tui-input formControlName="email" class="tui-space_bottom-4">Email</tui-input>
+    <form [formGroup]="loginForm" class="tui-form" (ngSubmit)="onLogin()">
+      <tui-input formControlName="email" class="tui-form__row">Email</tui-input>
 
-      <tui-input-password formControlName="password" class="tui-space_bottom-4">Password</tui-input-password>
+      <tui-input-password formControlName="password" class="tui-form__row">Password</tui-input-password>
 
-      <button type="submit" tuiButton icon="tuiIconLoginLarge">Sign in</button>
+      <div id="forgot-password" class="tui-space_vertical-2">
+        <a [routerLink]="['../', 'forgot-password']">Forgotten password?</a>
+      </div>
+
+      <div class="tui-form__buttons tui-space_top-0">
+        <button type="submit" tuiButton icon="tuiIconLoginLarge">Sign in</button>
+      </div>
     </form>
   </tui-island>
 </div>

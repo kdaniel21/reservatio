@@ -1,8 +1,22 @@
 import { NgModule } from '@angular/core'
-import { TuiButtonModule } from '@taiga-ui/core'
-import { TuiIslandModule, TuiInputModule, TuiInputPasswordModule, TuiToggleModule } from '@taiga-ui/kit'
+import { TuiButtonModule, TuiNotificationModule } from '@taiga-ui/core'
+import {
+  TuiIslandModule,
+  TuiInputModule,
+  TuiInputPasswordModule,
+  TuiToggleModule,
+  TuiMarkerIconModule,
+} from '@taiga-ui/kit'
 
-const taigaModules = [TuiIslandModule, TuiInputModule, TuiInputPasswordModule, TuiButtonModule, TuiToggleModule]
+const taigaModules = [
+  TuiIslandModule,
+  TuiInputModule,
+  TuiInputPasswordModule,
+  TuiButtonModule,
+  TuiToggleModule,
+  TuiMarkerIconModule,
+  TuiNotificationModule,
+]
 
 @NgModule({
   imports: taigaModules,
