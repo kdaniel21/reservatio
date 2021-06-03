@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core'
 import { AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms'
+import { ActivatedRoute } from '@angular/router'
+import isValid from 'date-fns/isValid'
 import { BehaviorSubject, merge, Observable, of, Subject } from 'rxjs'
 import { distinctUntilChanged, map, startWith, takeUntil, tap } from 'rxjs/operators'
 import { tuiDateTimeFutureOnly } from 'src/app/core/form-validators/tui-date-time-future-only.validator'
@@ -65,8 +67,11 @@ export class CreateReservationFormService {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly createReservationService: CreateReservationService,
+    private readonly route: ActivatedRoute,
   ) {
     merge(this.setCorrectValidatorAction$).pipe(takeUntil(this.destroy$)).subscribe()
+
+    this.preFillQueryParams()
   }
 
   toggleLocation(path: string) {
@@ -97,6 +102,16 @@ export class CreateReservationFormService {
     this.form
       .get('recurring')
       .patchValue({ includedDates: [...includedDates, newTime], excludedDates: [...excludedDates, oldTime] })
+  }
+
+  private preFillQueryParams() {
+    const startTimeParam = this.route.snapshot.queryParamMap.get('startTime')
+    const startTime = new Date(startTimeParam)
+
+    if (isValid(startTime)) {
+      const tuiStartTime = TaigaUtils.convertNativeDateToDateTime(startTime)
+      this.form.get('time').patchValue({ startTime: tuiStartTime })
+    }
   }
 
   // TODO: Repeat this query only if there are no items left in the unavailableItems$ subject

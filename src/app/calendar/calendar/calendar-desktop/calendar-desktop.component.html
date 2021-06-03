@@ -14,6 +14,8 @@
     [daysInWeek]="data.daysInWeek"
     [weekStartsOn]="1"
     [eventTemplate]="customEvent"
+    (dayHeaderClicked)="onSelectTimeToEdit($event.day.date)"
+    (hourSegmentClicked)="onSelectTimeToEdit($event.date)"
   ></mwl-calendar-week-view>
 
   <ng-template #customEvent let-weekEvent="weekEvent">

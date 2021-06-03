@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, ElementRef, Inject, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { WINDOW } from '@ng-web-apis/common'
 import { CalendarEventTitleFormatter, CalendarWeekViewComponent } from 'angular-calendar'
 import { addDays } from 'date-fns'
@@ -37,13 +37,14 @@ export class CalendarDesktopComponent implements OnInit {
 
   readonly selectedTimePeriod$ = this.calendarService.selectedTimePeriod$
 
-  readonly reservationCalendarEvents$ = this.calendarService.reservations$.pipe(
+  readonly reservationCalendarEvents$: Observable<void> = this.calendarService.reservations$.pipe(
     map(reservations => reservations.map(this.angularCalendarUtils.convertReservationToCalendarEvent)),
+    mapTo(void 0),
   )
 
-  @ViewChild(CalendarWeekViewComponent, { read: ElementRef }) calendar: ElementRef<any>
+  @ViewChild(CalendarWeekViewComponent, { read: ElementRef }) calendar: ElementRef<Element>
 
-  private readonly scrollToTopAction$ = this.selectedTimePeriod$.pipe(
+  private readonly scrollToTopAction$: Observable<void> = this.selectedTimePeriod$.pipe(
     tap(() => this.calendar?.nativeElement?.scrollTo({ top: 0 })),
     mapTo(void 0),
   )
@@ -51,19 +52,20 @@ export class CalendarDesktopComponent implements OnInit {
   constructor(
     private readonly elementRef: ElementRef,
     @Inject(WINDOW) private readonly window: Window,
+    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly calendarService: CalendarService,
     private readonly angularCalendarUtils: AngularCalendarUtilsService,
     private readonly destroy$: TuiDestroyService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     merge(this.scrollToTopAction$).pipe(takeUntil(this.destroy$)).subscribe()
 
     this.initStartDateFromRoute()
   }
 
-  initStartDateFromRoute() {
+  initStartDateFromRoute(): void {
     const startDateString = this.route.snapshot.queryParamMap.get('startDate')
     const selectedTimePeriodStartDate = startDateString ? new Date(startDateString) : new Date()
     this.numOfDisplayedDays$.pipe(take(1)).subscribe({
@@ -72,5 +74,9 @@ export class CalendarDesktopComponent implements OnInit {
         this.calendarService.setTimePeriod(selectedTimePeriodStartDate, newEndDate)
       },
     })
+  }
+
+  onSelectTimeToEdit(time: Date): void {
+    this.router.navigate(['/', 'create'], { queryParams: { startTime: time.toISOString() } })
   }
 }
