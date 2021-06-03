@@ -1,4 +1,4 @@
-<div class="tui-space_horizontal-2">
+<ng-container *ngIf="{ isLoading: isLoading$ | async } as data">
   <tui-island size="l">
     <div class="tui-island__title tui-space_bottom-4">
       <span class="tui-text_h3 title">Login</span>
@@ -14,8 +14,16 @@
       </div>
 
       <div class="tui-form__buttons tui-space_top-0">
-        <button type="submit" tuiButton icon="tuiIconLoginLarge">Sign in</button>
+        <button
+          type="submit"
+          tuiButton
+          icon="tuiIconLoginLarge"
+          [disabled]="loginForm.invalid"
+          [showLoader]="data.isLoading"
+        >
+          Sign in
+        </button>
       </div>
     </form>
   </tui-island>
-</div>
+</ng-container>

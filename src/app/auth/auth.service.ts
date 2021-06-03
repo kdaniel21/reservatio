@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
 import { TuiNotification } from '@taiga-ui/core'
 import { Observable } from 'rxjs'
 import { map, mapTo, tap } from 'rxjs/operators'
@@ -12,7 +13,8 @@ export class AuthService {
     private readonly authStateService: AuthStateService,
     private readonly loginGQL: LoginGQL,
     private readonly logoutGQL: LogoutGQL,
-    private readonly notificationsService: NotificationsService
+    private readonly notificationsService: NotificationsService,
+    private readonly router: Router,
   ) {}
 
   login(email: string, password: string): Observable<void> {
@@ -22,21 +24,22 @@ export class AuthService {
       map(loginData => loginData?.user),
       tap(user => this.authStateService.setUser(user)),
       tap(() =>
-        this.notificationsService.show('You have successfully logged in!', { status: TuiNotification.Success })
+        this.notificationsService.show('You have successfully logged in!', { status: TuiNotification.Success }),
       ),
-      mapTo(void 0)
+      mapTo(void 0),
     )
   }
 
   logout(): Observable<void> {
     return this.logoutGQL.mutate().pipe(
       tap(() => {
-        this.notificationsService.show('You have been successfully logged out!', { status: TuiNotification.Success })
-
         this.authStateService.resetAccessToken()
         this.authStateService.resetUser()
+
+        this.notificationsService.show('You have been successfully logged out!', { status: TuiNotification.Success })
+        this.router.navigate(['/', 'auth', 'login'])
       }),
-      mapTo(void 0)
+      mapTo(void 0),
     )
   }
 }

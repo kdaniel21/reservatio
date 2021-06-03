@@ -14,17 +14,20 @@ const routes: Routes = [
         path: 'auth',
         loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
         canActivate: [UnauthenticatedGuard],
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'calendar',
         loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarModule),
         canActivate: [AuthenticatedGuard],
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'create',
         loadChildren: () =>
           import('./create-reservation/create-reservation.module').then(m => m.CreateReservationModule),
         canActivate: [AuthenticatedGuard],
+        runGuardsAndResolvers: 'always',
       },
     ],
   },
