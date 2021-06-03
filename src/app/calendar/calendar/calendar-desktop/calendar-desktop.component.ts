@@ -36,6 +36,8 @@ export class CalendarDesktopComponent implements OnInit {
   )
 
   readonly selectedTimePeriod$ = this.calendarService.selectedTimePeriod$
+  readonly isLoading$ = this.calendarService.loader.isLoading$
+  readonly errorMessage$ = this.calendarService.retryHandler.message$
 
   readonly reservationCalendarEvents$: Observable<ReservationCalendarEvent[]> = this.calendarService.reservations$.pipe(
     map(reservations => reservations.map(this.angularCalendarUtils.convertReservationToCalendarEvent)),
@@ -77,5 +79,9 @@ export class CalendarDesktopComponent implements OnInit {
 
   onSelectTimeToEdit(time: Date): void {
     this.router.navigate(['/', 'create'], { queryParams: { startTime: time.toISOString() } })
+  }
+
+  onRetry(): void {
+    this.calendarService.retryHandler.retryAfterError()
   }
 }

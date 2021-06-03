@@ -8,6 +8,10 @@ import {
   GetReservationsQuery,
   GraphQlReservationLocationOutput,
 } from 'src/app/core/graphql/generated'
+import { Loader } from 'src/app/core/loader/loader'
+import { handleRetry } from 'src/app/core/retry-error-handler/handle-retry'
+import { RetryErrorHandler } from 'src/app/core/retry-error-handler/retry-error-handler'
+import { RetryableService } from 'src/app/core/retry-error-handler/retryable.service'
 
 export interface ReservationTimePeriod {
   startDate: Date
@@ -19,8 +23,11 @@ export type ReservationLocations = Omit<GraphQlReservationLocationOutput, '__typ
 export type ReservationListItem = GetReservationsQuery['reservations'][number]
 
 @Injectable({ providedIn: 'root' })
-export class CalendarService implements OnDestroy {
+export class CalendarService implements RetryableService, OnDestroy {
   private readonly destroy$ = new Subject<void>()
+
+  readonly loader = new Loader()
+  readonly retryHandler = new RetryErrorHandler()
 
   private readonly selectedTimePeriodSubject = new BehaviorSubject<ReservationTimePeriod>(undefined)
   readonly selectedTimePeriod$ = this.selectedTimePeriodSubject.pipe(filter(val => !!val))
@@ -88,6 +95,7 @@ export class CalendarService implements OnDestroy {
           endTime: new Date(reservation.endTime),
         })),
       ),
+      handleRetry(this, 'Could not load reservations!'),
     )
   }
 

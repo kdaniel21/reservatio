@@ -1,17 +1,19 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   width: 100%;
-  max-width: 100%;
   height: calc(100vh - 2rem);
+
   padding-top: 1rem;
   padding-bottom: 1rem;
 
-  & mwl-calendar-week-view::ng-deep {
-    display: block;
+  & #calendar-wrapper {
     overflow-y: auto;
     height: 100%;
 
-    & mwl-calendar-week-view-header {
+    &::ng-deep mwl-calendar-week-view-header {
       position: sticky;
       top: 0;
       z-index: 999;
@@ -21,6 +23,4 @@
       }
     }
   }
-
-  // TODO: Fix upward scrolling bug
 }

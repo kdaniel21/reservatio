@@ -2,21 +2,31 @@
   *ngIf="{
     daysInWeek: numOfDisplayedDays$ | async,
     selectedTimePeriod: selectedTimePeriod$ | async,
-    calendarEvents: reservationCalendarEvents$ | async
+    calendarEvents: reservationCalendarEvents$ | async,
+    isLoading: isLoading$ | async,
+    errorMessage: errorMessage$ | async
   } as data"
 >
   <!-- TODO: Take care of i18n -->
-  <mwl-calendar-week-view
-    tuiOverscroll="scroll"
-    precision="minutes"
-    [viewDate]="data.selectedTimePeriod?.startDate"
-    [events]="data.calendarEvents"
-    [daysInWeek]="data.daysInWeek"
-    [weekStartsOn]="1"
-    [eventTemplate]="customEvent"
-    (dayHeaderClicked)="onSelectTimeToEdit($event.day.date)"
-    (hourSegmentClicked)="onSelectTimeToEdit($event.date)"
-  ></mwl-calendar-week-view>
+  <div *ngIf="!data.errorMessage; else error" id="calendar-wrapper">
+    <tui-loader [showLoader]="data.isLoading" [overlay]="true">
+      <mwl-calendar-week-view
+        tuiOverscroll="scroll"
+        precision="minutes"
+        [viewDate]="data.selectedTimePeriod?.startDate"
+        [events]="data.calendarEvents"
+        [daysInWeek]="data.daysInWeek"
+        [weekStartsOn]="1"
+        [eventTemplate]="customEvent"
+        (dayHeaderClicked)="onSelectTimeToEdit($event.day.date)"
+        (hourSegmentClicked)="onSelectTimeToEdit($event.date)"
+      ></mwl-calendar-week-view>
+    </tui-loader>
+  </div>
+
+  <ng-template #error>
+    <app-retry-error-message [message]="data.errorMessage" (retry)="onRetry()"></app-retry-error-message>
+  </ng-template>
 
   <ng-template #customEvent let-weekEvent="weekEvent">
     <app-calendar-item [calendarEvent]="weekEvent.event" [height]="weekEvent.height"></app-calendar-item>

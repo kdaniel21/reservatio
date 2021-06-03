@@ -14,6 +14,7 @@ import { CalendarItemComponent } from './calendar/calendar-item/calendar-item.co
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { CalendarDesktopActionButtonsComponent } from './calendar/calendar-desktop/calendar-desktop-action-buttons/calendar-desktop-action-buttons.component'
 import { ReservationLocationsSelectModule } from '../create-reservation/reservation-locations-select/reservation-locations-select.module'
+import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-error-message.module'
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ReservationLocationsSelectModule } from '../create-reservation/reservat
     FormsModule,
     ReactiveFormsModule,
     ReservationLocationsSelectModule,
+    RetryErrorMessageModule,
   ],
 })
 export class CalendarModule {}

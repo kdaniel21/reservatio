@@ -5,6 +5,7 @@ import {
   TuiDataListModule,
   TuiExpandModule,
   TuiHostedDropdownModule,
+  TuiLoaderModule,
   TuiSvgModule,
 } from '@taiga-ui/core'
 import { TuiCheckboxLabeledModule, TuiIslandModule } from '@taiga-ui/kit'
@@ -18,6 +19,7 @@ const taigaModules = [
   TuiCheckboxLabeledModule,
   TuiExpandModule,
   TuiDataListModule,
+  TuiLoaderModule,
 ]
 
 @NgModule({
