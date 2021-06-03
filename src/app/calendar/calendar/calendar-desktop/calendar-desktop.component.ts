@@ -5,7 +5,7 @@ import { CalendarEventTitleFormatter, CalendarWeekViewComponent } from 'angular-
 import { addDays } from 'date-fns'
 import { fromEvent, merge, Observable } from 'rxjs'
 import { distinctUntilChanged, map, mapTo, startWith, take, takeUntil, tap } from 'rxjs/operators'
-import { AngularCalendarUtilsService } from '../../angular-calendar-utils.service'
+import { AngularCalendarUtilsService, ReservationCalendarEvent } from '../../angular-calendar-utils.service'
 import { CalendarService } from '../calendar.service'
 import { CustomEventTitleFormatter } from '../../angular-calendar-utils/custom-event-title-formatter'
 import { ReservationDetailsService } from '../calendar-reservation-details/reservation-details.service'
@@ -37,9 +37,8 @@ export class CalendarDesktopComponent implements OnInit {
 
   readonly selectedTimePeriod$ = this.calendarService.selectedTimePeriod$
 
-  readonly reservationCalendarEvents$: Observable<void> = this.calendarService.reservations$.pipe(
+  readonly reservationCalendarEvents$: Observable<ReservationCalendarEvent[]> = this.calendarService.reservations$.pipe(
     map(reservations => reservations.map(this.angularCalendarUtils.convertReservationToCalendarEvent)),
-    mapTo(void 0),
   )
 
   @ViewChild(CalendarWeekViewComponent, { read: ElementRef }) calendar: ElementRef<Element>
