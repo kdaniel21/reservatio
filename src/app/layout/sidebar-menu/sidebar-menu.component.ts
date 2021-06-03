@@ -19,7 +19,6 @@ interface MenuItem {
 })
 export class SidebarMenuComponent {
   private readonly authenticatedMenuItems: MenuItem[] = [
-    { text: 'Home', icon: 'tuiIconStopLarge' },
     { text: 'Calendar', icon: 'tuiIconCalendarLarge', route: ['/', 'calendar'] },
     { text: 'New reservation', icon: 'tuiIconPlusLarge', route: ['/', 'create'] },
     { text: 'Dashboard', icon: 'tuiIconStructureLarge' },
