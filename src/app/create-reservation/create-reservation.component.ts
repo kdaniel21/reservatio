@@ -42,17 +42,11 @@ export class CreateReservationComponent extends CreateReservationBaseComponent {
   }
 
   onCreateReservation(): void {
-    const {
-      name,
-      startTime: tuiStartTime,
-      endTime: tuiEndTime,
-      locations,
-      recurring,
-    } = this.createReservationForm.value
+    const { name, time, locations, recurring } = this.createReservationForm.value
     const { isRecurring } = recurring
 
-    const startTime = TaigaUtils.convertDateTimeToNativeDate(tuiStartTime)
-    const endTime = TaigaUtils.convertDateTimeToNativeDate(tuiEndTime)
+    const startTime = TaigaUtils.convertDateTimeToNativeDate(time.startTime)
+    const endTime = TaigaUtils.convertDateTimeToNativeDate(time.endTime)
 
     const action = isRecurring
       ? this.createReservationService.createRecurringReservation({ name, locations, startTime, endTime, ...recurring })
