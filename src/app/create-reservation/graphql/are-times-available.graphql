@@ -1,0 +1,11 @@
+query areTimesAvailable($timeProposals: [TimeAvailableInputDto!]!) {
+  areTimesAvailable(timeProposals: $timeProposals) {
+    startTime
+    endTime
+    locations {
+      tableTennis
+      badminton
+    }
+    isTimeAvailable
+  }
+}

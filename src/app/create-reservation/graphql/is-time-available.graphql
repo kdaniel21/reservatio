@@ -1,5 +1,0 @@
-query isTimeAvailable($startTime: DateTime!, $endTime: DateTime!, $locations: GraphQLReservationLocationInput!) {
-  isTimeAvailable(startTime: $startTime, endTime: $endTime, locations: $locations) {
-    isTimeAvailable
-  }
-}
