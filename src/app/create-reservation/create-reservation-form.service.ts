@@ -104,8 +104,10 @@ export class CreateReservationFormService {
       .patchValue({ includedDates: [...includedDates, newTime], excludedDates: [...excludedDates, oldTime] })
   }
 
-  private preFillQueryParams() {
+  private preFillQueryParams(): void {
     const startTimeParam = this.route.snapshot.queryParamMap.get('startTime')
+    if (!startTimeParam) return
+
     const startTime = new Date(startTimeParam)
 
     if (isValid(startTime)) {
