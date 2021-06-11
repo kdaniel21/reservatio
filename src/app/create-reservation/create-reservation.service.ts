@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { TuiNotification } from '@taiga-ui/core'
 import { Observable } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import {
@@ -44,7 +43,7 @@ export class CreateReservationService {
       map(res => res.data.createReservation),
       tap(createdReservation => {
         const notificationText = `Reservation ${createdReservation.name} has been successfully created!`
-        this.notificationsService.show(notificationText, { status: TuiNotification.Success, hasIcon: true })
+        this.notificationsService.showSuccess(notificationText)
       }),
     )
   }
@@ -54,7 +53,7 @@ export class CreateReservationService {
       map(res => ({ count: res.data.createRecurringReservation.count })),
       tap(count => {
         const notificationText = `${count} reservations have been successfully created!`
-        this.notificationsService.show(notificationText, { status: TuiNotification.Success, hasIcon: true })
+        this.notificationsService.showSuccess(notificationText)
       }),
     )
   }

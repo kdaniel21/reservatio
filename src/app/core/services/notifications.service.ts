@@ -1,16 +1,35 @@
 import { Injectable } from '@angular/core'
-import { TuiNotificationContentContext, TuiNotificationOptions, TuiNotificationsService } from '@taiga-ui/core'
+import {
+  TuiNotification,
+  TuiNotificationContentContext,
+  TuiNotificationOptions,
+  TuiNotificationsService,
+} from '@taiga-ui/core'
 import { PolymorpheusContent } from '@tinkoff/ng-polymorpheus'
 
-@Injectable({
-  providedIn: 'root',
-})
+type NotificationContent = PolymorpheusContent<TuiNotificationContentContext<void, undefined>>
+
+@Injectable({ providedIn: 'root' })
 export class NotificationsService {
   constructor(private readonly tuiNotificationsService: TuiNotificationsService) {}
 
-  // TODO: Refactor in a way that the TuiNotifications stuff doesn't need to be passed in
-  // So create separate methods like showSuccess, showError etc.
-  show(content: PolymorpheusContent<TuiNotificationContentContext<void, undefined>>, options: TuiNotificationOptions) {
+  show(content: NotificationContent, options: TuiNotificationOptions) {
     this.tuiNotificationsService.show(content, options).subscribe()
+  }
+
+  showSuccess(content: NotificationContent) {
+    this.show(content, { status: TuiNotification.Success })
+  }
+
+  showError(content: NotificationContent) {
+    this.show(content, { status: TuiNotification.Error })
+  }
+
+  showWarning(content: NotificationContent) {
+    this.show(content, { status: TuiNotification.Warning })
+  }
+
+  showInfo(content: NotificationContent) {
+    this.show(content, { status: TuiNotification.Info })
   }
 }

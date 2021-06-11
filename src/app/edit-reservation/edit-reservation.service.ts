@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { TuiNotification } from '@taiga-ui/core'
 import { EMPTY, Observable } from 'rxjs'
 import { map, mapTo, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { Reservation } from '../calendar/calendar/calendar-reservation-details/reservation-details.service'
@@ -41,7 +40,7 @@ export class EditReservationService implements RetryableService {
         const message = connectedUpdates.length
           ? `The reservation ${updatedReservation.name} and ${connectedUpdates.length} more have been successfully updated!`
           : `The reservation ${updatedReservation.name} has been successfully updated!`
-        this.notificationsService.show(message, { status: TuiNotification.Success })
+        this.notificationsService.showSuccess(message)
       }),
       mapTo(void 0),
       handleRetry(this, 'Something went wrong while updating the reservation.'),
@@ -60,7 +59,7 @@ export class EditReservationService implements RetryableService {
           connectedUpdates.length > 1
             ? `${connectedUpdates.length} reservations have been removed!`
             : `Reservation has been removed!`
-        this.notificationsService.show(message, { status: TuiNotification.Success })
+        this.notificationsService.showSuccess(message)
       }),
       mapTo(void 0),
       handleRetry(this, 'Could not remove reservation.'),

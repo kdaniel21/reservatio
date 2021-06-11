@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { TuiNotification } from '@taiga-ui/core'
 import { Observable } from 'rxjs'
 import { map, mapTo, tap } from 'rxjs/operators'
 import { LoginGQL, LogoutGQL } from '../core/graphql/generated'
@@ -23,9 +22,7 @@ export class AuthService {
       tap(loginData => this.authStateService.setAccessToken(loginData?.accessToken)),
       map(loginData => loginData?.user),
       tap(user => this.authStateService.setUser(user)),
-      tap(() =>
-        this.notificationsService.show('You have successfully logged in!', { status: TuiNotification.Success }),
-      ),
+      tap(() => this.notificationsService.showSuccess('You have successfully logged in!')),
       mapTo(void 0),
     )
   }
@@ -36,7 +33,7 @@ export class AuthService {
         this.authStateService.resetAccessToken()
         this.authStateService.resetUser()
 
-        this.notificationsService.show('You have been successfully logged out!', { status: TuiNotification.Success })
+        this.notificationsService.showSuccess('You have been successfully logged out!')
         this.router.navigate(['/', 'auth', 'login'])
       }),
       mapTo(void 0),

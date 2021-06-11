@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core'
 import { onError } from '@apollo/client/link/error'
-import { TuiNotification, TuiNotificationsService } from '@taiga-ui/core'
+import { NotificationsService } from '../services/notifications.service'
 import { errorMap } from './error-map'
 
 export interface GraphqlContext extends Record<string, any> {
@@ -12,7 +12,7 @@ export const errorHandler = (injector: Injector) =>
     const context: GraphqlContext = operation.getContext()
     if (context.avoidErrorNotification) return
 
-    const notificationsService = injector.get(TuiNotificationsService)
+    const notificationsService = injector.get(NotificationsService)
 
     let errorCode: string
 
@@ -20,5 +20,5 @@ export const errorHandler = (injector: Injector) =>
     else if (networkError) errorCode = 'NETWORK_ERROR'
 
     const errorMessage = errorMap.get(errorCode) || errorMap.get('DEFAULT')
-    notificationsService.show(errorMessage, { status: TuiNotification.Error }).subscribe()
+    notificationsService.showError(errorMessage)
   })

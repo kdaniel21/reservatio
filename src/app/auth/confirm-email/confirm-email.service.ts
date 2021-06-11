@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { TuiNotification } from '@taiga-ui/core'
 import { Observable } from 'rxjs'
 import { mapTo, tap } from 'rxjs/operators'
 import { ConfirmEmailGQL } from 'src/app/core/graphql/generated'
@@ -23,7 +22,7 @@ export class ConfirmEmailService implements RetryableService {
     return this.confirmEmailGQL.mutate({ token: confirmationToken }).pipe(
       tap(() => {
         const notificationText = 'Your email address has been successfully confirmed. Now you can log in!'
-        this.notificationsService.show(notificationText, { status: TuiNotification.Success })
+        this.notificationsService.showSuccess(notificationText)
       }),
       mapTo(void 0),
       handleRetry(this, 'Could not confirm email address. Please try again!'),
