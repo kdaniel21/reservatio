@@ -3,7 +3,7 @@
     *ngFor="let option of locationOptions"
     tuiButton
     size="xl"
-    icon="tuiIconCallLarge"
+    [icon]="option.icon"
     [appearance]="locations && locations[option.value] ? 'primary' : 'outline'"
     [disabled]="isLoading || isDisabled"
     [class.tui-skeleton]="isLoading"
