@@ -23,14 +23,11 @@
       ></app-connected-update-form>
 
       <div class="tui-form__buttons tui-form__buttons_align_end">
-        <!-- <button type="button" tuiButton appearance="outline" class="tui-space_right-3" [routerLink]="['..']">
-          Cancel
-        </button> -->
         <button
           type="button"
           tuiButton
           appearance="negative"
-          class="tui-space_right-3"
+          class="tui-form__button"
           icon="tuiIconTrashLarge"
           (click)="onRemove()"
         >
@@ -41,6 +38,7 @@
           type="submit"
           tuiButton
           icon="tuiIconCheckLarge"
+          class="tui-form__button"
           [disabled]="editReservationForm.invalid || editReservationForm.pristine"
           [showLoader]="data.isLoading || editReservationForm.pending"
           (click)="onUpdateReservation()"

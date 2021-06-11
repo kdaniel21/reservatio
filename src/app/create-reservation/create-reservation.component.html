@@ -30,6 +30,7 @@
           <button
             tuiButton
             icon="tuiIconCheckCircleLarge"
+            class="tui-form__button"
             [disabled]="createReservationForm.invalid"
             [showLoader]="createReservationForm.pending || data.isLoading"
             (click)="onCreateReservation()"
