@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { TuiDestroyService } from '@taiga-ui/cdk'
 import { format } from 'date-fns'
-import { defer } from 'rxjs'
+import { defer, Observable } from 'rxjs'
 import { finalize } from 'rxjs/operators'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
 import { Loader } from '../core/loader/loader'
@@ -47,20 +47,17 @@ export class CreateReservationComponent {
     const startTime = TaigaUtils.convertDateTimeToNativeDate(time.startTime)
     const endTime = TaigaUtils.convertDateTimeToNativeDate(time.endTime)
 
-    const action = isRecurring
+    const action: Observable<any> = isRecurring
       ? this.createReservationService.createRecurringReservation({ name, locations, startTime, endTime, ...recurring })
       : this.createReservationService.createReservation({ name, startTime, endTime, locations })
 
     this.loader.startLoading()
 
-    // TODO: Make this more straightforward and investigate why simply subscribing is wrong?
-    defer(() => action)
-      .pipe(finalize(() => this.loader.stopLoading()))
-      .subscribe({
-        next: () => {
-          const startDate = format(startTime, 'yyyy-MM-dd')
-          this.router.navigate(['/', 'calendar'], { queryParams: { startDate } })
-        },
-      })
+    action.pipe(finalize(() => this.loader.stopLoading())).subscribe({
+      next: () => {
+        const startDate = format(startTime, 'yyyy-MM-dd')
+        this.router.navigate(['/', 'calendar'], { queryParams: { startDate } })
+      },
+    })
   }
 }
