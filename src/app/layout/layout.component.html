@@ -2,7 +2,6 @@
   <div
     *ngIf="{ isMobile: isMobile$ | async } as data"
     id="layout-container"
-    [ngStyle]="{ flexDirection: data.isMobile ? 'column' : 'row' }"
   >
     <app-mobile-navbar *ngIf="data.isMobile; else desktopSidebar"></app-mobile-navbar>
 
@@ -11,9 +10,7 @@
     </ng-template>
 
     <div id="outlet-container">
-      <div class="tui-container">
-        <router-outlet></router-outlet>
-      </div>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </tui-root>

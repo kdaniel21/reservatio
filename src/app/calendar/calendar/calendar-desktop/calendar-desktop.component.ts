@@ -1,10 +1,10 @@
-import { Component, ChangeDetectionStrategy, ElementRef, Inject, OnInit, ViewChild } from '@angular/core'
+import { Component, ChangeDetectionStrategy, ElementRef, Inject, ViewChild, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { WINDOW } from '@ng-web-apis/common'
 import { CalendarEventTitleFormatter, CalendarWeekViewComponent } from 'angular-calendar'
 import { addDays, isPast } from 'date-fns'
 import { fromEvent, merge, Observable } from 'rxjs'
-import { distinctUntilChanged, map, mapTo, startWith, take, takeUntil, tap } from 'rxjs/operators'
+import { distinctUntilChanged, first, map, mapTo, startWith, takeUntil, tap } from 'rxjs/operators'
 import { AngularCalendarUtilsService, ReservationCalendarEvent } from '../../angular-calendar-utils.service'
 import { CalendarService } from '../calendar.service'
 import { CustomEventTitleFormatter } from '../../angular-calendar-utils/custom-event-title-formatter'
@@ -22,7 +22,7 @@ import { TuiDestroyService } from '@taiga-ui/cdk'
     TuiDestroyService,
   ],
 })
-export class CalendarDesktopComponent implements OnInit {
+export class CalendarDesktopComponent implements AfterViewInit {
   private readonly DAY_WIDTH_PX = 140
 
   readonly numOfDisplayedDays$: Observable<number> = fromEvent(this.window, 'resize').pipe(
@@ -60,7 +60,7 @@ export class CalendarDesktopComponent implements OnInit {
     private readonly destroy$: TuiDestroyService,
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     merge(this.scrollToTopAction$).pipe(takeUntil(this.destroy$)).subscribe()
 
     this.initStartDateFromRoute()
@@ -69,7 +69,8 @@ export class CalendarDesktopComponent implements OnInit {
   initStartDateFromRoute(): void {
     const startDateString = this.route.snapshot.queryParamMap.get('startDate')
     const selectedTimePeriodStartDate = startDateString ? new Date(startDateString) : new Date()
-    this.numOfDisplayedDays$.pipe(take(1)).subscribe({
+
+    this.numOfDisplayedDays$.pipe(first()).subscribe({
       next: displayedNumOfDays => {
         const newEndDate = addDays(selectedTimePeriodStartDate, displayedNumOfDays - 1)
         this.calendarService.setTimePeriod(selectedTimePeriodStartDate, newEndDate)

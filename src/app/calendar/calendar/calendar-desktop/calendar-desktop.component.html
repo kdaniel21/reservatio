@@ -1,6 +1,5 @@
 <ng-container
   *ngIf="{
-    daysInWeek: numOfDisplayedDays$ | async,
     selectedTimePeriod: selectedTimePeriod$ | async,
     calendarEvents: reservationCalendarEvents$ | async,
     isLoading: isLoading$ | async,
@@ -11,11 +10,12 @@
   <div *ngIf="!data.hasError; else error" id="calendar-wrapper">
     <tui-loader [showLoader]="data.isLoading" [overlay]="true">
       <mwl-calendar-week-view
+        *ngIf="data.selectedTimePeriod"
         tuiOverscroll="scroll"
         precision="minutes"
         [viewDate]="data.selectedTimePeriod?.startDate"
         [events]="data.calendarEvents"
-        [daysInWeek]="data.daysInWeek"
+        [daysInWeek]="numOfDisplayedDays$ | async"
         [weekStartsOn]="1"
         [eventTemplate]="customEvent"
         (dayHeaderClicked)="onSelectTimeToEdit($event.day.date)"
@@ -32,5 +32,7 @@
     <app-calendar-item [calendarEvent]="weekEvent.event" [height]="weekEvent.height"></app-calendar-item>
   </ng-template>
 
-  <app-calendar-desktop-action-buttons [numOfDisplayedDays]="data.daysInWeek"></app-calendar-desktop-action-buttons>
+  <app-calendar-desktop-action-buttons
+    [numOfDisplayedDays]="numOfDisplayedDays$ | async"
+  ></app-calendar-desktop-action-buttons>
 </ng-container>

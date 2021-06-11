@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms'
 import { TuiDay, TuiDestroyService } from '@taiga-ui/cdk'
 import { addDays } from 'date-fns'
 import { merge } from 'rxjs'
-import { map, take, takeUntil, tap } from 'rxjs/operators'
+import { first, map, takeUntil, tap } from 'rxjs/operators'
 import { CalendarService } from '../../calendar.service'
 
 @Component({
@@ -58,7 +58,7 @@ export class CalendarDesktopActionButtonsComponent implements OnInit {
   }
 
   onNext() {
-    this.selectedTimePeriod$.pipe(take(1)).subscribe({
+    this.selectedTimePeriod$.pipe(first()).subscribe({
       next: selectedTimePeriod => {
         const newStartDate = addDays(selectedTimePeriod.startDate, this.numOfDisplayedDays)
         const newEndDate = addDays(newStartDate, this.numOfDisplayedDays - 1)
@@ -68,7 +68,7 @@ export class CalendarDesktopActionButtonsComponent implements OnInit {
   }
 
   onPrevious() {
-    this.selectedTimePeriod$.pipe(take(1)).subscribe({
+    this.selectedTimePeriod$.pipe(first()).subscribe({
       next: selectedTimePeriod => {
         const newStartDate = addDays(selectedTimePeriod.startDate, this.numOfDisplayedDays * -1)
         const newEndDate = addDays(newStartDate, this.numOfDisplayedDays - 1)

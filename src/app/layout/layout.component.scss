@@ -4,22 +4,30 @@
 }
 
 #layout-container {
-  display: flex;
-  height: 100%;
-  width: 100%;
+  display: grid;
+  grid-template-columns: min(35vw, 21rem) auto;
 
-  & > #outlet-container {
-    height: 100vh;
-    flex-grow: 1;
-    overflow: auto;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
+  }
 
-    & > .tui-container {
-      flex-direction: column;
-      display: flex;
+  #outlet-container {
+    padding: 3rem 2rem;
+    height: calc(100vh - 6rem);
 
-      router-outlet::ng-deep + * {
-        flex-grow: 1;
-      }
+    @media screen and (max-width: 768px) {
+      padding: 1rem;
+      height: calc(100vh - 2rem);
+      width: calc(100vw - 2rem);
+    }
+
+    router-outlet::ng-deep + * {
+      display: block;
+
+      height: 100%;
+      width: 100%;
+      overflow-y: scroll;
     }
   }
 }

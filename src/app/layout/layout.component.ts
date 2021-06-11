@@ -10,13 +10,13 @@ import { map, startWith } from 'rxjs/operators'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutComponent {
-  readonly MAX_MOBILE_WIDTH = 576
+  readonly MAX_MOBILE_WIDTH = 768
 
   readonly isMobile$: Observable<boolean> = fromEvent(this.window, 'resize').pipe(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     map((event: any) => event.target.innerWidth),
     startWith(this.window.innerWidth),
-    map((width: number) => width <= this.MAX_MOBILE_WIDTH)
+    map((width: number) => width <= this.MAX_MOBILE_WIDTH),
   )
 
   constructor(@Inject(WINDOW) private window: Window) {}

@@ -10,6 +10,7 @@ import { ConnectedUpdateFormComponent } from './connected-update-form/connected-
 import { GeneralFormModule } from '../shared/general-form/general-form.module'
 import { LocationsSelectFormModule } from '../shared/locations-select-form/locations-select-form.module'
 import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-error-message.module'
+import { PromptModule } from '../core/prompt/prompt.module'
 
 @NgModule({
   declarations: [EditReservationComponent, ConnectedUpdateFormComponent],
@@ -28,6 +29,7 @@ import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-err
     GeneralFormModule,
     LocationsSelectFormModule,
     RetryErrorMessageModule,
+    PromptModule,
   ],
 })
 export class EditReservationModule {}
