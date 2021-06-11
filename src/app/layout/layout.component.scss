@@ -9,7 +9,7 @@
 
   @media screen and (max-width: 768px) {
     grid-template-columns: auto;
-    grid-template-rows: auto auto;
+    grid-template-rows: 6.5rem auto;
   }
 
   #outlet-container {
@@ -18,8 +18,9 @@
 
     @media screen and (max-width: 768px) {
       padding: 1rem;
-      height: calc(100vh - 2rem);
+      padding-top: 0;
       width: calc(100vw - 2rem);
+      height: calc(100vh - 7.5rem);
     }
 
     router-outlet::ng-deep + * {
