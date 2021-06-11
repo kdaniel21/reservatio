@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, ElementRef, Inject, OnInit, ViewChi
 import { ActivatedRoute, Router } from '@angular/router'
 import { WINDOW } from '@ng-web-apis/common'
 import { CalendarEventTitleFormatter, CalendarWeekViewComponent } from 'angular-calendar'
-import { addDays } from 'date-fns'
+import { addDays, isPast } from 'date-fns'
 import { fromEvent, merge, Observable } from 'rxjs'
 import { distinctUntilChanged, map, mapTo, startWith, take, takeUntil, tap } from 'rxjs/operators'
 import { AngularCalendarUtilsService, ReservationCalendarEvent } from '../../angular-calendar-utils.service'
@@ -78,6 +78,9 @@ export class CalendarDesktopComponent implements OnInit {
   }
 
   onSelectTimeToEdit(time: Date): void {
+    const isInPast = isPast(time)
+    if (isInPast) return
+
     this.router.navigate(['/', 'create'], { queryParams: { startTime: time.toISOString() } })
   }
 }

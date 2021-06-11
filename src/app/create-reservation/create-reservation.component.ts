@@ -3,9 +3,10 @@ import { FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { TuiDestroyService } from '@taiga-ui/cdk'
 import { format } from 'date-fns'
-import { BehaviorSubject, defer } from 'rxjs'
+import { defer } from 'rxjs'
 import { finalize } from 'rxjs/operators'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
+import { Loader } from '../core/loader/loader'
 import { CreateReservationFormService } from './create-reservation-form.service'
 import { CreateReservationRecurringService } from './create-reservation-recurring/create-reservation-recurring.service'
 import { CreateReservationService } from './create-reservation.service'
@@ -24,8 +25,7 @@ export class CreateReservationComponent {
     return this.createReservationForm.get('general').valid && this.createReservationForm.get('recurring').valid
   }
 
-  private readonly isLoadingSubject = new BehaviorSubject<boolean>(false)
-  readonly isLoading$ = this.isLoadingSubject.asObservable()
+  readonly loader = new Loader()
 
   readonly createReservationForm: FormGroup = this.createReservationFormService.form
 
@@ -51,11 +51,11 @@ export class CreateReservationComponent {
       ? this.createReservationService.createRecurringReservation({ name, locations, startTime, endTime, ...recurring })
       : this.createReservationService.createReservation({ name, startTime, endTime, locations })
 
-    this.isLoadingSubject.next(true)
+    this.loader.startLoading()
 
     // TODO: Make this more straightforward and investigate why simply subscribing is wrong?
     defer(() => action)
-      .pipe(finalize(() => this.isLoadingSubject.next(false)))
+      .pipe(finalize(() => this.loader.stopLoading()))
       .subscribe({
         next: () => {
           const startDate = format(startTime, 'yyyy-MM-dd')

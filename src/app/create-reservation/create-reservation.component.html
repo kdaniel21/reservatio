@@ -1,4 +1,4 @@
-<ng-container *ngIf="{ isLoading: isLoading$ | async } as data">
+<ng-container *ngIf="{ isLoading: loader.isLoading$ | async } as data">
   <tui-island class="tui-space_top-5">
     <tui-stepper [(activeItemIndex)]="selectedStepIndex" class="tui-space_top-3 tui-space_bottom-5">
       <button type="button" tuiStep>General information</button>

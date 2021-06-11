@@ -28,7 +28,7 @@ export class TimeSelectFormService {
 
     if (isValid(startTime)) {
       const tuiStartTime = TaigaUtils.convertNativeDateToDateTime(startTime)
-      this.form.get('time').patchValue({ startTime: tuiStartTime })
+      this.form.patchValue({ startTime: tuiStartTime })
     }
   }
 

@@ -11,7 +11,6 @@ import {
   IsRecurringTimeAvailableGQL,
   IsRecurringTimeAvailableQueryVariables,
   IsRecurringTimeAvailableResponseDto,
-  TimeAvailableInputDto,
 } from 'src/app/core/graphql/generated'
 import { NotificationsService } from 'src/app/core/services/notifications.service'
 
