@@ -1,18 +1,21 @@
+import { Injector } from '@angular/core'
 import { AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms'
-import { Observable, of } from 'rxjs'
-import { debounceTime, catchError, map } from 'rxjs/operators'
+import { Observable, of, timer } from 'rxjs'
+import { catchError, map, switchMap } from 'rxjs/operators'
+import { ReservationService } from 'src/app/core/services/reservation-service/reservation.service'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
-import { CreateReservationService } from '../create-reservation.service'
 
-export const timeAvailabilityValidator = (createReservationService: CreateReservationService): AsyncValidatorFn => {
+export const timeAvailabilityValidator = (injector: Injector, excludedReservation?: string): AsyncValidatorFn => {
+  const reservationService = injector.get(ReservationService)
+
   return (group: FormGroup): Observable<ValidationErrors> => {
     const { locations, time } = group.value
 
     const startTime = TaigaUtils.convertDateTimeToNativeDate(time.startTime)
     const endTime = TaigaUtils.convertDateTimeToNativeDate(time.endTime)
 
-    return createReservationService.isTimeAvailable({ startTime, endTime, locations }).pipe(
-      debounceTime(500),
+    return timer(500).pipe(
+      switchMap(() => reservationService.isTimeAvailable({ startTime, endTime, locations, excludedReservation })),
       catchError(() => of(false)),
       map(isTimeAvailable => (isTimeAvailable ? null : { timeNotAvailable: 'Time is not available!' })),
     )

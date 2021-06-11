@@ -1,1 +1,18 @@
-@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import '../node_modules/angular-calendar/css/angular-calendar.css';
+
+tui-wrapper[data-appearance='negative'] {
+  background: var(--tui-error-fill);
+  color: #fff;
+
+  &[data-state='hovered'] {
+    background: var(--tui-negative-hover);
+  }
+
+  &[data-state='pressed'] {
+    background: var(--tui-negative);
+  }
+
+  &[data-state='disabled'] {
+    background: var(--tui-error-bg-hover);
+  }
+}

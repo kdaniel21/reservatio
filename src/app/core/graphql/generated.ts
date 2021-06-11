@@ -111,6 +111,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createRecurringReservation: CreateRecurringReservationResponseDto;
   createReservation: GraphQlReservation;
+  updateReservation: GraphQlReservation;
   changePasswordUsingToken: MessageResponseDto;
   confirmEmail: MessageResponseDto;
   login: LoginResponseDto;
@@ -138,6 +139,13 @@ export type MutationCreateReservationArgs = {
   startTime: Scalars['DateTime'];
   endTime: Scalars['DateTime'];
   locations: GraphQlReservationLocationInput;
+};
+
+
+export type MutationUpdateReservationArgs = {
+  id: Scalars['ID'];
+  updatedProperties: UpdatedProperties;
+  connectedUpdates?: Maybe<Array<Scalars['ID']>>;
 };
 
 
@@ -180,6 +188,7 @@ export type Query = {
   __typename?: 'Query';
   status: HealthCheckResponse;
   areTimesAvailable: Array<AreTimesAvailableResponseDto>;
+  recurringReservations: Array<GraphQlReservation>;
   reservation: GraphQlReservation;
   reservations: Array<GraphQlReservation>;
   isRecurringTimeAvailable: IsRecurringTimeAvailableResponseDto;
@@ -190,6 +199,12 @@ export type Query = {
 
 export type QueryAreTimesAvailableArgs = {
   timeProposals: Array<TimeAvailableInputDto>;
+};
+
+
+export type QueryRecurringReservationsArgs = {
+  recurringId: Scalars['ID'];
+  futureOnly?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -252,12 +267,26 @@ export type TimeAvailableInputDto = {
   startTime: Scalars['DateTime'];
   endTime: Scalars['DateTime'];
   locations: GraphQlReservationLocationInput;
+  excludedReservation?: Maybe<Scalars['ID']>;
 };
 
 export enum TimePeriod {
   HalfYear = 'HalfYear',
   CurrentYear = 'CurrentYear'
 }
+
+export type UpdateLocationInput = {
+  badminton?: Maybe<Scalars['Boolean']>;
+  tableTennis?: Maybe<Scalars['Boolean']>;
+};
+
+export type UpdatedProperties = {
+  name?: Maybe<Scalars['String']>;
+  startTime?: Maybe<Scalars['DateTime']>;
+  endTime?: Maybe<Scalars['DateTime']>;
+  locations?: Maybe<UpdateLocationInput>;
+  isActive?: Maybe<Scalars['Boolean']>;
+};
 
 export type ChangePasswordUsingTokenMutationVariables = Exact<{
   token: Scalars['String'];
@@ -374,7 +403,7 @@ export type GetReservationQuery = (
       & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
     ), customer: (
       { __typename?: 'GraphQLCustomer' }
-      & Pick<GraphQlCustomer, 'name'>
+      & Pick<GraphQlCustomer, 'id' | 'name'>
     ) }
   ) }
 );
@@ -470,6 +499,38 @@ export type IsRecurringTimeAvailableQuery = (
   & { isRecurringTimeAvailable: (
     { __typename?: 'IsRecurringTimeAvailableResponseDto' }
     & Pick<IsRecurringTimeAvailableResponseDto, 'availableTimes' | 'unavailableTimes'>
+  ) }
+);
+
+export type GetRelatedReservationsQueryVariables = Exact<{
+  recurringId: Scalars['ID'];
+}>;
+
+
+export type GetRelatedReservationsQuery = (
+  { __typename?: 'Query' }
+  & { recurringReservations: Array<(
+    { __typename?: 'GraphQLReservation' }
+    & Pick<GraphQlReservation, 'id' | 'name' | 'startTime' | 'endTime'>
+    & { locations: (
+      { __typename?: 'GraphQLReservationLocationOutput' }
+      & Pick<GraphQlReservationLocationOutput, 'badminton' | 'tableTennis'>
+    ) }
+  )> }
+);
+
+export type UpdateReservationMutationVariables = Exact<{
+  id: Scalars['ID'];
+  updatedProperties: UpdatedProperties;
+  connectedUpdates?: Maybe<Array<Scalars['ID']> | Scalars['ID']>;
+}>;
+
+
+export type UpdateReservationMutation = (
+  { __typename?: 'Mutation' }
+  & { updateReservation: (
+    { __typename?: 'GraphQLReservation' }
+    & Pick<GraphQlReservation, 'id' | 'name'>
   ) }
 );
 
@@ -634,6 +695,7 @@ export const GetReservationDocument = gql`
     createdAt
     updatedAt
     customer {
+      id
       name
     }
   }
@@ -781,6 +843,54 @@ export const IsRecurringTimeAvailableDocument = gql`
   })
   export class IsRecurringTimeAvailableGQL extends Apollo.Query<IsRecurringTimeAvailableQuery, IsRecurringTimeAvailableQueryVariables> {
     document = IsRecurringTimeAvailableDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetRelatedReservationsDocument = gql`
+    query getRelatedReservations($recurringId: ID!) {
+  recurringReservations(recurringId: $recurringId, futureOnly: true) {
+    id
+    name
+    startTime
+    endTime
+    locations {
+      badminton
+      tableTennis
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetRelatedReservationsGQL extends Apollo.Query<GetRelatedReservationsQuery, GetRelatedReservationsQueryVariables> {
+    document = GetRelatedReservationsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateReservationDocument = gql`
+    mutation updateReservation($id: ID!, $updatedProperties: UpdatedProperties!, $connectedUpdates: [ID!]) {
+  updateReservation(
+    id: $id
+    updatedProperties: $updatedProperties
+    connectedUpdates: $connectedUpdates
+  ) {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateReservationGQL extends Apollo.Mutation<UpdateReservationMutation, UpdateReservationMutationVariables> {
+    document = UpdateReservationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

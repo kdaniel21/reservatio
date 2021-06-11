@@ -13,7 +13,7 @@ import { CalendarTaigaModule } from './calendar-taiga.module'
 import { CalendarItemComponent } from './calendar/calendar-item/calendar-item.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { CalendarDesktopActionButtonsComponent } from './calendar/calendar-desktop/calendar-desktop-action-buttons/calendar-desktop-action-buttons.component'
-import { ReservationLocationsSelectModule } from '../create-reservation/reservation-locations-select/reservation-locations-select.module'
+import { LocationsSelectModule } from '../shared/locations-select/locations-select.module'
 import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-error-message.module'
 
 @NgModule({
@@ -31,7 +31,7 @@ import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-err
     AngularCalendarWeekModule,
     FormsModule,
     ReactiveFormsModule,
-    ReservationLocationsSelectModule,
+    LocationsSelectModule,
     RetryErrorMessageModule,
   ],
 })

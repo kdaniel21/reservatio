@@ -1,4 +1,4 @@
-<ng-container [formGroup]="createReservationForm.get('recurring')">
+<ng-container [formGroup]="recurringForm">
   <div></div>
   <div class="tui-form__row tui-space_vertical-3">
     <tui-toggle formControlName="isRecurring" [showIcons]="true" size="l" class="tui-space_right-3"></tui-toggle>
@@ -10,7 +10,7 @@
     ></tui-tooltip>
   </div>
 
-  <tui-expand [expanded]="createReservationForm.get('recurring.isRecurring').value">
+  <tui-expand [expanded]="recurringForm.value?.isRecurring">
     <div class="tui-form__header">Recurring rules</div>
 
     <div class="tui-form__row">
@@ -38,7 +38,7 @@
     </div>
 
     <tui-error
-      *ngIf="haveAllControlsBeenTouched && createReservationForm.get('recurring')?.errors"
+      *ngIf="haveAllControlsBeenTouched && recurringForm.errors"
       [error]="{ message: 'These fields are required!' }"
     ></tui-error>
   </tui-expand>

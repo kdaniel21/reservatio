@@ -13,6 +13,7 @@ query getReservation($id: ID!) {
     createdAt
     updatedAt
     customer {
+      id
       name
     }
   }

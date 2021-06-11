@@ -12,7 +12,7 @@ import { ChangePasswordService } from './change-password.service'
 })
 export class ChangePasswordComponent {
   readonly isLoading$ = this.changePasswordService.loader.isLoading$
-  readonly errorMessage$ = this.changePasswordService.retryHandler.message$
+  readonly hasError$ = this.changePasswordService.retryHandler.hasError$
 
   private readonly hasChangedPasswordSubject = new BehaviorSubject<boolean>(false)
   readonly hasChangedPassword$ = this.hasChangedPasswordSubject.asObservable()
@@ -27,7 +27,7 @@ export class ChangePasswordComponent {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly changePasswordService: ChangePasswordService,
+    public readonly changePasswordService: ChangePasswordService,
     private readonly route: ActivatedRoute,
   ) {}
 
@@ -38,10 +38,6 @@ export class ChangePasswordComponent {
     this.changePasswordService.changePasswordUsingToken(passwordResetToken, password, passwordConfirm).subscribe({
       next: () => this.hasChangedPasswordSubject.next(true),
     })
-  }
-
-  onRetry() {
-    this.changePasswordService.retryHandler.retryAfterError()
   }
 
   private passwordConfirmValidator(group: FormGroup) {

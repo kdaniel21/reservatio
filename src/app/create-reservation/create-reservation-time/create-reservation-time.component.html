@@ -1,12 +1,4 @@
-<ng-container
-  *ngIf="{
-    availableTimes: availableTimes$ | async,
-    unavailableTimes: unavailableTimes$ | async,
-    maxStartTuiDate: maxStartTuiDate$ | async,
-    minEndTuiDate: minEndTuiDate$ | async
-  } as data"
-  [formGroup]="createReservationForm.get('time')"
->
+<ng-container *ngIf="{ availableTimes: availableTimes$ | async, unavailableTimes: unavailableTimes$ | async } as data">
   <h3 class="tui-form__header">Time</h3>
   <tui-notification
     *ngIf="createReservationForm.valid"
@@ -16,14 +8,7 @@
     Time is available!
   </tui-notification>
 
-  <div tuiGroup class="tui-form__row" [adaptive]="true">
-    <tui-input-date-time formControlName="startTime" [min]="todayTuiDate" [max]="data.maxStartTuiDate">
-      Start time
-    </tui-input-date-time>
-    <tui-input-date-time formControlName="endTime" [min]="data.minEndTuiDate" [max]="oneYearFromNowTuiDate">
-      End time
-    </tui-input-date-time>
-  </div>
+  <app-time-select-form></app-time-select-form>
 
   <tui-data-list *ngIf="isRecurring && (data.availableTimes.length || data.unavailableTimes.length)" role="menu">
     <!-- TODO: Find a neater solution to make the list count the nested tuiOptions so that it doesn't display the nothing found message -->

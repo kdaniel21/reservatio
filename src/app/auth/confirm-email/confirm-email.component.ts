@@ -11,7 +11,7 @@ import { ConfirmEmailService } from './confirm-email.service'
 })
 export class ConfirmEmailComponent {
   readonly isLoading$ = this.confirmEmailService.loader.isLoading$
-  readonly errorMessage$ = this.confirmEmailService.retryHandler.message$
+  readonly hasError$ = this.confirmEmailService.retryHandler.hasError$
 
   readonly tosForm = this.formBuilder.group({
     isAccepted: [false, Validators.requiredTrue],
@@ -21,7 +21,7 @@ export class ConfirmEmailComponent {
     private readonly formBuilder: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly confirmEmailService: ConfirmEmailService,
+    public readonly confirmEmailService: ConfirmEmailService,
   ) {}
 
   onConfirmEmail() {
@@ -32,9 +32,5 @@ export class ConfirmEmailComponent {
         this.router.navigate(['/', 'auth', 'login'])
       },
     })
-  }
-
-  onRetry() {
-    this.confirmEmailService.retryHandler.retryAfterError()
   }
 }

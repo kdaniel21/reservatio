@@ -1,6 +1,6 @@
 import { PolymorpheusContent } from '@tinkoff/ng-polymorpheus'
-import { BehaviorSubject, Subject } from 'rxjs'
-import { throttleTime } from 'rxjs/operators'
+import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { map, throttleTime } from 'rxjs/operators'
 
 export class RetryErrorHandler {
   private readonly messageSubject = new BehaviorSubject<PolymorpheusContent | null>(null)
@@ -9,15 +9,17 @@ export class RetryErrorHandler {
   private readonly retryAfterErrorSubject = new Subject<void>()
   readonly throttledRetryAfterError$ = this.retryAfterErrorSubject.pipe(throttleTime(1000))
 
-  retryAfterError() {
+  readonly hasError$: Observable<boolean> = this.message$.pipe(map(message => !!message))
+
+  retryAfterError(): void {
     this.retryAfterErrorSubject.next()
   }
 
-  setErrorMessage(content: PolymorpheusContent) {
+  setErrorMessage(content: PolymorpheusContent): void {
     this.messageSubject.next(content)
   }
 
-  resetErrorMessage() {
+  resetErrorMessage(): void {
     this.messageSubject.next(null)
   }
 }

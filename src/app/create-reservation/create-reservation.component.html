@@ -4,26 +4,28 @@
       <button type="button" tuiStep>General information</button>
       <button type="button" tuiStep [disabled]="!isFirstStepValid">Locations & time</button>
     </tui-stepper>
-  
+
     <form [ngSwitch]="selectedStepIndex" [formGroup]="createReservationForm">
       <ng-container *ngSwitchCase="0">
-        <app-create-reservation-general></app-create-reservation-general>
-  
-        <app-create-reservation-recurring class="tui-space_vertical-5"></app-create-reservation-recurring>
-  
+        <h3 class="tui-form__header">General information</h3>
+        <app-general-form class="tui-form__row"></app-general-form>
+
+        <app-create-reservation-recurring class="tui-form__row"></app-create-reservation-recurring>
+
         <div class="tui-form__buttons tui-form__buttons_align_end">
           <button tuiButton icon="tuiIconArrowRightLarge" [disabled]="!isFirstStepValid" (click)="onNextStep()">
             Next
           </button>
         </div>
       </ng-container>
-  
+
       <!-- STEP 2 -->
       <ng-container *ngSwitchCase="1">
-        <app-create-reservation-locations></app-create-reservation-locations>
-  
+        <h3 class="tui-form__header">Locations</h3>
+        <app-locations-select-form></app-locations-select-form>
+
         <app-create-reservation-time></app-create-reservation-time>
-  
+
         <div class="tui-form__buttons tui-form__buttons_align_end">
           <button
             tuiButton

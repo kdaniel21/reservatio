@@ -1,0 +1,13 @@
+<h2 [id]="context.id">{{ context.heading }}</h2>
+
+<section polymorpheus-outlet [attr.content]="context.content" [attr.context]="context"></section>
+
+<p class="buttons">
+  <button tuiButton class="tui-space_right-3" (click)="onClick(context.buttons[0].value)">
+    {{ context.buttons[0].text }}
+  </button>
+
+  <button tuiButton appearance="secondary" (click)="onClick(context.buttons[1].value)">
+    {{ context.buttons[1].text }}
+  </button>
+</p>

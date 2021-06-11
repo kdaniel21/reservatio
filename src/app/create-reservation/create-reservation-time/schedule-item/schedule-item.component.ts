@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, ViewChild, OnInit } from '@angular/core'
+import { Component, ChangeDetectionStrategy, Input, ViewChild, OnInit, Injector } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import { TuiDay, TuiTime } from '@taiga-ui/cdk'
 import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core'
@@ -10,7 +10,6 @@ import { tuiDateTimeFutureOnly } from 'src/app/core/form-validators/tui-date-tim
 import { tuiDateTimeRequired } from 'src/app/core/form-validators/tui-date-time-required.validator'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
 import { CreateReservationFormService } from '../../create-reservation-form.service'
-import { CreateReservationService } from '../../create-reservation.service'
 import { timeAvailabilityValidator } from '../../validators/time-availability.validator'
 
 @Component({
@@ -48,7 +47,7 @@ export class ScheduleItemComponent implements OnInit {
       }),
       locations: [undefined],
     },
-    { asyncValidators: [timeAvailabilityValidator(this.createReservationService)] },
+    { asyncValidators: [timeAvailabilityValidator(this.injector)] },
   )
 
   readonly newStartTime$: Observable<Date> = this.rescheduleForm.get('time.startTime').valueChanges.pipe(
@@ -66,8 +65,8 @@ export class ScheduleItemComponent implements OnInit {
   constructor(
     private readonly dialogService: TuiDialogService,
     private readonly formBuilder: FormBuilder,
-    private readonly createReservationService: CreateReservationService,
     private readonly createReservationFormService: CreateReservationFormService,
+    private readonly injector: Injector,
   ) {}
 
   ngOnInit(): void {

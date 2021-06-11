@@ -1,49 +1,48 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
+import { FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
+import { TuiDestroyService } from '@taiga-ui/cdk'
 import { format } from 'date-fns'
 import { BehaviorSubject, defer } from 'rxjs'
 import { finalize } from 'rxjs/operators'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
-import { CreateReservationBaseComponent } from './create-reservation-base/create-reservation-base.component'
 import { CreateReservationFormService } from './create-reservation-form.service'
+import { CreateReservationRecurringService } from './create-reservation-recurring/create-reservation-recurring.service'
 import { CreateReservationService } from './create-reservation.service'
 
 @Component({
   selector: 'app-create-reservation',
   templateUrl: './create-reservation.component.html',
   styleUrls: ['./create-reservation.component.scss'],
-  providers: [CreateReservationFormService],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CreateReservationFormService, CreateReservationRecurringService, TuiDestroyService],
 })
-export class CreateReservationComponent extends CreateReservationBaseComponent {
+export class CreateReservationComponent {
   selectedStepIndex = 0
 
   get isFirstStepValid(): boolean {
-    return this.createReservationForm.get('name').valid && this.createReservationForm.get('recurring').valid
+    return this.createReservationForm.get('general').valid && this.createReservationForm.get('recurring').valid
   }
 
   private readonly isLoadingSubject = new BehaviorSubject<boolean>(false)
   readonly isLoading$ = this.isLoadingSubject.asObservable()
 
+  readonly createReservationForm: FormGroup = this.createReservationFormService.form
+
   constructor(
-    protected readonly createReservationFormService: CreateReservationFormService,
+    private readonly createReservationFormService: CreateReservationFormService,
     private readonly createReservationService: CreateReservationService,
     private readonly router: Router,
-  ) {
-    super(createReservationFormService)
-  }
+  ) {}
 
   onNextStep(): void {
     this.selectedStepIndex++
   }
 
-  onToggleLocation(path: string): void {
-    this.createReservationFormService.toggleLocation(path)
-  }
-
   onCreateReservation(): void {
-    const { name, time, locations, recurring } = this.createReservationForm.value
+    const { general, time, locations, recurring } = this.createReservationForm.value
     const { isRecurring } = recurring
+    const { name } = general
 
     const startTime = TaigaUtils.convertDateTimeToNativeDate(time.startTime)
     const endTime = TaigaUtils.convertDateTimeToNativeDate(time.endTime)

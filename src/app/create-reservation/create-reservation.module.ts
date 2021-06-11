@@ -3,24 +3,21 @@ import { NgModule } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { CalendarReservationDetailsComponent } from '../calendar/calendar/calendar-reservation-details/calendar-reservation-details.component'
-import { CreateReservationBaseComponent } from './create-reservation-base/create-reservation-base.component'
-import { CreateReservationGeneralComponent } from './create-reservation-general/create-reservation-general.component'
-import { CreateReservationLocationsComponent } from './create-reservation-locations/create-reservation-locations.component'
+import { GeneralFormModule } from '../shared/general-form/general-form.module'
+import { LocationsSelectFormModule } from '../shared/locations-select-form/locations-select-form.module'
+import { TimeSelectFormModule } from '../shared/time-select-form/time-select-form.module'
 import { CreateReservationRecurringComponent } from './create-reservation-recurring/create-reservation-recurring.component'
 import { CreateReservationTaigaModule } from './create-reservation-taiga.module'
 import { CreateReservationTimeComponent } from './create-reservation-time/create-reservation-time.component'
 import { ScheduleItemComponent } from './create-reservation-time/schedule-item/schedule-item.component'
 import { CreateReservationComponent } from './create-reservation.component'
-import { ReservationLocationsSelectModule } from './reservation-locations-select/reservation-locations-select.module'
+import { LocationsSelectModule } from '../shared/locations-select/locations-select.module'
 
 @NgModule({
   declarations: [
     CreateReservationComponent,
-    CreateReservationLocationsComponent,
     CreateReservationTimeComponent,
     ScheduleItemComponent,
-    CreateReservationGeneralComponent,
-    CreateReservationBaseComponent,
     CreateReservationRecurringComponent,
     CalendarReservationDetailsComponent,
   ],
@@ -29,7 +26,10 @@ import { ReservationLocationsSelectModule } from './reservation-locations-select
     CreateReservationTaigaModule,
     ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: CreateReservationComponent }]),
-    ReservationLocationsSelectModule,
+    LocationsSelectModule,
+    TimeSelectFormModule,
+    LocationsSelectFormModule,
+    GeneralFormModule,
   ],
   exports: [RouterModule],
 })

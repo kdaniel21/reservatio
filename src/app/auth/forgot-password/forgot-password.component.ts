@@ -14,7 +14,7 @@ export class ForgotPasswordComponent {
   readonly hasSentResetEmail$ = this.hasSentResetEmailSubject.asObservable()
 
   readonly isLoading$ = this.forgotPasswordService.loader.isLoading$
-  readonly errorMessage$ = this.forgotPasswordService.retryHandler.message$
+  readonly hasError$ = this.forgotPasswordService.retryHandler.hasError$
 
   readonly forgotPasswordForm = this.formBuilder.group({
     email: [undefined, [Validators.required, Validators.email]],
@@ -22,7 +22,7 @@ export class ForgotPasswordComponent {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly forgotPasswordService: ForgotPasswordService,
+    public readonly forgotPasswordService: ForgotPasswordService,
   ) {}
 
   onResetPassword() {
@@ -33,7 +33,4 @@ export class ForgotPasswordComponent {
     })
   }
 
-  onRetry() {
-    this.forgotPasswordService.retryHandler.retryAfterError()
-  }
 }

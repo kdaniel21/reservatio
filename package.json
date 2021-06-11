@@ -30,6 +30,7 @@
     "angular-calendar": "^0.28.24",
     "apollo-angular": "^2.4.0",
     "date-fns": "^2.22.1",
+    "deep-object-diff": "^1.1.0",
     "graphql": "^15.5.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",

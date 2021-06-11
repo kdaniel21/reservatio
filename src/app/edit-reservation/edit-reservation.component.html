@@ -1,0 +1,57 @@
+<ng-container
+  *ngIf="{
+    isLoading: isLoading$ | async,
+    hasError: hasError$ | async,
+    editedReservation: editedReservation$ | async
+  } as data"
+>
+  <tui-island size="l">
+    <h3 class="tui-island__title">Edit reservation</h3>
+
+    <form *ngIf="!data.hasError; else error" [formGroup]="editReservationForm" class="tui-form tui-space_top-5">
+      <app-general-form class="tui-form__row"></app-general-form>
+
+      <h3 class="tui-form__header">Locations</h3>
+      <app-locations-select-form class="tui-form__row"></app-locations-select-form>
+
+      <h3 class="tui-form__header">Time</h3>
+      <app-time-select-form class="tui-form__row"></app-time-select-form>
+
+      <app-connected-update-form
+        *ngIf="data.editedReservation?.recurringId"
+        class="tui-form__row"
+      ></app-connected-update-form>
+
+      <div class="tui-form__buttons tui-form__buttons_align_end">
+        <!-- <button type="button" tuiButton appearance="outline" class="tui-space_right-3" [routerLink]="['..']">
+          Cancel
+        </button> -->
+        <button
+          type="button"
+          tuiButton
+          appearance="negative"
+          class="tui-space_right-3"
+          icon="tuiIconTrashLarge"
+          (click)="onRemove()"
+        >
+          Remove reservation
+        </button>
+
+        <button
+          type="submit"
+          tuiButton
+          icon="tuiIconCheckLarge"
+          [disabled]="editReservationForm.invalid || editReservationForm.pristine"
+          [showLoader]="data.isLoading || editReservationForm.pending"
+          (click)="onUpdateReservation()"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+
+    <ng-template #error>
+      <app-retry-error-message [service]="editReservationService"></app-retry-error-message>
+    </ng-template>
+  </tui-island>
+</ng-container>

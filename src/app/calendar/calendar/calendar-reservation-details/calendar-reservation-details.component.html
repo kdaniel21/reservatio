@@ -44,11 +44,11 @@
 
   <h2 class="tui-header_h2">Locations</h2>
 
-  <app-reservation-locations-select
+  <app-locations-select
     [locations]="data.reservation?.locations"
     [isDisabled]="true"
     [isLoading]="data.isLoading"
-  ></app-reservation-locations-select>
+  ></app-locations-select>
 
   <div class="buttons tui-space_top-5">
     <button
@@ -60,7 +60,7 @@
     >
       Cancel
     </button>
-    <!-- <button
+    <button
       tuiButton
       icon="tuiIconDraft"
       [disabled]="!data.canEdit"
@@ -68,13 +68,13 @@
       (click)="onEdit()"
     >
       Edit
-    </button> -->
-    <button
+    </button>
+    <!-- <button
       tuiButton
       icon="tuiIconTrashLarge"
       [disabled]="!data.canEdit"
       [class.tui-skeleton]="data.isLoading"
       (click)="onDelete()"
-    >Delete</button>
+    >Delete</button> -->
   </div>
 </ng-container>

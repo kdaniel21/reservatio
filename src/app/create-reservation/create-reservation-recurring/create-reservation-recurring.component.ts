@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
-import { FormGroup } from '@angular/forms'
 import { TimePeriod, Recurrence } from 'src/app/core/graphql/generated'
-import { CreateReservationBaseComponent } from '../create-reservation-base/create-reservation-base.component'
+import { CreateReservationRecurringService } from './create-reservation-recurring.service'
 
 const timePeriodOptions = {
   [TimePeriod.CurrentYear]: 'Until the end of the current year',
@@ -19,14 +18,17 @@ const recurrenceOptions = {
   styleUrls: ['./create-reservation-recurring.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateReservationRecurringComponent extends CreateReservationBaseComponent {
+export class CreateReservationRecurringComponent {
   readonly timePeriodOptions = timePeriodOptions
   readonly recurrenceOptions = recurrenceOptions
 
-  get haveAllControlsBeenTouched(): boolean {
-    const group = this.createReservationForm.get('recurring') as FormGroup
-    const { timePeriod, recurrence } = group.controls
+  readonly recurringForm = this.createReservationRecurringService.form
 
-    return group && timePeriod.touched && recurrence.touched
+  constructor(private readonly createReservationRecurringService: CreateReservationRecurringService) {}
+
+  get haveAllControlsBeenTouched(): boolean {
+    const { timePeriod, recurrence } = this.recurringForm.controls
+
+    return timePeriod.touched && recurrence.touched
   }
 }

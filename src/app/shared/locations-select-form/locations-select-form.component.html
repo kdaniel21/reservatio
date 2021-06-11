@@ -1,0 +1,9 @@
+<app-locations-select
+  [locations]="selectedLocation$ | async"
+  (toggleLocation)="onToggleLocation($event)"
+></app-locations-select>
+
+<tui-error
+  *ngIf="locationsForm.touched && locationsForm?.errors?.locationNotSelected as error"
+  [error]="{ message: error }"
+></tui-error>

@@ -1,9 +1,9 @@
-<ng-container *ngIf="{ isLoading: isLoading$ | async, errorMessage: errorMessage$ | async } as data">
+<ng-container *ngIf="{ isLoading: isLoading$ | async, hasError: hasError$ | async } as data">
   {{ data.errorMessage }}
   <tui-island size="l" class="tui-space_horizontal-2">
     <h3 class="tui-island_title tui-text_h3 tui-space_bottom-4">Confirm email address</h3>
 
-    <ng-container *ngIf="!data.errorMessage; else error">
+    <ng-container *ngIf="!data.hasError; else error">
       <p class="tui-island_paragraph">
         As a last check before logging in for the first time, please confirm your email address. You can do so by
         clicking the button below.
@@ -27,7 +27,7 @@
     </ng-container>
 
     <ng-template #error>
-      <app-retry-error-message [message]="data.errorMessage" (retry)="onRetry()"></app-retry-error-message>
+      <app-retry-error-message [service]="confirmEmailService"></app-retry-error-message>
     </ng-template>
   </tui-island>
 </ng-container>

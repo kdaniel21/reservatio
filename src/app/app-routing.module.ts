@@ -29,6 +29,12 @@ const routes: Routes = [
         canActivate: [AuthenticatedGuard],
         runGuardsAndResolvers: 'always',
       },
+      {
+        path: 'edit/:id',
+        loadChildren: () => import('./edit-reservation/edit-reservation.module').then(m => m.EditReservationModule),
+        canActivate: [AuthenticatedGuard],
+        runGuardsAndResolvers: 'always',
+      },
     ],
   },
 ]

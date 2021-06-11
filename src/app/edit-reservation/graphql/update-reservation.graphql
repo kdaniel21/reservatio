@@ -1,0 +1,6 @@
+mutation updateReservation($id: ID!, $updatedProperties: UpdatedProperties!, $connectedUpdates: [ID!]) {
+  updateReservation(id: $id, updatedProperties: $updatedProperties, connectedUpdates: $connectedUpdates) {
+    id
+    name
+  }
+}

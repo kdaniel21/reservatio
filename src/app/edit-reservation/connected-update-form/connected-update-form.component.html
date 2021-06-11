@@ -1,0 +1,76 @@
+<ng-container
+  *ngIf="{
+    relatedReservations: relatedReservations$ | async,
+    hasError: hasError$ | async,
+    isLoading: isLoading$ | async
+  } as data"
+  [formGroup]="connectedUpdateForm"
+>
+  <tui-toggle size="l" formControlName="shouldUpdateConnected"></tui-toggle> Update connected reservations
+  <tui-tooltip
+    direction="top-right"
+    content="As this reservation is part of a bigger recurring reservation, there might be still other members in the future. You can as well update those accordingly."
+  ></tui-tooltip>
+
+  <ng-container *ngIf="!data.hasError; else error">
+    <tui-data-list *ngIf="shouldUpdateConnected" formArrayName="connectedUpdates">
+      <a *ngFor="let reservation of data.relatedReservations; let i = index" tuiOption>
+        <span *ngIf="reservation.proposedChanges as proposedChanges">
+          {{ reservation.name }}
+          ({{ reservation.startTime | date: 'short' }} - {{ reservation.endTime | date: 'short' }})
+
+          <button
+            *ngIf="!isObjectEmpty(reservation.proposedChanges)"
+            tuiButton
+            size="xs"
+            tuiHintMode="onDark"
+            tuiHintDirection="top-left"
+            [tuiHint]="proposedChangesTooltip"
+          >
+            Show changes
+          </button>
+          <ng-template #proposedChangesTooltip>
+            <ul class="tui-list tui-list_small">
+              <li *ngIf="proposedChanges.name" class="tui-list__item">
+                Name:
+                <span class="old-value">{{ reservation.name }}</span>
+                -> {{ proposedChanges.name }}
+              </li>
+              <li *ngIf="proposedChanges.startTime" class="tui-list__item">
+                Start time:
+                <span class="old-value">{{ reservation.startTime | date: 'short' }} </span>
+                ->
+                {{ proposedChanges.startTime | date: 'short' }}
+              </li>
+              <li *ngIf="proposedChanges.endTime" class="tui-list__item">
+                End time:
+                <span class="old-value"> {{ reservation.endTime | date: 'short' }} </span>
+                ->
+                {{ proposedChanges.endTime | date: 'short' }}
+              </li>
+              <li *ngIf="proposedChanges.locations" class="tui-list__item">Locations</li>
+              <ul *ngIf="proposedChanges.locations" class="tui-list tui-list_nested">
+                <li *ngIf="proposedChanges.locations.badminton !== undefined" class="tui-list__item">
+                  <span [class.old-value]="proposedChanges.locations.badminton === false">Badminton</span>
+                </li>
+                <li *ngIf="proposedChanges.locations.tableTennis !== undefined" class="tui-list__item">
+                  <span [class.old-value]="proposedChanges.locations.tableTennis === false">Table tennis</span>
+                </li>
+              </ul>
+            </ul>
+          </ng-template>
+
+          <tui-error
+            *ngIf="connectedUpdates.controls[i]?.value && connectedUpdates.controls[i]?.errors?.timeNotAvailable"
+            [error]="{ message: 'This time is not available!' }"
+          ></tui-error>
+        </span>
+        <tui-checkbox [formControlName]="i"></tui-checkbox>
+      </a>
+    </tui-data-list>
+  </ng-container>
+
+  <ng-template #error>
+    <app-retry-error-message [service]="connectedUpdateService"></app-retry-error-message>
+  </ng-template>
+</ng-container>

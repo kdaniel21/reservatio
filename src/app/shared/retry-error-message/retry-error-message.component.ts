@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, TemplateRef } from '@angular/core'
+import { RetryableService } from 'src/app/core/retry-error-handler/retryable.service'
 
 @Component({
   selector: 'app-retry-error-message',
@@ -7,6 +8,7 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, Templa
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RetryErrorMessageComponent {
+  @Input() service: RetryableService
   @Input() message = 'Something went wrong. Please try again!'
   // TODO: Refactor to use PolymorpheusContent
   @Input() content: TemplateRef<any>
@@ -14,6 +16,8 @@ export class RetryErrorMessageComponent {
   @Output() retry = new EventEmitter<void>()
 
   onRetry() {
+    if (this.service) this.service.retryHandler.retryAfterError()
+
     this.retry.next()
   }
 }

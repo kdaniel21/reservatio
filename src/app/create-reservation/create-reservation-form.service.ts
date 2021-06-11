@@ -1,48 +1,23 @@
-import { Injectable } from '@angular/core'
+import { Injectable, Injector } from '@angular/core'
 import { AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
-import isValid from 'date-fns/isValid'
-import { BehaviorSubject, merge, Observable, of, Subject } from 'rxjs'
+import { TuiDestroyService } from '@taiga-ui/cdk'
+import { BehaviorSubject, merge, Observable, of } from 'rxjs'
 import { distinctUntilChanged, map, startWith, takeUntil, tap } from 'rxjs/operators'
-import { tuiDateTimeFutureOnly } from 'src/app/core/form-validators/tui-date-time-future-only.validator'
-import { tuiDateTimeRequired } from 'src/app/core/form-validators/tui-date-time-required.validator'
 import { TaigaUtils } from 'src/app/core/taiga-utils'
+import { GeneralFormService } from '../shared/general-form/general-form.service'
+import { LocationsSelectFormService } from '../shared/locations-select-form/locations-select-form.service'
+import { TimeSelectFormService } from '../shared/time-select-form/time-select-form.service'
+import { CreateReservationRecurringService } from './create-reservation-recurring/create-reservation-recurring.service'
 import { CreateReservationService } from './create-reservation.service'
-import { locationValidator } from './validators/location.validator'
-import { recurringValidator } from './validators/recurring.validator'
 import { timeAvailabilityValidator } from './validators/time-availability.validator'
-import { timeValidator } from './validators/time.validator'
 
 @Injectable()
 export class CreateReservationFormService {
-  private readonly destroy$ = new Subject<void>()
-
   readonly form = this.formBuilder.group({
-    name: [undefined, Validators.required],
-    locations: this.formBuilder.group(
-      {
-        tableTennis: [false],
-        badminton: [false],
-      },
-      { validators: [locationValidator] },
-    ),
-    recurring: this.formBuilder.group(
-      {
-        isRecurring: [false],
-        recurrence: [undefined],
-        timePeriod: [undefined],
-        includedDates: [[]],
-        excludedDates: [[]],
-      },
-      { validators: [recurringValidator] },
-    ),
-    time: this.formBuilder.group(
-      {
-        startTime: [undefined, [tuiDateTimeRequired, tuiDateTimeFutureOnly]],
-        endTime: [undefined, [tuiDateTimeRequired, tuiDateTimeFutureOnly]],
-      },
-      { validators: [timeValidator] },
-    ),
+    general: this.generalFormService.form,
+    locations: this.locationsSelectFormService.form,
+    recurring: this.createReservationRecurringService.form,
+    time: this.timeSelectFormService.form,
   })
 
   private readonly availableTimesSubject = new BehaviorSubject<Date[]>([])
@@ -58,7 +33,7 @@ export class CreateReservationFormService {
     tap(isRecurring => {
       const validator = isRecurring
         ? this.recurringTimeAvailabilityValidator()
-        : timeAvailabilityValidator(this.createReservationService)
+        : timeAvailabilityValidator(this.injector)
 
       this.form.setAsyncValidators(validator)
     }),
@@ -67,18 +42,14 @@ export class CreateReservationFormService {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly createReservationService: CreateReservationService,
-    private readonly route: ActivatedRoute,
+    private readonly timeSelectFormService: TimeSelectFormService,
+    private readonly locationsSelectFormService: LocationsSelectFormService,
+    private readonly createReservationRecurringService: CreateReservationRecurringService,
+    private readonly generalFormService: GeneralFormService,
+    private readonly destroy$: TuiDestroyService,
+    private readonly injector: Injector,
   ) {
     merge(this.setCorrectValidatorAction$).pipe(takeUntil(this.destroy$)).subscribe()
-
-    this.preFillQueryParams()
-  }
-
-  toggleLocation(path: string) {
-    const currentValue = this.form.get(path).value
-
-    this.form.get(path).setValue(!currentValue)
-    this.form.get(path).markAsTouched()
   }
 
   rescheduleTime(oldTime: Date, newTime: Date, wasAvailable: boolean) {
@@ -104,19 +75,6 @@ export class CreateReservationFormService {
       .patchValue({ includedDates: [...includedDates, newTime], excludedDates: [...excludedDates, oldTime] })
   }
 
-  private preFillQueryParams(): void {
-    const startTimeParam = this.route.snapshot.queryParamMap.get('startTime')
-    if (!startTimeParam) return
-
-    const startTime = new Date(startTimeParam)
-
-    if (isValid(startTime)) {
-      const tuiStartTime = TaigaUtils.convertNativeDateToDateTime(startTime)
-      this.form.get('time').patchValue({ startTime: tuiStartTime })
-    }
-  }
-
-  // TODO: Repeat this query only if there are no items left in the unavailableItems$ subject
   private recurringTimeAvailabilityValidator(): AsyncValidatorFn {
     return (group: FormGroup): Observable<ValidationErrors> => {
       const hasStillUnavailableTimes = !!this.unavailableTimesSubject.getValue().length

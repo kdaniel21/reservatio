@@ -1,8 +1,8 @@
 <tui-marker-icon size="l" src="tuiIconAlertCircleLarge"></tui-marker-icon>
 
-<div>
+<div *ngIf="{ errorMessage: service?.retryHandler.message$ | async } as data">
   <h6 class="tui-text_h6 tui-space_top-2 tui-space_bottom-3" [ngTemplateOutlet]="content">
-    {{ message }}
+    {{ data.errorMessage || message }}
   </h6>
 
   <button tuiButton appearance="outline" (click)="onRetry()">Retry</button>

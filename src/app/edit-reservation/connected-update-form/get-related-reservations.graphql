@@ -1,0 +1,12 @@
+query getRelatedReservations($recurringId: ID!) {
+  recurringReservations(recurringId: $recurringId, futureOnly: true) {
+    id
+    name
+    startTime
+    endTime
+    locations {
+      badminton
+      tableTennis
+    }
+  }
+}

@@ -3,7 +3,6 @@ import { TuiNotification } from '@taiga-ui/core'
 import { Observable } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import {
-  AreTimesAvailableGQL,
   CreateRecurringReservationGQL,
   CreateRecurringReservationMutationVariables,
   CreateReservationGQL,
@@ -23,18 +22,11 @@ export type IsRecurringTimeAvailableResponse = Omit<IsRecurringTimeAvailableResp
 @Injectable({ providedIn: 'root' })
 export class CreateReservationService {
   constructor(
-    private readonly areTimesAvailableGQL: AreTimesAvailableGQL,
     private readonly createReservationGQL: CreateReservationGQL,
     private readonly notificationsService: NotificationsService,
     private readonly isRecurringTimeAvailableGQL: IsRecurringTimeAvailableGQL,
     private readonly createRecurringReservationGQL: CreateRecurringReservationGQL,
   ) {}
-
-  isTimeAvailable(params: TimeAvailableInputDto): Observable<boolean> {
-    return this.areTimesAvailableGQL
-      .fetch({ timeProposals: [params] }, { fetchPolicy: 'network-only' })
-      .pipe(map(res => res.data.areTimesAvailable[0].isTimeAvailable))
-  }
 
   isRecurringTimeAvailable(
     params: IsRecurringTimeAvailableQueryVariables,

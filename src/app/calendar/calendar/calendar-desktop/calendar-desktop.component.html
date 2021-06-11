@@ -4,11 +4,11 @@
     selectedTimePeriod: selectedTimePeriod$ | async,
     calendarEvents: reservationCalendarEvents$ | async,
     isLoading: isLoading$ | async,
-    errorMessage: errorMessage$ | async
+    hasError: hasError$ | async
   } as data"
 >
   <!-- TODO: Take care of i18n -->
-  <div *ngIf="!data.errorMessage; else error" id="calendar-wrapper">
+  <div *ngIf="!data.hasError; else error" id="calendar-wrapper">
     <tui-loader [showLoader]="data.isLoading" [overlay]="true">
       <mwl-calendar-week-view
         tuiOverscroll="scroll"
@@ -25,7 +25,7 @@
   </div>
 
   <ng-template #error>
-    <app-retry-error-message [message]="data.errorMessage" (retry)="onRetry()"></app-retry-error-message>
+    <app-retry-error-message [service]="calendarService"></app-retry-error-message>
   </ng-template>
 
   <ng-template #customEvent let-weekEvent="weekEvent">
