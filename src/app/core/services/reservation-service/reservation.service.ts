@@ -4,6 +4,8 @@ import { map } from 'rxjs/operators'
 import { Reservation } from 'src/app/calendar/calendar/calendar-reservation-details/reservation-details.service'
 import { AreTimesAvailableGQL, GetReservationGQL, TimeAvailableInputDto } from '../../graphql/generated'
 
+// TODO: Implement better caching
+
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
   constructor(
@@ -12,7 +14,7 @@ export class ReservationService {
   ) {}
 
   getReservation(id: string): Observable<Reservation> {
-    return this.getReservationGQL.fetch({ id }).pipe(
+    return this.getReservationGQL.fetch({ id }, { fetchPolicy: 'network-only' }).pipe(
       map(res => res.data.reservation),
       map(reservation => ({
         ...reservation,
