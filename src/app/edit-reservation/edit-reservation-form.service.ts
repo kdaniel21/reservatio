@@ -5,7 +5,7 @@ import { updatedDiff } from 'deep-object-diff'
 import { EMPTY, merge, Observable, of, timer } from 'rxjs'
 import { defaultIfEmpty, map, mapTo, switchMap, takeUntil, tap, withLatestFrom } from 'rxjs/operators'
 import { Reservation } from '../calendar/calendar/calendar-reservation-details/reservation-details.service'
-import { TimeAvailableInputDto } from '../core/graphql/generated'
+import { TimeProposalInput } from '../core/graphql/generated'
 import { ReservationService } from '../core/services/reservation-service/reservation.service'
 import { TaigaUtils } from '../core/taiga-utils'
 import { GeneralFormService } from '../shared/general-form/general-form.service'
@@ -95,7 +95,7 @@ export class EditReservationFormService {
             endTime: TaigaUtils.convertDateTimeToNativeDate(time.endTime),
             locations,
             excludedReservation: editedReservation.id,
-          } as TimeAvailableInputDto
+          } as TimeProposalInput
         }),
         switchMap(timeProposal => this.reservationService.isTimeAvailable(timeProposal)),
         map(isTimeAvailable => (isTimeAvailable ? null : { timeNotAvailable: 'Time is not available!' })),

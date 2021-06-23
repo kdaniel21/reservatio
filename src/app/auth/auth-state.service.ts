@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, EMPTY, asapScheduler, concat } from 'rxjs'
-import { distinctUntilChanged, map, tap, catchError, finalize, switchMapTo, skipWhile, filter } from 'rxjs/operators'
+import { distinctUntilChanged, map, tap, catchError, finalize, switchMapTo, filter } from 'rxjs/operators'
 import { GraphqlContext } from '../core/graphql/error-handler'
-import { GetCurrentUserGQL, GetCurrentUserQuery, RefreshAccessTokenGQL, Role } from '../core/graphql/generated'
+import { CustomerRole, GetCurrentUserGQL, GetCurrentUserQuery, RefreshAccessTokenGQL } from '../core/graphql/generated'
 
 export type RedactedUser = GetCurrentUserQuery['currentUser']
 
@@ -10,7 +10,7 @@ export type RedactedUser = GetCurrentUserQuery['currentUser']
 export class AuthStateService {
   private hasAttemptedAuthenticationSubject = new BehaviorSubject<boolean>(undefined)
   private hasAttemptedAuthentication$ = this.hasAttemptedAuthenticationSubject.pipe(
-    filter(val => typeof val === 'boolean')
+    filter(val => typeof val === 'boolean'),
   )
 
   private readonly userSubject = new BehaviorSubject<RedactedUser>(undefined)
@@ -21,15 +21,15 @@ export class AuthStateService {
 
   readonly isAuthenticated$: Observable<boolean> = this.user$.pipe(
     map(user => !!user),
-    distinctUntilChanged()
+    distinctUntilChanged(),
   )
   get isAuthenticated(): boolean {
     return !!this.user
   }
 
-  readonly isAdmin$: Observable<boolean> = this.user$.pipe(map(user => user.customer.role === Role.Admin))
+  readonly isAdmin$: Observable<boolean> = this.user$.pipe(map(user => user.customer.role === CustomerRole.Admin))
   get isAdmin(): boolean {
-    return this.user.customer.role === Role.Admin
+    return this.user.customer.role === CustomerRole.Admin
   }
 
   private readonly accessTokenSubject = new BehaviorSubject<string>(undefined)
@@ -40,7 +40,7 @@ export class AuthStateService {
 
   constructor(
     private readonly refreshAccessTokenGQL: RefreshAccessTokenGQL,
-    private readonly getCurrentUserGQL: GetCurrentUserGQL
+    private readonly getCurrentUserGQL: GetCurrentUserGQL,
   ) {
     asapScheduler.schedule(() => this.initAuthState())
   }
@@ -49,7 +49,7 @@ export class AuthStateService {
     concat(this.refreshAccessToken(), this.fetchCurrentUser())
       .pipe(
         finalize(() => this.hasAttemptedAuthenticationSubject.next(true)),
-        catchError(() => EMPTY)
+        catchError(() => EMPTY),
       )
       .subscribe()
   }
@@ -58,15 +58,15 @@ export class AuthStateService {
     return this.refreshAccessTokenGQL
       .fetch(undefined, { context: { avoidErrorNotification: true } as GraphqlContext })
       .pipe(
-        map(res => res.data.refreshAccessToken.accessToken),
-        tap(newAccessToken => this.accessTokenSubject.next(newAccessToken))
+        map(res => res.data.renewAccessToken.accessToken),
+        tap(newAccessToken => this.setAccessToken(newAccessToken)),
       )
   }
 
   fetchCurrentUser(): Observable<RedactedUser> {
     return this.getCurrentUserGQL.fetch().pipe(
       map(res => res.data.currentUser),
-      tap(currentUser => this.userSubject.next(currentUser))
+      tap(currentUser => this.userSubject.next(currentUser)),
     )
   }
 

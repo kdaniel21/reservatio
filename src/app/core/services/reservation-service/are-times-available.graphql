@@ -1,4 +1,4 @@
-query areTimesAvailable($timeProposals: [TimeAvailableInputDto!]!) {
+query areTimesAvailable($timeProposals: [TimeProposalInput!]!) {
   areTimesAvailable(timeProposals: $timeProposals) {
     startTime
     endTime
@@ -6,6 +6,6 @@ query areTimesAvailable($timeProposals: [TimeAvailableInputDto!]!) {
       tableTennis
       badminton
     }
-    isTimeAvailable
+    isAvailable
   }
 }

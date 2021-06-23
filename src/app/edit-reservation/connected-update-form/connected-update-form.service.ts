@@ -15,7 +15,7 @@ import {
   tap,
 } from 'rxjs/operators'
 import { Reservation } from 'src/app/calendar/calendar/calendar-reservation-details/reservation-details.service'
-import { TimeAvailableInputDto } from 'src/app/core/graphql/generated'
+import { TimeProposalInput } from 'src/app/core/graphql/generated'
 import { ReservationService } from 'src/app/core/services/reservation-service/reservation.service'
 import { EditReservationFormService } from '../edit-reservation-form.service'
 import { EditReservationService } from '../edit-reservation.service'
@@ -104,7 +104,7 @@ export class ConnectedUpdateFormService {
         map(reservation => {
           const { startTime, endTime, locations, proposedChanges } = reservation
 
-          const timeProposal: TimeAvailableInputDto = {
+          const timeProposal: TimeProposalInput = {
             startTime: proposedChanges.startTime || startTime,
             endTime: proposedChanges.endTime || endTime,
             locations: {

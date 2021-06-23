@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Reservation } from 'src/app/calendar/calendar/calendar-reservation-details/reservation-details.service'
-import { AreTimesAvailableGQL, GetReservationGQL, TimeAvailableInputDto } from '../../graphql/generated'
+import { AreTimesAvailableGQL, GetReservationGQL, TimeProposalInput } from '../../graphql/generated'
 
 // TODO: Implement better caching
 
@@ -24,9 +24,9 @@ export class ReservationService {
     )
   }
 
-  isTimeAvailable(timeProposal: TimeAvailableInputDto): Observable<boolean> {
+  isTimeAvailable(timeProposal: TimeProposalInput): Observable<boolean> {
     return this.areTimesAvailableGQL
       .fetch({ timeProposals: [timeProposal] }, { fetchPolicy: 'network-only' })
-      .pipe(map(res => res.data.areTimesAvailable[0].isTimeAvailable))
+      .pipe(map(res => res.data.areTimesAvailable[0].isAvailable))
   }
 }

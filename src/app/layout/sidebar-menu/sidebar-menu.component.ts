@@ -3,14 +3,14 @@ import { Router } from '@angular/router'
 import { map, withLatestFrom } from 'rxjs/operators'
 import { AuthStateService } from 'src/app/auth/auth-state.service'
 import { AuthService } from 'src/app/auth/auth.service'
-import { Role } from 'src/app/core/graphql/generated'
+import { CustomerRole } from 'src/app/core/graphql/generated'
 
 interface MenuItem {
   text: string
   icon: string
   route?: string[]
   action?: () => void
-  roles?: Role[]
+  roles?: CustomerRole[]
 }
 
 @Component({
@@ -23,7 +23,7 @@ export class SidebarMenuComponent {
   private readonly authenticatedMenuItems: MenuItem[] = [
     { text: 'Calendar', icon: 'tuiIconCalendarLarge', route: ['/', 'calendar'] },
     { text: 'New reservation', icon: 'tuiIconPlusLarge', route: ['/', 'create'] },
-    { text: 'Dashboard', icon: 'tuiIconStructureLarge', roles: [Role.Admin] },
+    { text: 'Dashboard', icon: 'tuiIconStructureLarge', roles: [CustomerRole.Admin] },
     { text: 'Sign out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
   ]
 

@@ -1,5 +1,5 @@
 query refreshAccessToken {
-  refreshAccessToken {
+  renewAccessToken {
     accessToken
   }
 }

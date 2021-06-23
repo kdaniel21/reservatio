@@ -9,13 +9,13 @@ import {
   CreateReservationMutationVariables,
   IsRecurringTimeAvailableGQL,
   IsRecurringTimeAvailableQueryVariables,
-  IsRecurringTimeAvailableResponseDto,
+  RecurringTimeAvailabilityType,
 } from 'src/app/core/graphql/generated'
 import { NotificationsService } from 'src/app/core/services/notifications.service'
 
 export type RedactedReservation = CreateReservationMutation['createReservation']
 
-export type IsRecurringTimeAvailableResponse = Omit<IsRecurringTimeAvailableResponseDto, '__typename'>
+export type IsRecurringTimeAvailableResponse = Omit<RecurringTimeAvailabilityType, '__typename'>
 
 @Injectable({ providedIn: 'root' })
 export class CreateReservationService {

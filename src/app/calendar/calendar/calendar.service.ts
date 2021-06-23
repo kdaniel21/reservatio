@@ -3,11 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { format } from 'date-fns'
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs'
 import { filter, map, shareReplay, switchMap, takeUntil, tap } from 'rxjs/operators'
-import {
-  GetReservationsGQL,
-  GetReservationsQuery,
-  GraphQlReservationLocationOutput,
-} from 'src/app/core/graphql/generated'
+import { GetReservationsGQL, GetReservationsQuery, ReservationLocationsType } from 'src/app/core/graphql/generated'
 import { Loader } from 'src/app/core/loader/loader'
 import { handleRetry } from 'src/app/core/retry-error-handler/handle-retry'
 import { RetryErrorHandler } from 'src/app/core/retry-error-handler/retry-error-handler'
@@ -18,7 +14,7 @@ export interface ReservationTimePeriod {
   endDate: Date
 }
 
-export type ReservationLocations = Omit<GraphQlReservationLocationOutput, '__typename'>
+export type ReservationLocations = Omit<ReservationLocationsType, '__typename'>
 
 export type ReservationListItem = GetReservationsQuery['reservations'][number]
 

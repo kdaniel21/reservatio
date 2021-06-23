@@ -4,7 +4,7 @@ mutation createRecurringReservation(
   $endTime: DateTime!
   $includedDates: [DateTime!]
   $excludedDates: [DateTime!]
-  $locations: GraphQLReservationLocationInput!
+  $locations: ReservationLocationsInput!
   $recurrence: Recurrence!
   $timePeriod: TimePeriod!
 ) {

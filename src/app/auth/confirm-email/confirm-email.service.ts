@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { mapTo, tap } from 'rxjs/operators'
-import { ConfirmEmailGQL } from 'src/app/core/graphql/generated'
+import { ConfirmEmailAddressGQL } from 'src/app/core/graphql/generated'
 import { Loader } from 'src/app/core/loader/loader'
 import { RetryErrorHandler } from 'src/app/core/retry-error-handler/retry-error-handler'
 import { NotificationsService } from 'src/app/core/services/notifications.service'
@@ -14,7 +14,7 @@ export class ConfirmEmailService implements RetryableService {
   readonly retryHandler = new RetryErrorHandler()
 
   constructor(
-    private readonly confirmEmailGQL: ConfirmEmailGQL,
+    private readonly confirmEmailGQL: ConfirmEmailAddressGQL,
     private readonly notificationsService: NotificationsService,
   ) {}
 

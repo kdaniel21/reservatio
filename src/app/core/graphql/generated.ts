@@ -12,150 +12,79 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any;
 };
 
 
 
-export type AreTimesAvailableResponseDto = {
-  __typename?: 'AreTimesAvailableResponseDto';
-  startTime: Scalars['DateTime'];
-  endTime: Scalars['DateTime'];
-  locations: GraphQlReservationLocationOutput;
-  isTimeAvailable: Scalars['Boolean'];
+export type AccessTokenType = {
+  __typename?: 'AccessTokenType';
+  accessToken: Scalars['String'];
 };
 
-export type ChangePasswordUsingTokenInputDto = {
-  passwordResetToken: Scalars['String'];
-  password: Scalars['String'];
-  passwordConfirm: Scalars['String'];
-};
-
-export type CreateRecurringReservationResponseDto = {
-  __typename?: 'CreateRecurringReservationResponseDto';
+export type CreatedRecurringReservationType = {
+  __typename?: 'CreatedRecurringReservationType';
+  recurringId: Scalars['ID'];
   count: Scalars['Float'];
-  recurringId: Scalars['String'];
+};
+
+export enum CustomerRole {
+  Admin = 'ADMIN',
+  Customer = 'CUSTOMER'
+}
+
+export type CustomerType = {
+  __typename?: 'CustomerType';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  role: CustomerRole;
+  user: UserType;
 };
 
 
-export type GraphQlCustomer = {
-  __typename?: 'GraphQLCustomer';
+export type InvitationType = {
+  __typename?: 'InvitationType';
   id: Scalars['ID'];
-  user: GraphQlUser;
-  name: Scalars['String'];
-  role: Role;
-};
-
-export type GraphQlReservation = {
-  __typename?: 'GraphQLReservation';
-  id: Scalars['ID'];
-  recurringId?: Maybe<Scalars['ID']>;
-  name: Scalars['String'];
+  expiresAt: Scalars['DateTime'];
+  inviter: CustomerType;
+  emailAddress: Scalars['String'];
   isActive: Scalars['Boolean'];
-  customer: GraphQlCustomer;
-  startTime: Scalars['DateTime'];
-  endTime: Scalars['DateTime'];
-  locations: GraphQlReservationLocationOutput;
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
 };
 
-export type GraphQlReservationLocationInput = {
-  tableTennis?: Maybe<Scalars['Boolean']>;
-  badminton?: Maybe<Scalars['Boolean']>;
+export type InvitationTypeEdge = {
+  __typename?: 'InvitationTypeEdge';
+  node: InvitationType;
+  cursor: Scalars['String'];
 };
 
-export type GraphQlReservationLocationOutput = {
-  __typename?: 'GraphQLReservationLocationOutput';
-  tableTennis: Scalars['Boolean'];
-  badminton: Scalars['Boolean'];
-};
-
-export type GraphQlUser = {
-  __typename?: 'GraphQLUser';
-  id: Scalars['String'];
-  email: Scalars['String'];
-  isEmailConfirmed: Scalars['Boolean'];
-  customer?: Maybe<GraphQlCustomer>;
-};
-
-export type HealthCheckResponse = {
-  __typename?: 'HealthCheckResponse';
-  name: Scalars['String'];
-  status: Scalars['String'];
-  version: Scalars['String'];
-  currentTime: Scalars['DateTime'];
-};
-
-export type IsRecurringTimeAvailableResponseDto = {
-  __typename?: 'IsRecurringTimeAvailableResponseDto';
-  availableTimes: Array<Scalars['DateTime']>;
-  unavailableTimes: Array<Scalars['DateTime']>;
-};
-
-/** Login mutation result. */
-export type LoginResponseDto = {
-  __typename?: 'LoginResponseDto';
-  user: GraphQlUser;
+export type LoginType = {
+  __typename?: 'LoginType';
   accessToken: Scalars['String'];
   refreshToken: Scalars['String'];
+  user: UserType;
 };
 
-export type MessageResponseDto = {
-  __typename?: 'MessageResponseDto';
+export type MessageType = {
+  __typename?: 'MessageType';
   message: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createRecurringReservation: CreateRecurringReservationResponseDto;
-  createReservation: GraphQlReservation;
-  updateReservation: GraphQlReservation;
-  changePasswordUsingToken: MessageResponseDto;
-  confirmEmail: MessageResponseDto;
-  login: LoginResponseDto;
-  logout: MessageResponseDto;
-  register: RegisterResponseDto;
-  resetPassword: MessageResponseDto;
-  sendEmailConfirmation: MessageResponseDto;
-};
-
-
-export type MutationCreateRecurringReservationArgs = {
-  startTime: Scalars['DateTime'];
-  endTime: Scalars['DateTime'];
-  includedDates?: Maybe<Array<Scalars['DateTime']>>;
-  excludedDates?: Maybe<Array<Scalars['DateTime']>>;
-  locations: GraphQlReservationLocationInput;
-  recurrence?: Maybe<Recurrence>;
-  timePeriod?: Maybe<TimePeriod>;
-  name: Scalars['String'];
-};
-
-
-export type MutationCreateReservationArgs = {
-  name: Scalars['String'];
-  startTime: Scalars['DateTime'];
-  endTime: Scalars['DateTime'];
-  locations: GraphQlReservationLocationInput;
-};
-
-
-export type MutationUpdateReservationArgs = {
-  id: Scalars['ID'];
-  updatedProperties: UpdatedProperties;
-  connectedUpdates?: Maybe<Array<Scalars['ID']>>;
-};
-
-
-export type MutationChangePasswordUsingTokenArgs = {
-  params: ChangePasswordUsingTokenInputDto;
-};
-
-
-export type MutationConfirmEmailArgs = {
-  token: Scalars['String'];
+  login: LoginType;
+  register: MessageType;
+  logout: MessageType;
+  confirmEmailAddress: MessageType;
+  sendEmailConfirmation: MessageType;
+  resetPassword: MessageType;
+  changePasswordUsingToken: MessageType;
+  sendInvitation: InvitationType;
+  updateInvitation: InvitationType;
+  createReservation: ReservationType;
+  createRecurringReservation: CreatedRecurringReservationType;
+  updateReservation: ReservationType;
 };
 
 
@@ -165,13 +94,27 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationRegisterArgs = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
+  invitationToken: Scalars['String'];
+};
+
+
 export type MutationLogoutArgs = {
   refreshToken?: Maybe<Scalars['String']>;
 };
 
 
-export type MutationRegisterArgs = {
-  params: RegisterInputDto;
+export type MutationConfirmEmailAddressArgs = {
+  token: Scalars['String'];
+};
+
+
+export type MutationSendEmailConfirmationArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -180,36 +123,110 @@ export type MutationResetPasswordArgs = {
 };
 
 
-export type MutationSendEmailConfirmationArgs = {
-  email: Scalars['String'];
+export type MutationChangePasswordUsingTokenArgs = {
+  passwordResetToken: Scalars['String'];
+  password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
+};
+
+
+export type MutationSendInvitationArgs = {
+  emailAddress: Scalars['String'];
+};
+
+
+export type MutationUpdateInvitationArgs = {
+  id: Scalars['ID'];
+  expiresAt: Scalars['DateTime'];
+  emailAddress: Scalars['String'];
+  isActive: Scalars['Boolean'];
+};
+
+
+export type MutationCreateReservationArgs = {
+  name: Scalars['String'];
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  locations: ReservationLocationsInput;
+};
+
+
+export type MutationCreateRecurringReservationArgs = {
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  locations: ReservationLocationsInput;
+  includedDates?: Maybe<Array<Scalars['DateTime']>>;
+  excludedDates?: Maybe<Array<Scalars['DateTime']>>;
+  recurrence?: Maybe<Recurrence>;
+  timePeriod?: Maybe<TimePeriod>;
+  name: Scalars['String'];
+};
+
+
+export type MutationUpdateReservationArgs = {
+  id: Scalars['ID'];
+  updatedProperties: UpdatedProperties;
+  connectedUpdates?: Maybe<Array<Scalars['ID']>>;
+};
+
+export type PageInfoType = {
+  __typename?: 'PageInfoType';
+  startCursor: Scalars['String'];
+  endCursor: Scalars['String'];
+  hasPreviousPage: Scalars['Boolean'];
+  hasNextPage: Scalars['Boolean'];
+};
+
+export type PageType = {
+  __typename?: 'PageType';
+  edges: Array<InvitationTypeEdge>;
+  totalCount: Scalars['Float'];
+  pageInfo: PageInfoType;
 };
 
 export type Query = {
   __typename?: 'Query';
-  status: HealthCheckResponse;
-  areTimesAvailable: Array<AreTimesAvailableResponseDto>;
-  recurringReservations: Array<GraphQlReservation>;
-  reservation: GraphQlReservation;
-  reservations: Array<GraphQlReservation>;
-  isRecurringTimeAvailable: IsRecurringTimeAvailableResponseDto;
-  currentUser: GraphQlUser;
-  refreshAccessToken: RefreshAccessTokenResponseDto;
+  renewAccessToken: AccessTokenType;
+  currentUser: UserType;
+  foo: MessageType;
+  invitations: PageType;
+  reservation: ReservationType;
+  areTimesAvailable: Array<TimeProposalAvailability>;
+  isRecurringTimeAvailable: RecurringTimeAvailabilityType;
+  reservations: Array<ReservationType>;
+  recurringReservations: Array<ReservationType>;
 };
 
 
-export type QueryAreTimesAvailableArgs = {
-  timeProposals: Array<TimeAvailableInputDto>;
+export type QueryRenewAccessTokenArgs = {
+  refreshToken?: Maybe<Scalars['String']>;
 };
 
 
-export type QueryRecurringReservationsArgs = {
-  recurringId: Scalars['ID'];
-  futureOnly?: Maybe<Scalars['Boolean']>;
+export type QueryInvitationsArgs = {
+  first: Scalars['Float'];
+  after?: Maybe<Scalars['String']>;
 };
 
 
 export type QueryReservationArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryAreTimesAvailableArgs = {
+  timeProposals: Array<TimeProposalInput>;
+};
+
+
+export type QueryIsRecurringTimeAvailableArgs = {
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  locations: ReservationLocationsInput;
+  includedDates?: Maybe<Array<Scalars['DateTime']>>;
+  excludedDates?: Maybe<Array<Scalars['DateTime']>>;
+  recurrence?: Maybe<Recurrence>;
+  timePeriod?: Maybe<TimePeriod>;
 };
 
 
@@ -219,73 +236,81 @@ export type QueryReservationsArgs = {
 };
 
 
-export type QueryIsRecurringTimeAvailableArgs = {
-  startTime: Scalars['DateTime'];
-  endTime: Scalars['DateTime'];
-  includedDates?: Maybe<Array<Scalars['DateTime']>>;
-  excludedDates?: Maybe<Array<Scalars['DateTime']>>;
-  locations: GraphQlReservationLocationInput;
-  recurrence?: Maybe<Recurrence>;
-  timePeriod?: Maybe<TimePeriod>;
-};
-
-
-export type QueryRefreshAccessTokenArgs = {
-  refreshToken?: Maybe<Scalars['String']>;
+export type QueryRecurringReservationsArgs = {
+  recurringId: Scalars['ID'];
+  futureOnly?: Maybe<Scalars['Boolean']>;
 };
 
 export enum Recurrence {
-  Weekly = 'Weekly',
-  Monthly = 'Monthly'
+  Weekly = 'WEEKLY',
+  Monthly = 'MONTHLY'
 }
 
-export type RefreshAccessTokenResponseDto = {
-  __typename?: 'RefreshAccessTokenResponseDto';
-  accessToken: Scalars['String'];
+export type RecurringTimeAvailabilityType = {
+  __typename?: 'RecurringTimeAvailabilityType';
+  availableTimes: Array<Scalars['DateTime']>;
+  unavailableTimes: Array<Scalars['DateTime']>;
 };
 
-export type RegisterInputDto = {
-  email: Scalars['String'];
+export type ReservationLocationsInput = {
+  tableTennis?: Maybe<Scalars['Boolean']>;
+  badminton?: Maybe<Scalars['Boolean']>;
+};
+
+export type ReservationLocationsType = {
+  __typename?: 'ReservationLocationsType';
+  tableTennis: Scalars['Boolean'];
+  badminton: Scalars['Boolean'];
+};
+
+export type ReservationType = {
+  __typename?: 'ReservationType';
+  id: Scalars['ID'];
+  recurringId?: Maybe<Scalars['ID']>;
   name: Scalars['String'];
-  password: Scalars['String'];
-  passwordConfirm: Scalars['String'];
-};
-
-export type RegisterResponseDto = {
-  __typename?: 'RegisterResponseDto';
-  user: GraphQlUser;
-  accessToken: Scalars['String'];
-  refreshToken: Scalars['String'];
-};
-
-export enum Role {
-  Admin = 'Admin',
-  Customer = 'Customer'
-}
-
-export type TimeAvailableInputDto = {
+  isActive: Scalars['Boolean'];
+  customer: CustomerType;
   startTime: Scalars['DateTime'];
   endTime: Scalars['DateTime'];
-  locations: GraphQlReservationLocationInput;
-  excludedReservation?: Maybe<Scalars['ID']>;
+  locations: ReservationLocationsType;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export enum TimePeriod {
-  HalfYear = 'HalfYear',
-  CurrentYear = 'CurrentYear'
+  HalfYear = 'HALF_YEAR',
+  CurrentYear = 'CURRENT_YEAR'
 }
 
-export type UpdateLocationInput = {
-  badminton?: Maybe<Scalars['Boolean']>;
-  tableTennis?: Maybe<Scalars['Boolean']>;
+export type TimeProposalAvailability = {
+  __typename?: 'TimeProposalAvailability';
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  locations: ReservationLocationsType;
+  isAvailable: Scalars['Boolean'];
+};
+
+export type TimeProposalInput = {
+  startTime: Scalars['DateTime'];
+  endTime: Scalars['DateTime'];
+  locations: ReservationLocationsInput;
+  excludedReservation?: Maybe<Scalars['ID']>;
 };
 
 export type UpdatedProperties = {
   name?: Maybe<Scalars['String']>;
+  isActive?: Maybe<Scalars['Boolean']>;
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
-  locations?: Maybe<UpdateLocationInput>;
-  isActive?: Maybe<Scalars['Boolean']>;
+  locations?: Maybe<ReservationLocationsInput>;
+};
+
+export type UserType = {
+  __typename?: 'UserType';
+  id: Scalars['ID'];
+  email: Scalars['String'];
+  isEmailConfirmed: Scalars['Boolean'];
+  customer: CustomerType;
 };
 
 export type ChangePasswordUsingTokenMutationVariables = Exact<{
@@ -298,21 +323,21 @@ export type ChangePasswordUsingTokenMutationVariables = Exact<{
 export type ChangePasswordUsingTokenMutation = (
   { __typename?: 'Mutation' }
   & { changePasswordUsingToken: (
-    { __typename?: 'MessageResponseDto' }
-    & Pick<MessageResponseDto, 'message'>
+    { __typename?: 'MessageType' }
+    & Pick<MessageType, 'message'>
   ) }
 );
 
-export type ConfirmEmailMutationVariables = Exact<{
+export type ConfirmEmailAddressMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
 
 
-export type ConfirmEmailMutation = (
+export type ConfirmEmailAddressMutation = (
   { __typename?: 'Mutation' }
-  & { confirmEmail: (
-    { __typename?: 'MessageResponseDto' }
-    & Pick<MessageResponseDto, 'message'>
+  & { confirmEmailAddress: (
+    { __typename?: 'MessageType' }
+    & Pick<MessageType, 'message'>
   ) }
 );
 
@@ -324,8 +349,8 @@ export type ResetPasswordMutationVariables = Exact<{
 export type ResetPasswordMutation = (
   { __typename?: 'Mutation' }
   & { resetPassword: (
-    { __typename?: 'MessageResponseDto' }
-    & Pick<MessageResponseDto, 'message'>
+    { __typename?: 'MessageType' }
+    & Pick<MessageType, 'message'>
   ) }
 );
 
@@ -335,12 +360,12 @@ export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetCurrentUserQuery = (
   { __typename?: 'Query' }
   & { currentUser: (
-    { __typename?: 'GraphQLUser' }
-    & Pick<GraphQlUser, 'id' | 'email' | 'isEmailConfirmed'>
-    & { customer?: Maybe<(
-      { __typename?: 'GraphQLCustomer' }
-      & Pick<GraphQlCustomer, 'id' | 'name' | 'role'>
-    )> }
+    { __typename?: 'UserType' }
+    & Pick<UserType, 'id' | 'email' | 'isEmailConfirmed'>
+    & { customer: (
+      { __typename?: 'CustomerType' }
+      & Pick<CustomerType, 'id' | 'name' | 'role'>
+    ) }
   ) }
 );
 
@@ -353,15 +378,15 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login: (
-    { __typename?: 'LoginResponseDto' }
-    & Pick<LoginResponseDto, 'accessToken'>
+    { __typename?: 'LoginType' }
+    & Pick<LoginType, 'accessToken'>
     & { user: (
-      { __typename?: 'GraphQLUser' }
-      & Pick<GraphQlUser, 'id' | 'email' | 'isEmailConfirmed'>
-      & { customer?: Maybe<(
-        { __typename?: 'GraphQLCustomer' }
-        & Pick<GraphQlCustomer, 'id' | 'name' | 'role'>
-      )> }
+      { __typename?: 'UserType' }
+      & Pick<UserType, 'id' | 'email' | 'isEmailConfirmed'>
+      & { customer: (
+        { __typename?: 'CustomerType' }
+        & Pick<CustomerType, 'id' | 'name' | 'role'>
+      ) }
     ) }
   ) }
 );
@@ -372,8 +397,8 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
   & { logout: (
-    { __typename?: 'MessageResponseDto' }
-    & Pick<MessageResponseDto, 'message'>
+    { __typename?: 'MessageType' }
+    & Pick<MessageType, 'message'>
   ) }
 );
 
@@ -382,29 +407,9 @@ export type RefreshAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type RefreshAccessTokenQuery = (
   { __typename?: 'Query' }
-  & { refreshAccessToken: (
-    { __typename?: 'RefreshAccessTokenResponseDto' }
-    & Pick<RefreshAccessTokenResponseDto, 'accessToken'>
-  ) }
-);
-
-export type GetReservationQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type GetReservationQuery = (
-  { __typename?: 'Query' }
-  & { reservation: (
-    { __typename?: 'GraphQLReservation' }
-    & Pick<GraphQlReservation, 'id' | 'recurringId' | 'name' | 'isActive' | 'startTime' | 'endTime' | 'createdAt' | 'updatedAt'>
-    & { locations: (
-      { __typename?: 'GraphQLReservationLocationOutput' }
-      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
-    ), customer: (
-      { __typename?: 'GraphQLCustomer' }
-      & Pick<GraphQlCustomer, 'id' | 'name'>
-    ) }
+  & { renewAccessToken: (
+    { __typename?: 'AccessTokenType' }
+    & Pick<AccessTokenType, 'accessToken'>
   ) }
 );
 
@@ -417,30 +422,50 @@ export type GetReservationsQueryVariables = Exact<{
 export type GetReservationsQuery = (
   { __typename?: 'Query' }
   & { reservations: Array<(
-    { __typename?: 'GraphQLReservation' }
-    & Pick<GraphQlReservation, 'id' | 'recurringId' | 'name' | 'isActive' | 'startTime' | 'endTime'>
+    { __typename?: 'ReservationType' }
+    & Pick<ReservationType, 'id' | 'recurringId' | 'name' | 'isActive' | 'startTime' | 'endTime'>
     & { locations: (
-      { __typename?: 'GraphQLReservationLocationOutput' }
-      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
+      { __typename?: 'ReservationLocationsType' }
+      & Pick<ReservationLocationsType, 'tableTennis' | 'badminton'>
     ) }
   )> }
 );
 
 export type AreTimesAvailableQueryVariables = Exact<{
-  timeProposals: Array<TimeAvailableInputDto> | TimeAvailableInputDto;
+  timeProposals: Array<TimeProposalInput> | TimeProposalInput;
 }>;
 
 
 export type AreTimesAvailableQuery = (
   { __typename?: 'Query' }
   & { areTimesAvailable: Array<(
-    { __typename?: 'AreTimesAvailableResponseDto' }
-    & Pick<AreTimesAvailableResponseDto, 'startTime' | 'endTime' | 'isTimeAvailable'>
+    { __typename?: 'TimeProposalAvailability' }
+    & Pick<TimeProposalAvailability, 'startTime' | 'endTime' | 'isAvailable'>
     & { locations: (
-      { __typename?: 'GraphQLReservationLocationOutput' }
-      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
+      { __typename?: 'ReservationLocationsType' }
+      & Pick<ReservationLocationsType, 'tableTennis' | 'badminton'>
     ) }
   )> }
+);
+
+export type GetReservationQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetReservationQuery = (
+  { __typename?: 'Query' }
+  & { reservation: (
+    { __typename?: 'ReservationType' }
+    & Pick<ReservationType, 'id' | 'recurringId' | 'name' | 'isActive' | 'startTime' | 'endTime' | 'createdAt' | 'updatedAt'>
+    & { locations: (
+      { __typename?: 'ReservationLocationsType' }
+      & Pick<ReservationLocationsType, 'tableTennis' | 'badminton'>
+    ), customer: (
+      { __typename?: 'CustomerType' }
+      & Pick<CustomerType, 'id' | 'name'>
+    ) }
+  ) }
 );
 
 export type CreateRecurringReservationMutationVariables = Exact<{
@@ -449,7 +474,7 @@ export type CreateRecurringReservationMutationVariables = Exact<{
   endTime: Scalars['DateTime'];
   includedDates?: Maybe<Array<Scalars['DateTime']> | Scalars['DateTime']>;
   excludedDates?: Maybe<Array<Scalars['DateTime']> | Scalars['DateTime']>;
-  locations: GraphQlReservationLocationInput;
+  locations: ReservationLocationsInput;
   recurrence: Recurrence;
   timePeriod: TimePeriod;
 }>;
@@ -458,8 +483,8 @@ export type CreateRecurringReservationMutationVariables = Exact<{
 export type CreateRecurringReservationMutation = (
   { __typename?: 'Mutation' }
   & { createRecurringReservation: (
-    { __typename?: 'CreateRecurringReservationResponseDto' }
-    & Pick<CreateRecurringReservationResponseDto, 'count' | 'recurringId'>
+    { __typename?: 'CreatedRecurringReservationType' }
+    & Pick<CreatedRecurringReservationType, 'count' | 'recurringId'>
   ) }
 );
 
@@ -467,18 +492,18 @@ export type CreateReservationMutationVariables = Exact<{
   name: Scalars['String'];
   startTime: Scalars['DateTime'];
   endTime: Scalars['DateTime'];
-  locations: GraphQlReservationLocationInput;
+  locations: ReservationLocationsInput;
 }>;
 
 
 export type CreateReservationMutation = (
   { __typename?: 'Mutation' }
   & { createReservation: (
-    { __typename?: 'GraphQLReservation' }
-    & Pick<GraphQlReservation, 'id' | 'name' | 'isActive' | 'startTime'>
+    { __typename?: 'ReservationType' }
+    & Pick<ReservationType, 'id' | 'name' | 'isActive' | 'startTime'>
     & { locations: (
-      { __typename?: 'GraphQLReservationLocationOutput' }
-      & Pick<GraphQlReservationLocationOutput, 'tableTennis' | 'badminton'>
+      { __typename?: 'ReservationLocationsType' }
+      & Pick<ReservationLocationsType, 'tableTennis' | 'badminton'>
     ) }
   ) }
 );
@@ -488,7 +513,7 @@ export type IsRecurringTimeAvailableQueryVariables = Exact<{
   endTime: Scalars['DateTime'];
   includedDates?: Maybe<Array<Scalars['DateTime']> | Scalars['DateTime']>;
   excludedDates?: Maybe<Array<Scalars['DateTime']> | Scalars['DateTime']>;
-  locations: GraphQlReservationLocationInput;
+  locations: ReservationLocationsInput;
   recurrence: Recurrence;
   timePeriod: TimePeriod;
 }>;
@@ -497,8 +522,8 @@ export type IsRecurringTimeAvailableQueryVariables = Exact<{
 export type IsRecurringTimeAvailableQuery = (
   { __typename?: 'Query' }
   & { isRecurringTimeAvailable: (
-    { __typename?: 'IsRecurringTimeAvailableResponseDto' }
-    & Pick<IsRecurringTimeAvailableResponseDto, 'availableTimes' | 'unavailableTimes'>
+    { __typename?: 'RecurringTimeAvailabilityType' }
+    & Pick<RecurringTimeAvailabilityType, 'availableTimes' | 'unavailableTimes'>
   ) }
 );
 
@@ -510,11 +535,11 @@ export type GetRelatedReservationsQueryVariables = Exact<{
 export type GetRelatedReservationsQuery = (
   { __typename?: 'Query' }
   & { recurringReservations: Array<(
-    { __typename?: 'GraphQLReservation' }
-    & Pick<GraphQlReservation, 'id' | 'name' | 'startTime' | 'endTime'>
+    { __typename?: 'ReservationType' }
+    & Pick<ReservationType, 'id' | 'name' | 'startTime' | 'endTime'>
     & { locations: (
-      { __typename?: 'GraphQLReservationLocationOutput' }
-      & Pick<GraphQlReservationLocationOutput, 'badminton' | 'tableTennis'>
+      { __typename?: 'ReservationLocationsType' }
+      & Pick<ReservationLocationsType, 'badminton' | 'tableTennis'>
     ) }
   )> }
 );
@@ -529,15 +554,17 @@ export type UpdateReservationMutationVariables = Exact<{
 export type UpdateReservationMutation = (
   { __typename?: 'Mutation' }
   & { updateReservation: (
-    { __typename?: 'GraphQLReservation' }
-    & Pick<GraphQlReservation, 'id' | 'name'>
+    { __typename?: 'ReservationType' }
+    & Pick<ReservationType, 'id' | 'name'>
   ) }
 );
 
 export const ChangePasswordUsingTokenDocument = gql`
     mutation changePasswordUsingToken($token: String!, $password: String!, $passwordConfirm: String!) {
   changePasswordUsingToken(
-    params: {passwordResetToken: $token, password: $password, passwordConfirm: $passwordConfirm}
+    passwordResetToken: $token
+    password: $password
+    passwordConfirm: $passwordConfirm
   ) {
     message
   }
@@ -554,9 +581,9 @@ export const ChangePasswordUsingTokenDocument = gql`
       super(apollo);
     }
   }
-export const ConfirmEmailDocument = gql`
-    mutation confirmEmail($token: String!) {
-  confirmEmail(token: $token) {
+export const ConfirmEmailAddressDocument = gql`
+    mutation confirmEmailAddress($token: String!) {
+  confirmEmailAddress(token: $token) {
     message
   }
 }
@@ -565,8 +592,8 @@ export const ConfirmEmailDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class ConfirmEmailGQL extends Apollo.Mutation<ConfirmEmailMutation, ConfirmEmailMutationVariables> {
-    document = ConfirmEmailDocument;
+  export class ConfirmEmailAddressGQL extends Apollo.Mutation<ConfirmEmailAddressMutation, ConfirmEmailAddressMutationVariables> {
+    document = ConfirmEmailAddressDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -663,7 +690,7 @@ export const LogoutDocument = gql`
   }
 export const RefreshAccessTokenDocument = gql`
     query refreshAccessToken {
-  refreshAccessToken {
+  renewAccessToken {
     accessToken
   }
 }
@@ -674,6 +701,57 @@ export const RefreshAccessTokenDocument = gql`
   })
   export class RefreshAccessTokenGQL extends Apollo.Query<RefreshAccessTokenQuery, RefreshAccessTokenQueryVariables> {
     document = RefreshAccessTokenDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetReservationsDocument = gql`
+    query getReservations($startDate: DateTime!, $endDate: DateTime!) {
+  reservations(startDate: $startDate, endDate: $endDate) {
+    id
+    recurringId
+    name
+    isActive
+    startTime
+    endTime
+    locations {
+      tableTennis
+      badminton
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetReservationsGQL extends Apollo.Query<GetReservationsQuery, GetReservationsQueryVariables> {
+    document = GetReservationsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const AreTimesAvailableDocument = gql`
+    query areTimesAvailable($timeProposals: [TimeProposalInput!]!) {
+  areTimesAvailable(timeProposals: $timeProposals) {
+    startTime
+    endTime
+    locations {
+      tableTennis
+      badminton
+    }
+    isAvailable
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class AreTimesAvailableGQL extends Apollo.Query<AreTimesAvailableQuery, AreTimesAvailableQueryVariables> {
+    document = AreTimesAvailableDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -712,59 +790,8 @@ export const GetReservationDocument = gql`
       super(apollo);
     }
   }
-export const GetReservationsDocument = gql`
-    query getReservations($startDate: DateTime!, $endDate: DateTime!) {
-  reservations(startDate: $startDate, endDate: $endDate) {
-    id
-    recurringId
-    name
-    isActive
-    startTime
-    endTime
-    locations {
-      tableTennis
-      badminton
-    }
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class GetReservationsGQL extends Apollo.Query<GetReservationsQuery, GetReservationsQueryVariables> {
-    document = GetReservationsDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const AreTimesAvailableDocument = gql`
-    query areTimesAvailable($timeProposals: [TimeAvailableInputDto!]!) {
-  areTimesAvailable(timeProposals: $timeProposals) {
-    startTime
-    endTime
-    locations {
-      tableTennis
-      badminton
-    }
-    isTimeAvailable
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class AreTimesAvailableGQL extends Apollo.Query<AreTimesAvailableQuery, AreTimesAvailableQueryVariables> {
-    document = AreTimesAvailableDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
 export const CreateRecurringReservationDocument = gql`
-    mutation createRecurringReservation($name: String!, $startTime: DateTime!, $endTime: DateTime!, $includedDates: [DateTime!], $excludedDates: [DateTime!], $locations: GraphQLReservationLocationInput!, $recurrence: Recurrence!, $timePeriod: TimePeriod!) {
+    mutation createRecurringReservation($name: String!, $startTime: DateTime!, $endTime: DateTime!, $includedDates: [DateTime!], $excludedDates: [DateTime!], $locations: ReservationLocationsInput!, $recurrence: Recurrence!, $timePeriod: TimePeriod!) {
   createRecurringReservation(
     name: $name
     startTime: $startTime
@@ -792,7 +819,7 @@ export const CreateRecurringReservationDocument = gql`
     }
   }
 export const CreateReservationDocument = gql`
-    mutation createReservation($name: String!, $startTime: DateTime!, $endTime: DateTime!, $locations: GraphQLReservationLocationInput!) {
+    mutation createReservation($name: String!, $startTime: DateTime!, $endTime: DateTime!, $locations: ReservationLocationsInput!) {
   createReservation(
     name: $name
     startTime: $startTime
@@ -822,7 +849,7 @@ export const CreateReservationDocument = gql`
     }
   }
 export const IsRecurringTimeAvailableDocument = gql`
-    query isRecurringTimeAvailable($startTime: DateTime!, $endTime: DateTime!, $includedDates: [DateTime!], $excludedDates: [DateTime!], $locations: GraphQLReservationLocationInput!, $recurrence: Recurrence!, $timePeriod: TimePeriod!) {
+    query isRecurringTimeAvailable($startTime: DateTime!, $endTime: DateTime!, $includedDates: [DateTime!], $excludedDates: [DateTime!], $locations: ReservationLocationsInput!, $recurrence: Recurrence!, $timePeriod: TimePeriod!) {
   isRecurringTimeAvailable(
     startTime: $startTime
     endTime: $endTime
