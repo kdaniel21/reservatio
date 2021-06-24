@@ -55,7 +55,15 @@ export class EditReservationFormService {
       locations,
     }
 
-    return updatedDiff(referenceReservation, updatedReservation)
+    const diff: { [key: string]: any } = updatedDiff(referenceReservation, updatedReservation)
+    if (diff.startTime || diff.endTime) {
+      diff.startTime = updatedReservation.startTime
+      diff.endTime = updatedReservation.endTime
+    }
+
+    if (diff.locations) diff.locations = updatedReservation.locations
+
+    return diff
   }
 
   getConnectedUpdatedIds(): string[] {
