@@ -40,7 +40,8 @@
     "reservation_deleted": "Ez a foglalás törölve lett, ezért már nem aktív.",
     "recurring": "Ismétlődő foglalás",
     "created": "Létrehozva",
-    "last_updated": "Utoljára frissítve"
+    "last_updated": "Utoljára frissítve",
+    "today": "Ma"
   },
 
   "dashboard": {

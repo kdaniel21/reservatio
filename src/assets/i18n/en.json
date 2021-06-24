@@ -40,7 +40,8 @@
     "reservation_deleted": "This reservation has been deleted and therefore is not active anymore.",
     "recurring": "Recurring reservation",
     "created": "Created",
-    "last_updated": "Last updated"
+    "last_updated": "Last updated",
+    "today": "Today"
   },
 
   "dashboard": {

@@ -51,7 +51,9 @@
             <div id="date-title">
               <h5 class="tui-text_h5 tui-space_vertical-4">{{ t('reservation.time') }}</h5>
 
-              <button tuiButton size="s" appearance="secondary" (click)="onSelectToday()">Today</button>
+              <button tuiButton size="s" appearance="secondary" (click)="onSelectToday()">
+                {{ t('calendar.today') }}
+              </button>
             </div>
             <tui-calendar
               [value]="customSettingsForm.value.startDate"
