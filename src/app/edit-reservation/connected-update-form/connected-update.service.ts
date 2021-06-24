@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { FormGroup } from '@angular/forms'
+import { TranslocoService } from '@ngneat/transloco'
 import { Observable } from 'rxjs'
 import { tap, switchMap, first, map, shareReplay, filter, withLatestFrom, startWith, mapTo, take } from 'rxjs/operators'
 import { ReservationLocations } from 'src/app/calendar/calendar/calendar.service'
@@ -70,6 +71,7 @@ export class ConnectedUpdateService implements RetryableService {
     private readonly editReservationService: EditReservationService,
     private readonly editReservationFormService: EditReservationFormService,
     private readonly connectedUpdateFormService: ConnectedUpdateFormService,
+    private readonly transloco: TranslocoService,
   ) {}
 
   private getRelatedReservations(): Observable<RelatedReservation[]> {
@@ -86,7 +88,7 @@ export class ConnectedUpdateService implements RetryableService {
           endTime: new Date(reservation.endTime),
         })),
       ),
-      handleRetry(this, 'Could not load related reservations!'),
+      handleRetry(this, this.transloco.translate('edit_reservation.related_load_fail')),
     )
   }
 }

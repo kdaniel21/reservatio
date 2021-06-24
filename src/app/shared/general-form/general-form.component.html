@@ -1,4 +1,4 @@
-<ng-container [formGroup]="generalForm">
-  <tui-input formControlName="name">Name</tui-input>
+<ng-container *transloco="let t" [formGroup]="generalForm">
+  <tui-input formControlName="name">{{ t('reservation.name') }}</tui-input>
   <tui-field-error formControlName="name"></tui-field-error>
 </ng-container>

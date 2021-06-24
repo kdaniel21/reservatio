@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { TranslocoService } from '@ngneat/transloco'
 import { Observable } from 'rxjs'
 import { map, mapTo, tap } from 'rxjs/operators'
 import {
@@ -24,13 +25,14 @@ export class EditInvitationService implements RetryableService {
     private readonly getInvitationGQL: GetInvitationGQL,
     private readonly updateInvitationGQL: UpdateInvitationGQL,
     private readonly notificationsService: NotificationsService,
+    private readonly transloco: TranslocoService,
   ) {}
 
   updateInvitation(updatedInvitation: UpdateInvitationMutationVariables): Observable<void> {
     return this.updateInvitationGQL.mutate(updatedInvitation).pipe(
-      tap(() => this.notificationsService.showSuccess('Invitation has been updated successfully!')),
+      tap(() => this.notificationsService.showSuccess(this.transloco.translate('dashboard.invitation.update_success'))),
       mapTo(void 0),
-      handleRetry(this, 'Could not update reservation!'),
+      handleRetry(this, this.transloco.translate('dashboard.invitation.update_fail')),
     )
   }
 
@@ -39,7 +41,7 @@ export class EditInvitationService implements RetryableService {
     return this.getInvitationGQL.fetch({ id }, { fetchPolicy: 'network-only' }).pipe(
       map(res => res.data.invitation),
       map(invitation => ({ ...invitation, expiresAt: new Date(invitation.expiresAt) })),
-      handleRetry(this, 'Could not load invitation!'),
+      handleRetry(this, this.transloco.translate('dashboard.invitation.load_fail')),
     )
   }
 }

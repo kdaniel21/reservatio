@@ -1,0 +1,172 @@
+{
+  "common": {
+    "send": "Küldés",
+    "cancel": "Mégsem",
+    "save": "Mentés",
+    "edit": "Szerkesztés"
+  },
+
+  "layout": {
+    "calendar": "Naptár",
+    "new_reservation": "Új foglalás",
+    "dashboard": "Vezérlőpult",
+    "sign_out": "Kijelentkezés",
+    "login": "Bejelentkezés"
+  },
+
+  "reservation": {
+    "name": "Név",
+    "details": "Foglalás részletei",
+    "start_time": "Kezdési időpont",
+    "end_time": "Befejezési időpont",
+    "locations": "Helyszínek",
+    "badminton": "Tollaslabda",
+    "table_tennis": "Asztalitenisz",
+    "time_not_available": "Az időpont nem elérhető!",
+    "time_available": "Az időpont elérhető!",
+    "time": "Időpont",
+    "time_period": {
+      "current_year": "Év végéig",
+      "half_year": "A következő hat hónapra"
+    },
+    "recurrence": {
+      "weekly": "Minden héten ugyanazon a napon",
+      "monthly": "Négyhetente ugyanazon a napon"
+    }
+  },
+
+  "calendar": {
+    "loading_fail": "Nem sikerült betölteni a foglalásokat!",
+    "reservation_deleted": "Ez a foglalás törölve lett, ezért már nem aktív.",
+    "recurring": "Ismétlődő foglalás",
+    "created": "Létrehozva",
+    "last_updated": "Utoljára frissítve"
+  },
+
+  "dashboard": {
+    "welcome_message": "Üdv itt, {{name}}!",
+    "subtitle": "Merre tovább?",
+
+    "invitation": {
+      "title": "Meghívók",
+      "loading_error": "Hiba történt a meghívók betöltése közben!",
+      "send_invitation": "Meghívó küldése",
+      "edit_invitation": "Meghívó szerkesztése",
+      "send_new": "Meghívó küldése",
+      "status": "Állapot",
+      "email_address": "E-mail cím",
+      "expiration": "Lejárat",
+      "completed": "Felhasználva",
+      "not_completed": "Nincs felhasználva",
+      "active": "Aktív",
+      "inactive": "Nem aktív",
+      "send_success": "Meghívó sikeresen elküldve a(z) {{emailAddress}} e-mail címre!",
+      "send_fail": "Hiba történt a meghívó küldése közben.",
+      "update_success": "Meghívó sikeresen szerkesztve!",
+      "update_fail": "Hiba történt a meghívó szerkesztése közben.",
+      "load_fail": "Nem sikerült betölteni a meghívót!",
+      "edit_message": "Az e-mail cím megváltoztatásával az e-mail cím nem kerül kiküldésre az új címre. Ha egy másik címre szeretnél meghívót küldeni, deaktiváld ezt és csinálj egy új meghívót!",
+      "inviter": "Meghívó",
+      "created": "Létrehozva",
+      "activate": "Aktiválás",
+      "deactivate": "Deaktiválás",
+      "save": "Mentés",
+      "cancel": "Mégse",
+      "you": "Te"
+    },
+
+    "analytics": {
+      "title": "Statisztikák"
+    }
+  },
+
+  "edit_reservation": {
+    "multi_update_success": "A {{name}} nevű foglalás és további {{numOfReservations}} másik sikeresen módosításra került!",
+    "single_update_success": "A {{name}} nevű foglalásra módosításra került.",
+    "update_fail": "Hiba történt a foglalás módosítása közben.",
+    "confirm_delete": "Biztos vagy benne, hogy ki szeretnéd törölni ezt a foglalást?",
+    "multi_delete_success": "{{numOfReservations}} foglalás eltávolításra került!",
+    "single_delete_success": "A foglalás eltávolításra került!",
+    "delete_fail": "Nem sikerült eltávolítani a foglalást.",
+    "title": "Foglalás módosítása",
+    "locations": "Helyszínek",
+    "time": "Időpont",
+    "remove": "Foglalás eltávolítása",
+    "save": "Mentés",
+    "time_not_available": "Az időpont nem elérhető!",
+    "related_load_fail": "Hiba történt a kapcsoldó foglalások betöltése közben.",
+    "update_connected_title": "Kapcsolódó foglalások módosítása",
+    "update_connected_hint": "Ez a foglalás egy ismétlődő foglalás része. Lehetőséged van ennek az ismétlődő foglalásnak a többi jövőbeni tagját is frissíteni.",
+    "show_changes": "Módosítások mutatása"
+  },
+
+  "create_reservation": {
+    "create_success": "A {{name}} nevű foglalás létrehozásra került!",
+    "create_recurring_success": "`{{count}} foglalás létrehozásra került!`",
+    "general_information": "Általános információk",
+    "locations_time": "Helyszín & időpont",
+    "next": "Következő",
+    "create": "Létrehozás",
+    "locations": "Helyszínek",
+    "available_times": "Elérhető időpontok",
+    "unavailable_times": "Nem elérhető időpontok",
+    "reschedule": {
+      "info": "Ha csinálni szeretnél egy ismétlődő foglalást, de néhány időpontot mégsem szeretnél lefoglalni (vagy éppen ütközik egy meglévővel), akkor nagyon könnyen átütemezheted vagy kiveheted azokat.",
+      "time_available": "Jó választás! Ez az időpont elérhető!",
+      "new_start_time": "Új kezdési időpont",
+      "new_time": "Új időpont",
+      "cancel": "Mégsem",
+      "reschedule": "Újraütemezés"
+    },
+    "recurring": {
+      "all_required": "Minden mező kitöltése kötelező!",
+      "title": "Ismétlődő foglalás",
+      "rules": "Ismétlődési szabályok",
+      "recurrence": "Milyen gyakran szeretnéd hogy ismétlődjön?",
+      "timePeriod": "Milyen hosszú időre előre szeretnéd létrehozni?",
+      "fields_required": "Ezen mezők kitöltése kötelező!"
+    }
+  },
+
+  "auth": {
+    "login_success": "Sikeresen bejelentkeztél!",
+    "logout_success": "Sikeresen kijelentkeztél!",
+    "login_title": "Bejelentkezés",
+    "email": "E-mail cím",
+    "password": "Jelszó",
+    "forgotten_password": "Elfelejtett jelszó",
+    "login_button": "Bejelentkezés",
+    "password_reset_fail": "Nem sikerült jelszó-emlékeztetőt küldeni.",
+    "forgot_password_title": "Elfelejtetted a jelszavadat?",
+    "forgot_password_text": "Semmi probléma! Nagyon könnyen igényelhetsz új jelszót, ehhez mindössze az e-mail címedet kell megadnod. Ide kapni fogsz egy e-mailt, amiben rá kell kattintani a linkre és máris új jelszót állíthatsz be magadnak - ilyen egyszerű!",
+    "your_email": "E-mail címed",
+    "send_email": "E-mail küldése",
+    "forgot_password_success": "Amennyiben regisztrálva van, küldtünk egy e-mailt a {{email}} címre, amivel új jelszót állíthatsz be magadnak!",
+    "forgot_password_go_login": "Tovább a bejelentkezéshez.",
+    "confirm_email_title": "E-mail cím megerősítése",
+    "confirm_email_fail": "Nem sikerült megerősíteni az e-mail címet. Kérlek próbáld újra!",
+    "confirm_email_success": "Az e-mail címed megerősítésre került! Most már bejelentkezhetsz.",
+    "confirm_email_message": "Mielőtt először bejelentkezhetnél, kérlek erősítsd meg az e-mail címedet. Ezt az alábbi gombra kattintva teheted meg:",
+    "accept_tos": "Elfogadom az általános szerződési feltételeket (ÁSZF).",
+    "confirm": "Megerősítés",
+    "change_password_fail": "Hiba történt a jelszó megváltoztatása közben. Kérlek próbáld újra!",
+    "change_password_title": "Jelszó megváltoztatása",
+    "new_password": "Új jelszó",
+    "password_confirm": "Új jelszó megerősítése",
+    "set_password": "Új jelszó beállítása",
+    "change_password_success": "A jelszavad megváltoztatásra került. Most már bejelentkezhetsz."
+  },
+
+  "shared": {
+    "location_select": {
+      "at_least_one_selected": "Legalább egy helyszínt ki kell választanod!"
+    },
+    "retry_error": {
+      "default_message": "Hiba történt. Kérlek próbáld újra!"
+    },
+    "time_select": {
+      "start_before_end": "A kezdési időpontnak a befejezési időpont előtt kell lennie",
+      "incomplete": "Hiányos időpont!"
+    }
+  }
+}

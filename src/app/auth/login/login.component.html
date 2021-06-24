@@ -1,29 +1,31 @@
-<ng-container *ngIf="{ isLoading: isLoading$ | async } as data">
-  <tui-island size="l">
-    <div class="tui-island__title tui-space_bottom-4">
-      <span class="tui-text_h3 title">Login</span>
-    </div>
-
-    <form [formGroup]="loginForm" class="tui-form" (ngSubmit)="onLogin()">
-      <tui-input formControlName="email" class="tui-form__row">Email</tui-input>
-
-      <tui-input-password formControlName="password" class="tui-form__row">Password</tui-input-password>
-
-      <div id="forgot-password" class="tui-space_vertical-2">
-        <a [routerLink]="['../', 'forgot-password']">Forgotten password?</a>
+<ng-container *transloco="let t; read: 'auth'">
+  <ng-container *ngIf="{ isLoading: isLoading$ | async } as data">
+    <tui-island size="l">
+      <div class="tui-island__title tui-space_bottom-4">
+        <span class="tui-text_h3 title">{{ t('login_title') }}</span>
       </div>
 
-      <div class="tui-form__buttons tui-space_top-0">
-        <button
-          type="submit"
-          tuiButton
-          icon="tuiIconLoginLarge"
-          [disabled]="loginForm.invalid"
-          [showLoader]="data.isLoading"
-        >
-          Sign in
-        </button>
-      </div>
-    </form>
-  </tui-island>
+      <form [formGroup]="loginForm" class="tui-form" (ngSubmit)="onLogin()">
+        <tui-input formControlName="email" class="tui-form__row">{{ t('email') }}</tui-input>
+
+        <tui-input-password formControlName="password" class="tui-form__row">{{ t('password') }}</tui-input-password>
+
+        <div id="forgot-password" class="tui-space_vertical-2">
+          <a [routerLink]="['../', 'forgot-password']">{{ t('forgotten_password') }}</a>
+        </div>
+
+        <div class="tui-form__buttons tui-space_top-0">
+          <button
+            type="submit"
+            tuiButton
+            icon="tuiIconLoginLarge"
+            [disabled]="loginForm.invalid"
+            [showLoader]="data.isLoading"
+          >
+            {{ t('login_button') }}
+          </button>
+        </div>
+      </form>
+    </tui-island>
+  </ng-container>
 </ng-container>

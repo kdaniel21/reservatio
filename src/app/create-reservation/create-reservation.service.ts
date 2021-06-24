@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { TranslocoService } from '@ngneat/transloco'
 import { Observable } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import {
@@ -24,6 +25,7 @@ export class CreateReservationService {
     private readonly notificationsService: NotificationsService,
     private readonly isRecurringTimeAvailableGQL: IsRecurringTimeAvailableGQL,
     private readonly createRecurringReservationGQL: CreateRecurringReservationGQL,
+    private readonly transloco: TranslocoService,
   ) {}
 
   isRecurringTimeAvailable(
@@ -41,8 +43,8 @@ export class CreateReservationService {
   createReservation(params: CreateReservationMutationVariables): Observable<RedactedReservation> {
     return this.createReservationGQL.mutate(params).pipe(
       map(res => res.data.createReservation),
-      tap(createdReservation => {
-        const notificationText = `Reservation ${createdReservation.name} has been successfully created!`
+      tap(({ name }) => {
+        const notificationText = this.transloco.translate('create_reservation.create_success', { name })
         this.notificationsService.showSuccess(notificationText)
       }),
     )
@@ -52,7 +54,7 @@ export class CreateReservationService {
     return this.createRecurringReservationGQL.mutate(params).pipe(
       map(res => ({ count: res.data.createRecurringReservation.count })),
       tap(count => {
-        const notificationText = `${count} reservations have been successfully created!`
+        const notificationText = this.transloco.translate('create_reservation.create_success', { count })
         this.notificationsService.showSuccess(notificationText)
       }),
     )

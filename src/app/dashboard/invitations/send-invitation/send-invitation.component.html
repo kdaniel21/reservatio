@@ -1,23 +1,25 @@
-<ng-container *ngIf="{ isLoading: isLoading$ | async } as data">
-  <form [formGroup]="sendInvitationForm">
-    <div class="tui-form__row">
-      <tui-input formControlName="emailAddress">Email address</tui-input>
-    </div>
+<ng-container *transloco="let t">
+  <ng-container *ngIf="{ isLoading: isLoading$ | async } as data">
+    <form [formGroup]="sendInvitationForm">
+      <div class="tui-form__row">
+        <tui-input formControlName="emailAddress">{{ t('dashboard.invitation.email_address') }}</tui-input>
+      </div>
 
-    <div class="tui-form__buttons tui-form__buttons_align_end">
-      <button type="button" class="tui-form__button" tuiButton appearance="outline" (click)="closeDialog()">
-        Cancel
-      </button>
-      <button
-        type="submit"
-        class="tui-form__button"
-        tuiButton
-        [showLoader]="data.isLoading"
-        [disabled]="sendInvitationForm.invalid"
-        (click)="onSendInvitation(); (false)"
-      >
-        Send
-      </button>
-    </div>
-  </form>
+      <div class="tui-form__buttons tui-form__buttons_align_end">
+        <button type="button" class="tui-form__button" tuiButton appearance="outline" (click)="closeDialog()">
+          {{ t('common.cancel') }}
+        </button>
+        <button
+          type="submit"
+          class="tui-form__button"
+          tuiButton
+          [showLoader]="data.isLoading"
+          [disabled]="sendInvitationForm.invalid"
+          (click)="onSendInvitation(); (false)"
+        >
+          {{ t('common.send') }}
+        </button>
+      </div>
+    </form>
+  </ng-container>
 </ng-container>

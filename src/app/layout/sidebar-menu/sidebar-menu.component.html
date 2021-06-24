@@ -1,10 +1,12 @@
-<a
-  *ngFor="let menuItem of menuItems$ | async"
-  tuiAction
-  [icon]="menuItem.icon"
-  [routerLink]="menuItem.route"
-  [routerLinkActive]="menuItem.route ? 'active' : ''"
-  (click)="onMenuItemClick(menuItem.text)"
->
-  {{ menuItem.text }}
-</a>
+<ng-container *transloco="let t; read: 'layout'">
+  <a
+    *ngFor="let menuItem of menuItems$ | async"
+    tuiAction
+    [icon]="menuItem.icon"
+    [routerLink]="menuItem.route"
+    [routerLinkActive]="menuItem.route ? 'active' : ''"
+    (click)="onMenuItemClick(menuItem.text)"
+  >
+    {{ t(menuItem.translationKey) }}
+  </a>
+</ng-container>

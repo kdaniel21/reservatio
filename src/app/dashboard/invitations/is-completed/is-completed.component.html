@@ -1,0 +1,4 @@
+<ng-container *transloco="let t; read: 'dashboard.invitation'">
+  <tui-svg [src]="isCompleted ? 'tuiIconCheckCircle' : 'tuiIconCloseLarge'"></tui-svg>
+  {{ isCompleted ? t('completed') : t('not_completed') }}
+</ng-container>

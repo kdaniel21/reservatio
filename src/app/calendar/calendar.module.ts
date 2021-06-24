@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { CalendarDesktopActionButtonsComponent } from './calendar/calendar-desktop/calendar-desktop-action-buttons/calendar-desktop-action-buttons.component'
 import { LocationsSelectModule } from '../shared/locations-select/locations-select.module'
 import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-error-message.module'
+import { CoreModule } from '../core/core.module'
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-err
     CalendarDesktopActionButtonsComponent,
   ],
   imports: [
+    CoreModule,
     CommonModule,
     CalendarRoutingModule,
     CalendarTaigaModule,

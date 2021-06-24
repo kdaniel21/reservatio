@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { FormBuilder, FormGroup, ValidatorFn } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
+import { TranslocoService } from '@ngneat/transloco'
 import { isBefore, isValid } from 'date-fns'
 import { tuiDateTimeFutureOnly } from 'src/app/core/form-validators/tui-date-time-future-only.validator'
 import { tuiDateTimeRequired } from 'src/app/core/form-validators/tui-date-time-required.validator'
@@ -16,7 +17,11 @@ export class TimeSelectFormService {
     { validators: [this.timeValidator()] },
   )
 
-  constructor(private readonly formBuilder: FormBuilder, private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly route: ActivatedRoute,
+    private readonly transloco: TranslocoService,
+  ) {
     this.preFillQueryParams()
   }
 
@@ -40,9 +45,11 @@ export class TimeSelectFormService {
         const startTime = TaigaUtils.convertDateTimeToNativeDate(tuiStartTime)
         const endTime = TaigaUtils.convertDateTimeToNativeDate(tuiEndTime)
 
-        return isBefore(startTime, endTime) ? null : { timeValidator: `The 'startTime' must be before the 'endTime'!` }
+        return isBefore(startTime, endTime)
+          ? null
+          : { timeValidator: this.transloco.translate('shared.time_select.start_before_end') }
       } catch {
-        return { timeValidator: 'Incomplete date or time!' }
+        return { timeValidator: this.transloco.translate('shared.time_select.incomplete') }
       }
     }
   }

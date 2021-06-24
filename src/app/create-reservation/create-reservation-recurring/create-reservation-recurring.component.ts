@@ -1,16 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
+import { TranslocoService } from '@ngneat/transloco'
 import { TimePeriod, Recurrence } from 'src/app/core/graphql/generated'
 import { CreateReservationRecurringService } from './create-reservation-recurring.service'
-
-const timePeriodOptions = {
-  [TimePeriod.CurrentYear]: 'Until the end of the current year',
-  [TimePeriod.HalfYear]: 'For the next six months',
-}
-
-const recurrenceOptions = {
-  [Recurrence.Weekly]: 'Every week on the same day',
-  [Recurrence.Monthly]: 'Every four weeks on the same day',
-}
 
 @Component({
   selector: 'app-create-reservation-recurring',
@@ -19,12 +10,22 @@ const recurrenceOptions = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateReservationRecurringComponent {
-  readonly timePeriodOptions = timePeriodOptions
-  readonly recurrenceOptions = recurrenceOptions
+  readonly timePeriodOptions = {
+    [TimePeriod.CurrentYear]: this.transloco.translate('reservation.time_period.current_year'),
+    [TimePeriod.HalfYear]: this.transloco.translate('reservation.time_period.half_year'),
+  }
+
+  readonly recurrenceOptions = {
+    [Recurrence.Weekly]: this.transloco.translate('reservation.recurrence.weekly'),
+    [Recurrence.Monthly]: this.transloco.translate('reservation.recurrence.monthly'),
+  }
 
   readonly recurringForm = this.createReservationRecurringService.form
 
-  constructor(private readonly createReservationRecurringService: CreateReservationRecurringService) {}
+  constructor(
+    private readonly createReservationRecurringService: CreateReservationRecurringService,
+    private readonly transloco: TranslocoService,
+  ) {}
 
   get haveAllControlsBeenTouched(): boolean {
     const { timePeriod, recurrence } = this.recurringForm.controls

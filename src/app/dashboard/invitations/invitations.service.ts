@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { TranslocoService } from '@ngneat/transloco'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { map, scan, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { GetInvitationsGQL, GetInvitationsQuery } from 'src/app/core/graphql/generated'
@@ -24,7 +25,7 @@ export class InvitationsService implements RetryableService {
     shareReplay(1),
   )
 
-  constructor(private readonly getInvitationsGQL: GetInvitationsGQL) {}
+  constructor(private readonly getInvitationsGQL: GetInvitationsGQL, private readonly transloco: TranslocoService) {}
 
   fetchMoreInvitations(): void {
     if (!this.hasReachedEnd) this.fetchMoreInvitationsSubject.next()
@@ -51,7 +52,7 @@ export class InvitationsService implements RetryableService {
         this.lastCursor = endCursor
       }),
       map(res => res.data.invitations.edges.map(edge => edge.node)),
-      handleRetry(this, 'Could not load invitations!'),
+      handleRetry(this, this.transloco.translate('dashboard.invitation.loading_error')),
     )
   }
 }

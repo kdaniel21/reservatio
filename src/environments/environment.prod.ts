@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
-};
+  production: true,
+  graphqlApiUrl: 'https://api.reservatio.com/graphql',
+}

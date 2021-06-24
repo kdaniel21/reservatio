@@ -1,8 +1,8 @@
-<ng-container [formGroup]="recurringForm">
+<ng-container *transloco="let t; read: 'create_reservation.recurring'" [formGroup]="recurringForm">
   <div></div>
   <div class="tui-form__row tui-space_vertical-3">
     <tui-toggle formControlName="isRecurring" [showIcons]="true" size="l" class="tui-space_right-3"></tui-toggle>
-    Recurring reservation
+    {{ t('title') }}
     <tui-tooltip
       direction="right"
       content="Repeat the reservation with a specific interval."
@@ -11,11 +11,11 @@
   </div>
 
   <tui-expand [expanded]="recurringForm.value?.isRecurring">
-    <div class="tui-form__header">Recurring rules</div>
+    <div class="tui-form__header">{{ t('rules') }}</div>
 
     <div class="tui-form__row">
       <tui-select formControlName="recurrence" [valueContent]="recurrenceValue">
-        How often do you want it to repeat?
+        {{ t('recurrence') }}
         <ng-template #recurrenceValue let-item>{{ recurrenceOptions[item] }}</ng-template>
         <tui-data-list *tuiDataList>
           <button tuiOption *ngFor="let option of recurrenceOptions | keyvalue" [value]="option.key">
@@ -27,7 +27,7 @@
 
     <div class="tui-form__row">
       <tui-select formControlName="timePeriod" [valueContent]="timePeriodValue">
-        How far ahead do you want to make the reservation?
+        {{ t('timePeriod') }}
         <ng-template #timePeriodValue let-item>{{ timePeriodOptions[item] }}</ng-template>
         <tui-data-list *tuiDataList>
           <button tuiOption *ngFor="let option of timePeriodOptions | keyvalue" [value]="option.key">
@@ -39,7 +39,7 @@
 
     <tui-error
       *ngIf="haveAllControlsBeenTouched && recurringForm.errors"
-      [error]="{ message: 'These fields are required!' }"
+      [error]="{ message: t('fields_required') }"
     ></tui-error>
   </tui-expand>
 </ng-container>

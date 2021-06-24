@@ -1,11 +1,17 @@
-<ng-container *ngIf="{ name: name$ | async } as data">
-  <h1 class="tui-text_h1">Welcome back, {{ data.name }}! 👋</h1>
-  <h1 class="tui-text_h3">Where to go forward?</h1>
+<ng-container *transloco="let t; read: 'dashboard'">
+  <ng-container *ngIf="{ name: name$ | async } as data">
+    <h1 class="tui-text_h1">{{ t('welcome_message', { name: data.name }) }} 👋</h1>
+    <h1 class="tui-text_h3">{{ t('subtitle') }}</h1>
 
-  <!-- TODO: Add some datatable here -->
+    <!-- TODO: Add some datatable here -->
 
-  <div tuiGroup class="group" [collapsed]="true" [adaptive]="true">
-    <button tuiButton appearance="outline" icon="tuiIconMailLarge" [routerLink]="['invitations']">Invitations</button>
-    <button tuiButton appearance="outline" icon="tuiIconChartLineLarge" [disabled]="true">Analytics</button>
-  </div>
+    <div tuiGroup class="group" [collapsed]="true" [adaptive]="true">
+      <button tuiButton appearance="outline" icon="tuiIconMailLarge" [routerLink]="['invitations']">
+        {{ t('invitation.title') }}
+      </button>
+      <button tuiButton appearance="outline" icon="tuiIconChartLineLarge" [disabled]="true">
+        {{ t('analytics.title') }}
+      </button>
+    </div>
+  </ng-container>
 </ng-container>

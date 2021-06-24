@@ -1,4 +1,5 @@
 import { Injectable, Injector } from '@angular/core'
+import { TranslocoService } from '@ngneat/transloco'
 import { TuiDialogService } from '@taiga-ui/core'
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus'
 import { BehaviorSubject, Observable } from 'rxjs'
@@ -27,12 +28,17 @@ export class ReservationDetailsService {
     private readonly reservationService: ReservationService,
     private readonly dialogService: TuiDialogService,
     private readonly injector: Injector,
+    private readonly transloco: TranslocoService,
   ) {}
 
   showDetailsModal(reservationId: string): void {
-    const dialogComponent = new PolymorpheusComponent(CalendarReservationDetailsComponent, this.injector)
-
     this.reservationIdSubject.next(reservationId)
-    this.dialogService.open(dialogComponent, { data: { reservationId }, label: 'Reservation details' }).subscribe()
+
+    console.log('open')
+
+    const dialogComponent = new PolymorpheusComponent(CalendarReservationDetailsComponent, this.injector)
+    const label = this.transloco.translate('reservation.details')
+    console.log('label', label)
+    this.dialogService.open(dialogComponent, { data: { reservationId }, label }).subscribe()
   }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { TranslocoService } from '@ngneat/transloco'
 import { Observable } from 'rxjs'
 import { mapTo } from 'rxjs/operators'
 import { ChangePasswordUsingTokenGQL } from 'src/app/core/graphql/generated'
@@ -12,11 +13,14 @@ export class ChangePasswordService implements RetryableService {
   readonly loader = new Loader()
   readonly retryHandler = new RetryErrorHandler()
 
-  constructor(private readonly changePasswordUsingTokenGQL: ChangePasswordUsingTokenGQL) {}
+  constructor(
+    private readonly changePasswordUsingTokenGQL: ChangePasswordUsingTokenGQL,
+    private readonly transloco: TranslocoService,
+  ) {}
 
   changePasswordUsingToken(token: string, password: string, passwordConfirm: string): Observable<void> {
     return this.changePasswordUsingTokenGQL
       .mutate({ token, password, passwordConfirm })
-      .pipe(mapTo(void 0), handleRetry(this, 'Could not change password. Please try again!'))
+      .pipe(mapTo(void 0), handleRetry(this, this.transloco.translate('auth.change_password_fail')))
   }
 }

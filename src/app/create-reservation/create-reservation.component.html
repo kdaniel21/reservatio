@@ -1,44 +1,46 @@
-<ng-container *ngIf="{ isLoading: loader.isLoading$ | async } as data">
-  <tui-island class="tui-space_top-5">
-    <tui-stepper [(activeItemIndex)]="selectedStepIndex" class="tui-space_top-3 tui-space_bottom-5">
-      <button type="button" tuiStep>General information</button>
-      <button type="button" tuiStep [disabled]="!isFirstStepValid">Locations & time</button>
-    </tui-stepper>
+<ng-container *transloco="let t; read: 'create_reservation'">
+  <ng-container *ngIf="{ isLoading: loader.isLoading$ | async } as data">
+    <tui-island class="tui-space_top-5">
+      <tui-stepper [(activeItemIndex)]="selectedStepIndex" class="tui-space_top-3 tui-space_bottom-5">
+        <button type="button" tuiStep>{{ t('general_information') }}</button>
+        <button type="button" tuiStep [disabled]="!isFirstStepValid">{{ t('locations_time') }}</button>
+      </tui-stepper>
 
-    <form [ngSwitch]="selectedStepIndex" [formGroup]="createReservationForm">
-      <ng-container *ngSwitchCase="0">
-        <h3 class="tui-form__header">General information</h3>
-        <app-general-form class="tui-form__row"></app-general-form>
+      <form [ngSwitch]="selectedStepIndex" [formGroup]="createReservationForm">
+        <ng-container *ngSwitchCase="0">
+          <h3 class="tui-form__header">{{ t('general_information') }}</h3>
+          <app-general-form class="tui-form__row"></app-general-form>
 
-        <app-create-reservation-recurring class="tui-form__row"></app-create-reservation-recurring>
+          <app-create-reservation-recurring class="tui-form__row"></app-create-reservation-recurring>
 
-        <div class="tui-form__buttons tui-form__buttons_align_end">
-          <button tuiButton icon="tuiIconArrowRightLarge" [disabled]="!isFirstStepValid" (click)="onNextStep()">
-            Next
-          </button>
-        </div>
-      </ng-container>
+          <div class="tui-form__buttons tui-form__buttons_align_end">
+            <button tuiButton icon="tuiIconArrowRightLarge" [disabled]="!isFirstStepValid" (click)="onNextStep()">
+              {{ t('next') }}
+            </button>
+          </div>
+        </ng-container>
 
-      <!-- STEP 2 -->
-      <ng-container *ngSwitchCase="1">
-        <h3 class="tui-form__header">Locations</h3>
-        <app-locations-select-form></app-locations-select-form>
+        <!-- STEP 2 -->
+        <ng-container *ngSwitchCase="1">
+          <h3 class="tui-form__header">{{ t('locations') }}</h3>
+          <app-locations-select-form></app-locations-select-form>
 
-        <app-create-reservation-time></app-create-reservation-time>
+          <app-create-reservation-time></app-create-reservation-time>
 
-        <div class="tui-form__buttons tui-form__buttons_align_end">
-          <button
-            tuiButton
-            icon="tuiIconCheckCircleLarge"
-            class="tui-form__button"
-            [disabled]="createReservationForm.invalid"
-            [showLoader]="createReservationForm.pending || data.isLoading"
-            (click)="onCreateReservation()"
-          >
-            Create
-          </button>
-        </div>
-      </ng-container>
-    </form>
-  </tui-island>
+          <div class="tui-form__buttons tui-form__buttons_align_end">
+            <button
+              tuiButton
+              icon="tuiIconCheckCircleLarge"
+              class="tui-form__button"
+              [disabled]="createReservationForm.invalid"
+              [showLoader]="createReservationForm.pending || data.isLoading"
+              (click)="onCreateReservation()"
+            >
+              {{ t('create') }}
+            </button>
+          </div>
+        </ng-container>
+      </form>
+    </tui-island>
+  </ng-container>
 </ng-container>

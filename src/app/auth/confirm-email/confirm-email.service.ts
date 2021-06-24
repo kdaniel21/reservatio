@@ -7,6 +7,7 @@ import { RetryErrorHandler } from 'src/app/core/retry-error-handler/retry-error-
 import { NotificationsService } from 'src/app/core/services/notifications.service'
 import { RetryableService } from 'src/app/core/retry-error-handler/retryable.service'
 import { handleRetry } from 'src/app/core/retry-error-handler/handle-retry'
+import { TranslocoService } from '@ngneat/transloco'
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmEmailService implements RetryableService {
@@ -16,16 +17,17 @@ export class ConfirmEmailService implements RetryableService {
   constructor(
     private readonly confirmEmailGQL: ConfirmEmailAddressGQL,
     private readonly notificationsService: NotificationsService,
+    private readonly transloco: TranslocoService,
   ) {}
 
   confirmEmail(confirmationToken: string): Observable<void> {
     return this.confirmEmailGQL.mutate({ token: confirmationToken }).pipe(
       tap(() => {
-        const notificationText = 'Your email address has been successfully confirmed. Now you can log in!'
+        const notificationText = this.transloco.translate('auth.confirm_email_success')
         this.notificationsService.showSuccess(notificationText)
       }),
       mapTo(void 0),
-      handleRetry(this, 'Could not confirm email address. Please try again!'),
+      handleRetry(this, this.transloco.translate('auth.confirm_email_fail')),
     )
   }
 }

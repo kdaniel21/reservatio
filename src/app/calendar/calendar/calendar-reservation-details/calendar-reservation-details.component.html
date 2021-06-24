@@ -1,80 +1,82 @@
-<ng-container
-  *ngIf="{ reservation: reservation$ | async, canEdit: canEdit$ | async, isLoading: isLoading$ | async } as data"
->
-  <tui-notification *ngIf="data.reservation?.isActive === false" status="error">
-    This notification has been deleted and therefore is not active anymore.
-  </tui-notification>
+<ng-container *transloco="let t">
+  <ng-container
+    *ngIf="{ reservation: reservation$ | async, canEdit: canEdit$ | async, isLoading: isLoading$ | async } as data"
+  >
+    <tui-notification *ngIf="data.reservation?.isActive === false" status="error">
+      {{ t('calendar.reservation_deleted') }}
+    </tui-notification>
 
-  <tui-data-list>
-    <a tuiOption>
-      <tui-svg src="tuiIconInfo"></tui-svg>
-      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
-        {{ data.reservation?.name }} (ID: {{ data.reservation?.id }})
-      </span>
-    </a>
-    <a tuiOption>
-      <tui-svg src="tuiIconUser"></tui-svg>
-      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
-        {{ data.reservation?.customer.name }}
-      </span>
-    </a>
-    <a tuiOption>
-      <tui-svg src="tuiIconCalendar"></tui-svg>
-      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
-        {{ data.reservation?.startTime | date: 'short' }} - {{ data.reservation?.endTime | date: 'short' }}
-      </span>
-    </a>
-    <a *ngIf="data.reservation?.recurringId" tuiOption>
-      <tui-svg src="tuiIconUndo"></tui-svg>
-      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">Recurring reservation</span>
-    </a>
-    <a tuiOption>
-      <tui-svg src="tuiIconCheckList"></tui-svg>
-      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
-        {{ data.reservation?.createdAt | date: 'short' }} (Created)
-      </span>
-    </a>
-    <a *ngIf="data.reservation?.updatedAt !== data.reservation?.createdAt" tuiOption>
-      <tui-svg src="tuiIconEdit"></tui-svg>
-      <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
-        {{ data.reservation?.updatedAt | date: 'short' }} (Last updated)
-      </span>
-    </a>
-  </tui-data-list>
+    <tui-data-list>
+      <a tuiOption>
+        <tui-svg src="tuiIconInfo"></tui-svg>
+        <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+          {{ data.reservation?.name }} (ID: {{ data.reservation?.id }})
+        </span>
+      </a>
+      <a tuiOption>
+        <tui-svg src="tuiIconUser"></tui-svg>
+        <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+          {{ data.reservation?.customer.name }}
+        </span>
+      </a>
+      <a tuiOption>
+        <tui-svg src="tuiIconCalendar"></tui-svg>
+        <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+          {{ data.reservation?.startTime | date: 'short' }} - {{ data.reservation?.endTime | date: 'short' }}
+        </span>
+      </a>
+      <a *ngIf="data.reservation?.recurringId" tuiOption>
+        <tui-svg src="tuiIconUndo"></tui-svg>
+        <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">{{ t('calendar.recurring') }}</span>
+      </a>
+      <a tuiOption>
+        <tui-svg src="tuiIconCheckList"></tui-svg>
+        <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+          {{ data.reservation?.createdAt | date: 'short' }} ({{ t('calendar.created') }})
+        </span>
+      </a>
+      <a *ngIf="data.reservation?.updatedAt !== data.reservation?.createdAt" tuiOption>
+        <tui-svg src="tuiIconEdit"></tui-svg>
+        <span [ngClass]="{ 'tui-skeleton tui-skeleton_text': data.isLoading }">
+          {{ data.reservation?.updatedAt | date: 'short' }} ({{ t('calendar.last_updated') }})
+        </span>
+      </a>
+    </tui-data-list>
 
-  <h2 class="tui-header_h2">Locations</h2>
+    <h2 class="tui-header_h2">{{ t('reservation.locations') }}</h2>
 
-  <app-locations-select
-    [locations]="data.reservation?.locations"
-    [isDisabled]="true"
-    [isLoading]="data.isLoading"
-  ></app-locations-select>
+    <app-locations-select
+      [locations]="data.reservation?.locations"
+      [isDisabled]="true"
+      [isLoading]="data.isLoading"
+    ></app-locations-select>
 
-  <div class="buttons tui-space_top-5">
-    <button
-      tuiButton
-      appearance="outline"
-      [class.tui-skeleton]="data.isLoading"
-      class="tui-space_right-2"
-      (click)="cancel()"
-    >
-      Cancel
-    </button>
-    <button
-      tuiButton
-      icon="tuiIconDraft"
-      [disabled]="!data.canEdit"
-      [class.tui-skeleton]="data.isLoading"
-      (click)="onEdit()"
-    >
-      Edit
-    </button>
-    <!-- <button
-      tuiButton
-      icon="tuiIconTrashLarge"
-      [disabled]="!data.canEdit"
-      [class.tui-skeleton]="data.isLoading"
-      (click)="onDelete()"
-    >Delete</button> -->
-  </div>
+    <div class="buttons tui-space_top-5">
+      <button
+        tuiButton
+        appearance="outline"
+        [class.tui-skeleton]="data.isLoading"
+        class="tui-space_right-2"
+        (click)="cancel()"
+      >
+        {{ t('common.cancel') }}
+      </button>
+      <button
+        tuiButton
+        icon="tuiIconDraft"
+        [disabled]="!data.canEdit"
+        [class.tui-skeleton]="data.isLoading"
+        (click)="onEdit()"
+      >
+        {{ t('common.edit') }}
+      </button>
+      <!-- <button
+        tuiButton
+        icon="tuiIconTrashLarge"
+        [disabled]="!data.canEdit"
+        [class.tui-skeleton]="data.isLoading"
+        (click)="onDelete()"
+      >Delete</button> -->
+    </div>
+  </ng-container>
 </ng-container>

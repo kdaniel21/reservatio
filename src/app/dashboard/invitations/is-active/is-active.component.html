@@ -1,3 +1,5 @@
-<div [class]="isActive ? 'active' : 'inactive'">
-  {{ isActive ? 'Active' : 'Inactive' }}
-</div>
+<ng-container *transloco="let t; read: 'dashboard.invitation'">
+  <div [class]="isActive ? 'active' : 'inactive'">
+    {{ isActive ? t('active') : t('inactive') }}
+  </div>
+</ng-container>

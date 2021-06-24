@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, Injector } from '@angular/core'
+import { TranslocoService } from '@ngneat/transloco'
 import { TuiDialogService } from '@taiga-ui/core'
 import { PolymorpheusComponent } from '@tinkoff/ng-polymorpheus'
 import { EditInvitationComponent } from './edit-invitation/edit-invitation.component'
@@ -20,6 +21,7 @@ export class InvitationsComponent {
     private readonly invitationsService: InvitationsService,
     private readonly dialogService: TuiDialogService,
     private readonly injector: Injector,
+    private readonly transloco: TranslocoService,
   ) {}
 
   fetchMoreInvitations(): void {
@@ -30,7 +32,7 @@ export class InvitationsComponent {
     const dialogComponent = new PolymorpheusComponent(SendInvitationComponent, this.injector)
 
     this.dialogService
-      .open(dialogComponent, { label: 'Send invitation' })
+      .open(dialogComponent, { label: this.transloco.translate('dashboard.invitation.send_invitation') })
       .subscribe({ next: () => this.invitationsService.reloadInvitations() })
   }
 
@@ -38,7 +40,10 @@ export class InvitationsComponent {
     const dialogComponent = new PolymorpheusComponent(EditInvitationComponent, this.injector)
 
     this.dialogService
-      .open(dialogComponent, { label: 'Edit invitation', data: { invitationId: invitation.id } })
+      .open(dialogComponent, {
+        label: this.transloco.translate('dashboard.invitation.edit_invitation'),
+        data: { invitationId: invitation.id },
+      })
       .subscribe({ next: () => this.invitationsService.reloadInvitations() })
   }
 }

@@ -1,0 +1,22 @@
+{
+  "locale": "en-US",
+  "translations": {
+    "dashboard.welcome_message": "Welcome back, {$INTERPOLATION}! 👋",
+    "dashboard.subtitle": "Where to go forward?",
+    "dashboard.invitations_title": " Invitations ",
+    "dashboard.analytics_title": " Analytics ",
+    "dashboard.send_invitation": " Send new invitation ",
+    "dashboard.invitation_status": "Status",
+    "dashboard.invitation_email": "Email address",
+    "dashboard.invitation_expiration": "Expiration",
+    "dashboard.invitation_completed": "Completed",
+    "1283702271339985714": "@@dashboard.edit_invitation:Edit invitation",
+    "3753646845659255126": "@@dashboard.invitation_loading_error:Could not load invitations!",
+    "dashboard.invitation_is_active": " {$INTERPOLATION}\n",
+    "dashboard.invitation.is_complete": "{$INTERPOLATION}",
+    "common.cancel": " Cancel ",
+    "common.send": " Send ",
+    "5349192219876141556": "@@dashboard.invitation_sent_success:Invitation has been successfully sent to {$PH}!",
+    "754459034282324663": "@@dashboard.invitation_sending_error:Could not send invitations!"
+  }
+}

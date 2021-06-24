@@ -20,6 +20,6 @@ import { CoreModule } from '../core/core.module'
     SidebarMenuComponent,
     SidebarProfileComponent,
   ],
-  imports: [CommonModule, LayoutTaigaModule, RouterModule, BrowserAnimationsModule, CoreModule],
+  imports: [CoreModule, CommonModule, LayoutTaigaModule, RouterModule, BrowserAnimationsModule],
 })
 export class LayoutModule {}

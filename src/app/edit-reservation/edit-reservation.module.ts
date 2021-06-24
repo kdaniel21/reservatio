@@ -11,10 +11,13 @@ import { GeneralFormModule } from '../shared/general-form/general-form.module'
 import { LocationsSelectFormModule } from '../shared/locations-select-form/locations-select-form.module'
 import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-error-message.module'
 import { PromptModule } from '../core/prompt/prompt.module'
+import { TranslocoRootModule } from '../transloco/transloco-root.module'
+import { CoreModule } from '../core/core.module'
 
 @NgModule({
   declarations: [EditReservationComponent, ConnectedUpdateFormComponent],
   imports: [
+    CoreModule,
     CommonModule,
     EditReservationTaigaModule,
     RouterModule.forChild([
@@ -30,6 +33,7 @@ import { PromptModule } from '../core/prompt/prompt.module'
     LocationsSelectFormModule,
     RetryErrorMessageModule,
     PromptModule,
+    TranslocoRootModule,
   ],
 })
 export class EditReservationModule {}

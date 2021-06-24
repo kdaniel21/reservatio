@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/auth/auth.service'
 import { CustomerRole } from 'src/app/core/graphql/generated'
 
 interface MenuItem {
-  text: string
+  translationKey: string
   icon: string
   route?: string[]
   action?: () => void
@@ -21,14 +21,19 @@ interface MenuItem {
 })
 export class SidebarMenuComponent {
   private readonly authenticatedMenuItems: MenuItem[] = [
-    { text: 'Calendar', icon: 'tuiIconCalendarLarge', route: ['/', 'calendar'] },
-    { text: 'New reservation', icon: 'tuiIconPlusLarge', route: ['/', 'create'] },
-    { text: 'Dashboard', icon: 'tuiIconStructureLarge', roles: [CustomerRole.Admin], route: ['/', 'dashboard'] },
-    { text: 'Sign out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
+    { translationKey: 'calendar', icon: 'tuiIconCalendarLarge', route: ['/', 'calendar'] },
+    { translationKey: 'new_reservation', icon: 'tuiIconPlusLarge', route: ['/', 'create'] },
+    {
+      translationKey: 'dashboard',
+      icon: 'tuiIconStructureLarge',
+      roles: [CustomerRole.Admin],
+      route: ['/', 'dashboard'],
+    },
+    { translationKey: 'sign_out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
   ]
 
   private readonly guestMenuItems: MenuItem[] = [
-    { text: 'Login', icon: 'tuiIconLoginLarge', route: ['/', 'auth', 'login'] },
+    { translationKey: 'login', icon: 'tuiIconLoginLarge', route: ['/', 'auth', 'login'] },
   ]
 
   readonly menuItems$ = this.authStateService.isAuthenticated$.pipe(
@@ -43,9 +48,9 @@ export class SidebarMenuComponent {
     private readonly router: Router,
   ) {}
 
-  onMenuItemClick(itemText: string) {
+  onMenuItemClick(translationKey: string) {
     const allMenuItems = [...this.authenticatedMenuItems, ...this.guestMenuItems]
-    const menuItem = allMenuItems.find(item => item.text === itemText)
+    const menuItem = allMenuItems.find(item => item.translationKey === translationKey)
     if (!menuItem) return
 
     if (typeof menuItem.action === 'function') menuItem.action()

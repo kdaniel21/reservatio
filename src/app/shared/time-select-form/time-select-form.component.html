@@ -1,10 +1,12 @@
-<ng-container *ngIf="{ maxStartTuiDate: maxStartTuiDate$ | async, minEndTuiDate: minEndTuiDate$ | async } as data">
-  <div [formGroup]="timeSelectForm" tuiGroup [adaptive]="true">
-    <tui-input-date-time formControlName="startTime" [min]="todayTuiDate" [max]="data.maxStartTuiDate">
-      Start time
-    </tui-input-date-time>
-    <tui-input-date-time formControlName="endTime" [min]="data.minEndTuiDate" [max]="oneYearFromNowTuiDate">
-      End time
-    </tui-input-date-time>
-  </div>
+<ng-container *transloco="let t">
+  <ng-container *ngIf="{ maxStartTuiDate: maxStartTuiDate$ | async, minEndTuiDate: minEndTuiDate$ | async } as data">
+    <div [formGroup]="timeSelectForm" tuiGroup [adaptive]="true">
+      <tui-input-date-time formControlName="startTime" [min]="todayTuiDate" [max]="data.maxStartTuiDate">
+        {{ t('reservation.start_time') }}
+      </tui-input-date-time>
+      <tui-input-date-time formControlName="endTime" [min]="data.minEndTuiDate" [max]="oneYearFromNowTuiDate">
+        {{ t('reservation.end_time') }}
+      </tui-input-date-time>
+    </div>
+  </ng-container>
 </ng-container>

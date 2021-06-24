@@ -11,7 +11,10 @@ import { EditInvitationComponent } from './invitations/edit-invitation/edit-invi
 import { RetryErrorMessageModule } from '../shared/retry-error-message/retry-error-message.module'
 import { IsCompletedComponent } from './invitations/is-completed/is-completed.component'
 import { IsActiveComponent } from './invitations/is-active/is-active.component'
+import { TranslocoRootModule } from '../transloco/transloco-root.module'
+import { CoreModule } from '../core/core.module'
 
+// TODO: Organize TranslocoRootModule
 @NgModule({
   declarations: [
     DashboardMainSelectComponent,
@@ -22,12 +25,14 @@ import { IsActiveComponent } from './invitations/is-active/is-active.component'
     IsActiveComponent,
   ],
   imports: [
+    CoreModule,
     CommonModule,
     DashboardRoutingModule,
     DashboardTaigaModule,
     InfiniteScrollModule,
     ReactiveFormsModule,
     RetryErrorMessageModule,
+    TranslocoRootModule,
   ],
 })
 export class DashboardModule {}

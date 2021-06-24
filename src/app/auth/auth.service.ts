@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
+import { TranslocoService } from '@ngneat/transloco'
 import { Observable } from 'rxjs'
 import { map, mapTo, tap } from 'rxjs/operators'
 import { LoginGQL, LogoutGQL } from '../core/graphql/generated'
@@ -14,6 +15,7 @@ export class AuthService {
     private readonly logoutGQL: LogoutGQL,
     private readonly notificationsService: NotificationsService,
     private readonly router: Router,
+    private readonly transloco: TranslocoService,
   ) {}
 
   login(email: string, password: string): Observable<void> {
@@ -22,7 +24,7 @@ export class AuthService {
       tap(loginData => this.authStateService.setAccessToken(loginData?.accessToken)),
       map(loginData => loginData?.user),
       tap(user => this.authStateService.setUser(user)),
-      tap(() => this.notificationsService.showSuccess('You have successfully logged in!')),
+      tap(() => this.notificationsService.showSuccess(this.transloco.translate('auth.login_success'))),
       mapTo(void 0),
     )
   }
@@ -33,7 +35,7 @@ export class AuthService {
         this.authStateService.resetAccessToken()
         this.authStateService.resetUser()
 
-        this.notificationsService.showSuccess('You have been successfully logged out!')
+        this.notificationsService.showSuccess(this.transloco.translate('auth.logout_success'))
         this.router.navigate(['/', 'auth', 'login'])
       }),
       mapTo(void 0),

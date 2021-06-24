@@ -1,34 +1,38 @@
-<ng-container *ngIf="{ availableTimes: availableTimes$ | async, unavailableTimes: unavailableTimes$ | async } as data">
-  <h3 class="tui-form__header">Time</h3>
-  <tui-notification
-    *ngIf="createReservationForm.valid"
-    class="tui-space_vertical-2 tui-form__row_half-width"
-    status="success"
+<ng-container *transloco="let t">
+  <ng-container
+    *ngIf="{ availableTimes: availableTimes$ | async, unavailableTimes: unavailableTimes$ | async } as data"
   >
-    Time is available!
-  </tui-notification>
+    <h3 class="tui-form__header">{{ t('reservation.time') }}</h3>
+    <tui-notification
+      *ngIf="createReservationForm.valid"
+      class="tui-space_vertical-2 tui-form__row_half-width"
+      status="success"
+    >
+      {{ t('reservation.time_available') }}
+    </tui-notification>
 
-  <app-time-select-form></app-time-select-form>
+    <app-time-select-form></app-time-select-form>
 
-  <tui-data-list *ngIf="isRecurring && (data.availableTimes.length || data.unavailableTimes.length)" role="menu">
-    <!-- TODO: Find a neater solution to make the list count the nested tuiOptions so that it doesn't display the nothing found message -->
-    <!-- Either an a tag or a button must be used -->
-    <a tuiOption style="height: 0; min-height: 0"></a>
+    <tui-data-list *ngIf="isRecurring && (data.availableTimes.length || data.unavailableTimes.length)" role="menu">
+      <!-- TODO: Find a neater solution to make the list count the nested tuiOptions so that it doesn't display the nothing found message -->
+      <!-- Either an a tag or a button must be used -->
+      <a tuiOption style="height: 0; min-height: 0"></a>
 
-    <tui-opt-group *ngIf="data.unavailableTimes.length" label="Unavailable times">
-      <app-schedule-item
-        *ngFor="let time of data.unavailableTimes"
-        [time]="time"
-        [isAvailable]="false"
-      ></app-schedule-item>
-    </tui-opt-group>
+      <tui-opt-group *ngIf="data.unavailableTimes.length" [label]="t('create_reservation.unavailable_times')">
+        <app-schedule-item
+          *ngFor="let time of data.unavailableTimes"
+          [time]="time"
+          [isAvailable]="false"
+        ></app-schedule-item>
+      </tui-opt-group>
 
-    <tui-opt-group *ngIf="data.availableTimes.length" label="Available times">
-      <app-schedule-item
-        *ngFor="let time of data.availableTimes"
-        [time]="time"
-        [isAvailable]="true"
-      ></app-schedule-item>
-    </tui-opt-group>
-  </tui-data-list>
+      <tui-opt-group *ngIf="data.availableTimes.length" [label]="t('create_reservation.available_times')">
+        <app-schedule-item
+          *ngFor="let time of data.availableTimes"
+          [time]="time"
+          [isAvailable]="true"
+        ></app-schedule-item>
+      </tui-opt-group>
+    </tui-data-list>
+  </ng-container>
 </ng-container>

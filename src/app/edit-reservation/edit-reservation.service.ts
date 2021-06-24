@@ -11,6 +11,7 @@ import { RetryableService } from '../core/retry-error-handler/retryable.service'
 import { NotificationsService } from '../core/services/notifications.service'
 import { PromptService } from '../core/prompt/prompt.service'
 import { ReservationService } from '../core/services/reservation-service/reservation.service'
+import { TranslocoService } from '@ngneat/transloco'
 
 export type UpdatedProperties = UpdateReservationMutationVariables['updatedProperties']
 
@@ -31,38 +32,42 @@ export class EditReservationService implements RetryableService {
     private readonly notificationsService: NotificationsService,
     private readonly route: ActivatedRoute,
     private readonly promptService: PromptService,
+    private readonly transloco: TranslocoService,
   ) {}
 
   updateReservation(id: string, updatedProperties: UpdatedProperties, connectedUpdates?: string[]): Observable<void> {
     return this.updateReservationGQL.mutate({ id, updatedProperties, connectedUpdates }).pipe(
       map(res => res.data.updateReservation),
       tap(updatedReservation => {
-        const message = connectedUpdates.length
-          ? `The reservation ${updatedReservation.name} and ${connectedUpdates.length} more have been successfully updated!`
-          : `The reservation ${updatedReservation.name} has been successfully updated!`
+        const { name } = updatedReservation
+        const numOfReservations = connectedUpdates.length
+        const message = numOfReservations
+          ? this.transloco.translate('edit_reservation.multi_update_success', { name, numOfReservations })
+          : this.transloco.translate('edit_reservation.single_update_success', { name })
         this.notificationsService.showSuccess(message)
       }),
       mapTo(void 0),
-      handleRetry(this, 'Something went wrong while updating the reservation.'),
+      handleRetry(this, this.transloco.translate('edit_reservation.update_fail')),
     )
   }
 
   deleteReservation(id: string, connectedUpdates?: string[]): Observable<void> {
-    return this.promptService.open('Are you sure you want to delete this reservation?').pipe(
+    return this.promptService.open(this.transloco.translate('edit_reservation.confirm_delete')).pipe(
       switchMap(isConfirmed => {
         if (!isConfirmed) return EMPTY
 
         return this.updateReservationGQL.mutate({ id, updatedProperties: { isActive: false }, connectedUpdates })
       }),
       tap(() => {
+        const numOfReservations = connectedUpdates.length
         const message =
-          connectedUpdates.length > 1
-            ? `${connectedUpdates.length} reservations have been removed!`
-            : `Reservation has been removed!`
+          numOfReservations > 1
+            ? this.transloco.translate('edit_reservation.multi_delete_success', { numOfReservations })
+            : this.transloco.translate('edit_reservation.single_delete_success')
         this.notificationsService.showSuccess(message)
       }),
       mapTo(void 0),
-      handleRetry(this, 'Could not remove reservation.'),
+      handleRetry(this, this.transloco.translate('edit_reservation.delete_fail')),
     )
   }
 }

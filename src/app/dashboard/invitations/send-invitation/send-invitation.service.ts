@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { TranslocoService } from '@ngneat/transloco'
 import { Observable } from 'rxjs'
 import { mapTo, tap } from 'rxjs/operators'
 import { SendInvitationGQL } from 'src/app/core/graphql/generated'
@@ -16,13 +17,18 @@ export class SendInvitationService implements RetryableService {
   constructor(
     private readonly sendInvitationGQL: SendInvitationGQL,
     private readonly notificationsService: NotificationsService,
+    private readonly transloco: TranslocoService,
   ) {}
 
   sendInvitation(emailAddress: string): Observable<void> {
     return this.sendInvitationGQL.mutate({ emailAddress }).pipe(
-      tap(() => this.notificationsService.showSuccess(`Invitation has been successfully sent to ${emailAddress}!`)),
+      tap(() =>
+        this.notificationsService.showSuccess(
+          this.transloco.translate('dashboard.invitation.send_success', { emailAddress }),
+        ),
+      ),
       mapTo(void 0),
-      handleRetry(this, 'Could not send invitation!'),
+      handleRetry(this, this.transloco.translate('dashboard.invitation.send_fail')),
     )
   }
 }

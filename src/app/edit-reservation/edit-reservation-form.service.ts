@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors } from '@angular/forms'
+import { TranslocoService } from '@ngneat/transloco'
 import { TuiDestroyService } from '@taiga-ui/cdk'
 import { updatedDiff } from 'deep-object-diff'
 import { EMPTY, merge, Observable, of, timer } from 'rxjs'
@@ -41,6 +42,7 @@ export class EditReservationFormService {
     private readonly destroy$: TuiDestroyService,
     private readonly editReservationService: EditReservationService,
     private readonly reservationService: ReservationService,
+    private readonly transloco: TranslocoService,
   ) {
     merge(this.populateFormAction$).pipe(takeUntil(this.destroy$)).subscribe()
   }
@@ -106,7 +108,10 @@ export class EditReservationFormService {
           } as TimeProposalInput
         }),
         switchMap(timeProposal => this.reservationService.isTimeAvailable(timeProposal)),
-        map(isTimeAvailable => (isTimeAvailable ? null : { timeNotAvailable: 'Time is not available!' })),
+        map(isTimeAvailable => {
+          const message = this.transloco.translate('edit_reservation.time_not_available')
+          return isTimeAvailable ? null : { timeNotAvailable: message }
+        }),
         defaultIfEmpty(null),
       )
     }

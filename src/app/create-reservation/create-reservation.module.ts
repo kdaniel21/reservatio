@@ -12,6 +12,7 @@ import { CreateReservationTimeComponent } from './create-reservation-time/create
 import { ScheduleItemComponent } from './create-reservation-time/schedule-item/schedule-item.component'
 import { CreateReservationComponent } from './create-reservation.component'
 import { LocationsSelectModule } from '../shared/locations-select/locations-select.module'
+import { CoreModule } from '../core/core.module'
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { LocationsSelectModule } from '../shared/locations-select/locations-sele
     CalendarReservationDetailsComponent,
   ],
   imports: [
+    CoreModule,
     CommonModule,
     CreateReservationTaigaModule,
     ReactiveFormsModule,

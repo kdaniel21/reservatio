@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { TranslocoService } from '@ngneat/transloco'
 import { format } from 'date-fns'
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs'
 import { filter, map, shareReplay, switchMap, takeUntil, tap } from 'rxjs/operators'
@@ -51,6 +52,7 @@ export class CalendarService implements RetryableService, OnDestroy {
     private readonly getReservationsGQL: GetReservationsGQL,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly transloco: TranslocoService,
   ) {
     this.loadLocationsQueryParams()
 
@@ -91,7 +93,7 @@ export class CalendarService implements RetryableService, OnDestroy {
           endTime: new Date(reservation.endTime),
         })),
       ),
-      handleRetry(this, 'Could not load reservations!'),
+      handleRetry(this, this.transloco.translate('calendar.loading_fail')),
     )
   }
 
