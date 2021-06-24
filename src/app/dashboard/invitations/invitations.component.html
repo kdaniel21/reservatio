@@ -1,0 +1,50 @@
+<ng-container *ngIf="{ invitations: invitations$ | async } as data">
+  <h1 class="tui-text_h1">Invitations</h1>
+
+  <div class="tui-space_bottom-5">
+    <button tuiButton icon="tuiIconPlusLarge" (click)="onSendNewInvitation()">Send new invitation</button>
+  </div>
+
+  <div
+    id="invitations-table-wrapper"
+    infiniteScroll
+    [fromRoot]="true"
+    [scrollWindow]="false"
+    (scrolled)="fetchMoreInvitations()"
+  >
+    <table tuiTable *ngIf="data.invitations" class="table" [columns]="columns">
+      <thead tuiThead>
+        <tr tuiThGroup>
+          <th *tuiHead="'isRedeemable'" tuiTh [sorter]="null">Status</th>
+          <th *tuiHead="'emailAddress'" tuiTh [sorter]="null">Email address</th>
+          <th *tuiHead="'expiresAt'" tuiTh [sorter]="null">Expiration</th>
+          <th *tuiHead="'isCompleted'" tuiTh [sorter]="null">Completed</th>
+          <th *tuiHead="'actions'" tuiTh [sorter]="null"></th>
+        </tr>
+      </thead>
+
+      <tbody tuiTbody [data]="data.invitations">
+        <tr *tuiRow="let invitation of data.invitations" tuiTr (click)="onEditInvitation(invitation)">
+          <td *tuiCell="'isRedeemable'" tuiTd>
+            <app-is-active [isActive]="invitation.isRedeemable"></app-is-active>
+          </td>
+          <td *tuiCell="'emailAddress'" tuiTd>{{ invitation.emailAddress }}</td>
+          <td *tuiCell="'expiresAt'" tuiTd>{{ invitation.expiresAt | date: 'short' }}</td>
+          <td *tuiCell="'isCompleted'" tuiTd>
+            <app-is-completed [isCompleted]="invitation.isCompleted"></app-is-completed>
+          </td>
+          <td *tuiCell="'actions'" tuiTd>
+            <button
+              tuiIconButton
+              appearance="flat"
+              icon="tuiIconEditLarge"
+              size="s"
+              title="Edit invitation"
+              shape="rounded"
+            ></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>

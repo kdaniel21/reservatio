@@ -1,0 +1,5 @@
+mutation updateInvitation($id: ID!, $expiresAt: DateTime, $isActive: Boolean, $emailAddress: String) {
+  updateInvitation(id: $id, expiresAt: $expiresAt, isActive: $isActive, emailAddress: $emailAddress) {
+    id
+  }
+}

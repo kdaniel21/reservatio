@@ -4,9 +4,7 @@ import { Observable } from 'rxjs'
 import { first, map } from 'rxjs/operators'
 import { AuthStateService } from '../auth-state.service'
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthenticatedGuard implements CanActivate {
   constructor(private readonly authStateService: AuthStateService, private readonly router: Router) {}
 
@@ -17,7 +15,7 @@ export class AuthenticatedGuard implements CanActivate {
         if (isAuthenticated) return true
 
         return this.router.createUrlTree(['/', 'auth', 'login'], { queryParams: { returnUrl: route.url } })
-      })
+      }),
     )
   }
 }

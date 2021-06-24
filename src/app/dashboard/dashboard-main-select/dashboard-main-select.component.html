@@ -1,0 +1,11 @@
+<ng-container *ngIf="{ name: name$ | async } as data">
+  <h1 class="tui-text_h1">Welcome back, {{ data.name }}! 👋</h1>
+  <h1 class="tui-text_h3">Where to go forward?</h1>
+
+  <!-- TODO: Add some datatable here -->
+
+  <div tuiGroup class="group" [collapsed]="true" [adaptive]="true">
+    <button tuiButton appearance="outline" icon="tuiIconMailLarge" [routerLink]="['invitations']">Invitations</button>
+    <button tuiButton appearance="outline" icon="tuiIconChartLineLarge" [disabled]="true">Analytics</button>
+  </div>
+</ng-container>

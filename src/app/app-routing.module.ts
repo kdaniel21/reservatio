@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+import { AdminOnlyGuard } from './auth/guards/admin-only.guard'
 import { AuthenticatedGuard } from './auth/guards/authenticated.guard'
 import { UnauthenticatedGuard } from './auth/guards/unauthenticated.guard'
 import { LayoutComponent } from './layout/layout.component'
@@ -33,6 +34,12 @@ const routes: Routes = [
         path: 'edit/:id',
         loadChildren: () => import('./edit-reservation/edit-reservation.module').then(m => m.EditReservationModule),
         canActivate: [AuthenticatedGuard],
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+        canActivate: [AuthenticatedGuard, AdminOnlyGuard],
         runGuardsAndResolvers: 'always',
       },
     ],

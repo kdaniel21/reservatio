@@ -50,6 +50,8 @@ export type InvitationType = {
   inviter: CustomerType;
   emailAddress: Scalars['String'];
   isActive: Scalars['Boolean'];
+  isCompleted: Scalars['Boolean'];
+  isRedeemable: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
 };
 
@@ -137,9 +139,11 @@ export type MutationSendInvitationArgs = {
 
 export type MutationUpdateInvitationArgs = {
   id: Scalars['ID'];
-  expiresAt: Scalars['DateTime'];
-  emailAddress: Scalars['String'];
-  isActive: Scalars['Boolean'];
+  expiresAt?: Maybe<Scalars['DateTime']>;
+  emailAddress?: Maybe<Scalars['String']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+  isCompleted?: Maybe<Scalars['Boolean']>;
+  isRedeemable?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -171,8 +175,8 @@ export type MutationUpdateReservationArgs = {
 
 export type PageInfoType = {
   __typename?: 'PageInfoType';
-  startCursor: Scalars['String'];
-  endCursor: Scalars['String'];
+  startCursor?: Maybe<Scalars['String']>;
+  endCursor?: Maybe<Scalars['String']>;
   hasPreviousPage: Scalars['Boolean'];
   hasNextPage: Scalars['Boolean'];
 };
@@ -188,8 +192,8 @@ export type Query = {
   __typename?: 'Query';
   renewAccessToken: AccessTokenType;
   currentUser: UserType;
-  foo: MessageType;
   invitations: PageType;
+  invitation: InvitationType;
   reservation: ReservationType;
   areTimesAvailable: Array<TimeProposalAvailability>;
   isRecurringTimeAvailable: RecurringTimeAvailabilityType;
@@ -206,6 +210,11 @@ export type QueryRenewAccessTokenArgs = {
 export type QueryInvitationsArgs = {
   first: Scalars['Float'];
   after?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryInvitationArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -524,6 +533,75 @@ export type IsRecurringTimeAvailableQuery = (
   & { isRecurringTimeAvailable: (
     { __typename?: 'RecurringTimeAvailabilityType' }
     & Pick<RecurringTimeAvailabilityType, 'availableTimes' | 'unavailableTimes'>
+  ) }
+);
+
+export type GetInvitationQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetInvitationQuery = (
+  { __typename?: 'Query' }
+  & { invitation: (
+    { __typename?: 'InvitationType' }
+    & Pick<InvitationType, 'id' | 'emailAddress' | 'expiresAt' | 'isActive' | 'isCompleted' | 'isRedeemable' | 'createdAt'>
+    & { inviter: (
+      { __typename?: 'CustomerType' }
+      & Pick<CustomerType, 'id' | 'name'>
+    ) }
+  ) }
+);
+
+export type UpdateInvitationMutationVariables = Exact<{
+  id: Scalars['ID'];
+  expiresAt?: Maybe<Scalars['DateTime']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+  emailAddress?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateInvitationMutation = (
+  { __typename?: 'Mutation' }
+  & { updateInvitation: (
+    { __typename?: 'InvitationType' }
+    & Pick<InvitationType, 'id'>
+  ) }
+);
+
+export type GetInvitationsQueryVariables = Exact<{
+  first: Scalars['Float'];
+  after?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetInvitationsQuery = (
+  { __typename?: 'Query' }
+  & { invitations: (
+    { __typename?: 'PageType' }
+    & { edges: Array<(
+      { __typename?: 'InvitationTypeEdge' }
+      & { node: (
+        { __typename?: 'InvitationType' }
+        & Pick<InvitationType, 'id' | 'emailAddress' | 'isRedeemable' | 'isCompleted' | 'expiresAt'>
+      ) }
+    )>, pageInfo: (
+      { __typename?: 'PageInfoType' }
+      & Pick<PageInfoType, 'endCursor' | 'hasNextPage'>
+    ) }
+  ) }
+);
+
+export type SendInvitationMutationVariables = Exact<{
+  emailAddress: Scalars['String'];
+}>;
+
+
+export type SendInvitationMutation = (
+  { __typename?: 'Mutation' }
+  & { sendInvitation: (
+    { __typename?: 'InvitationType' }
+    & Pick<InvitationType, 'id'>
   ) }
 );
 
@@ -870,6 +948,105 @@ export const IsRecurringTimeAvailableDocument = gql`
   })
   export class IsRecurringTimeAvailableGQL extends Apollo.Query<IsRecurringTimeAvailableQuery, IsRecurringTimeAvailableQueryVariables> {
     document = IsRecurringTimeAvailableDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetInvitationDocument = gql`
+    query getInvitation($id: ID!) {
+  invitation(id: $id) {
+    id
+    emailAddress
+    expiresAt
+    inviter {
+      id
+      name
+    }
+    isActive
+    isCompleted
+    isRedeemable
+    createdAt
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetInvitationGQL extends Apollo.Query<GetInvitationQuery, GetInvitationQueryVariables> {
+    document = GetInvitationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateInvitationDocument = gql`
+    mutation updateInvitation($id: ID!, $expiresAt: DateTime, $isActive: Boolean, $emailAddress: String) {
+  updateInvitation(
+    id: $id
+    expiresAt: $expiresAt
+    isActive: $isActive
+    emailAddress: $emailAddress
+  ) {
+    id
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateInvitationGQL extends Apollo.Mutation<UpdateInvitationMutation, UpdateInvitationMutationVariables> {
+    document = UpdateInvitationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetInvitationsDocument = gql`
+    query getInvitations($first: Float!, $after: String) {
+  invitations(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        emailAddress
+        isRedeemable
+        isCompleted
+        expiresAt
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetInvitationsGQL extends Apollo.Query<GetInvitationsQuery, GetInvitationsQueryVariables> {
+    document = GetInvitationsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const SendInvitationDocument = gql`
+    mutation sendInvitation($emailAddress: String!) {
+  sendInvitation(emailAddress: $emailAddress) {
+    id
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SendInvitationGQL extends Apollo.Mutation<SendInvitationMutation, SendInvitationMutationVariables> {
+    document = SendInvitationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

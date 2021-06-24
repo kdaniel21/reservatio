@@ -23,7 +23,7 @@ export class SidebarMenuComponent {
   private readonly authenticatedMenuItems: MenuItem[] = [
     { text: 'Calendar', icon: 'tuiIconCalendarLarge', route: ['/', 'calendar'] },
     { text: 'New reservation', icon: 'tuiIconPlusLarge', route: ['/', 'create'] },
-    { text: 'Dashboard', icon: 'tuiIconStructureLarge', roles: [CustomerRole.Admin] },
+    { text: 'Dashboard', icon: 'tuiIconStructureLarge', roles: [CustomerRole.Admin], route: ['/', 'dashboard'] },
     { text: 'Sign out', icon: 'tuiIconLogoutLarge', action: () => this.onLogout() },
   ]
 

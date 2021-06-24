@@ -5,16 +5,16 @@ import { first, map } from 'rxjs/operators'
 import { AuthStateService } from '../auth-state.service'
 
 @Injectable({ providedIn: 'root' })
-export class UnauthenticatedGuard implements CanActivate {
+export class AdminOnlyGuard implements CanActivate {
   constructor(private readonly authStateService: AuthStateService, private readonly router: Router) {}
 
   canActivate(): Observable<boolean | UrlTree> {
-    return this.authStateService.isAuthenticated$.pipe(
+    return this.authStateService.isAdmin$.pipe(
       first(),
-      map(isAuthenticated => {
-        if (!isAuthenticated) return true
+      map(isAdmin => {
+        if (isAdmin) return true
 
-        return this.router.createUrlTree(['/'])
+        return this.router.createUrlTree(['/', 'calendar'])
       }),
     )
   }

@@ -1,0 +1,5 @@
+mutation sendInvitation($emailAddress: String!) {
+  sendInvitation(emailAddress: $emailAddress) {
+    id
+  }
+}

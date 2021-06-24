@@ -1,0 +1,48 @@
+@import '~@taiga-ui/core/styles/taiga-ui-local';
+
+:host {
+  display: flex !important;
+  flex-direction: column;
+
+  & > h1 + div {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  & > #invitations-table-wrapper {
+    flex-grow: 1;
+    overflow-y: scroll;
+  }
+}
+
+#invitations-table-wrapper {
+  table {
+    width: 100%;
+  }
+
+  td,
+  th {
+    white-space: nowrap;
+    border-color: transparent;
+    border-right-color: var(--tui-base-04);
+
+    &:last-child {
+      border-right-color: transparent;
+    }
+  }
+
+  tbody {
+    border-color: transparent;
+  }
+
+  tr:nth-child(even) td {
+    background: var(--tui-base-02);
+  }
+
+  .remove {
+    tr:hover &,
+    tr:focus-within & {
+      opacity: 1;
+    }
+  }
+}

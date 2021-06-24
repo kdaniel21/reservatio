@@ -1,0 +1,70 @@
+<ng-container
+  *ngIf="{
+    invitation: editedInvitation$ | async,
+    isInvitedByCurrentUser: isInvitedByCurrentUser$ | async,
+    isReadonly: isReadonly$ | async,
+    isLoading: isLoading$ | async,
+    errorMessage: errorMessage$ | async
+  } as data"
+>
+  <tui-loader *ngIf="!data.errorMessage; else error" [showLoader]="data.isLoading">
+    <tui-notification *ngIf="!data.isReadonly" class="tui-space_bottom-3">
+      By changing the email address the invitation will not be re-sent to the new address. If you want to send it to a
+      different address, deactivate this and send a new invitation!
+    </tui-notification>
+
+    <form *ngIf="data.invitation" [formGroup]="editInvitationForm">
+      <div class="tui-form__row">
+        <tui-input formControlName="emailAddress">Email address</tui-input>
+      </div>
+
+      <div class="tui-form__row">
+        <tui-input-date-time formControlName="expiresAt"> Expiration </tui-input-date-time>
+      </div>
+
+      <tui-data-list>
+        <a tuiOption>
+          <app-is-active [isActive]="data.invitation.isRedeemable"></app-is-active>
+        </a>
+        <a tuiOption>
+          <app-is-completed [isCompleted]="data.invitation.isCompleted"></app-is-completed>
+        </a>
+        <a tuiOption>
+          Inviter: {{ data.invitation.inviter.name }}
+          <ng-contaienr *ngIf="data.isInvitedByCurrentUser">&nbsp;(You)</ng-contaienr>
+        </a>
+        <a tuiOption>Created: {{ data.invitation.createdAt | date: 'short' }}</a>
+      </tui-data-list>
+
+      <div class="tui-form__buttons tui-form__buttons_align_end">
+        <ng-container *ngIf="!data.isReadonly; else closeButton">
+          <ng-container [ngSwitch]="true">
+            <button
+              type="button"
+              class="tui-form__button"
+              *ngSwitchDefault
+              tuiButton
+              [appearance]="data.invitation.isActive ? 'negative' : 'secondary'"
+              [icon]="data.invitation.isActive ? 'tuiIconTrashLarge' : 'tuiIconRefreshLarge'"
+              (click)="onUpdateIsActive()"
+            >
+              {{ data.invitation.isActive ? 'Deactivate' : 'Re-activate' }}
+            </button>
+          </ng-container>
+
+          <button type="submit" class="tui-form__button" tuiButton icon="tuiIconCheckLarge" (click)="onSave(); (false)">
+            Save
+          </button>
+        </ng-container>
+
+        <ng-template #closeButton>
+          <button type="button" tuiButton appearance="outline" (click)="closeDialog()">Cancel</button>
+        </ng-template>
+      </div>
+    </form>
+  </tui-loader>
+
+  <ng-template #error>
+    <app-retry-error-message [service]="editInvitationService"></app-retry-error-message>
+  </ng-template>
+</ng-container>

@@ -1,0 +1,17 @@
+query getInvitations($first: Float!, $after: String) {
+  invitations(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        emailAddress
+        isRedeemable
+        isCompleted
+        expiresAt
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

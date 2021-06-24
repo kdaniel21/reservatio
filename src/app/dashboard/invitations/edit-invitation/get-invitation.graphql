@@ -1,0 +1,15 @@
+query getInvitation($id: ID!) {
+  invitation(id: $id) {
+    id
+    emailAddress
+    expiresAt
+    inviter {
+      id
+      name
+    }
+    isActive
+    isCompleted
+    isRedeemable
+    createdAt
+  }
+}

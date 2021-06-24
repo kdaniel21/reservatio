@@ -1,0 +1,19 @@
+.active,
+.inactive {
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+
+  &:before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    margin-right: 8px;
+    background: var(--tui-base-04);
+  }
+}
+
+.active:before {
+  background: var(--tui-success-fill);
+}

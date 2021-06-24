@@ -22,6 +22,7 @@
     "@apollo/client": "^3.3.19",
     "@ng-web-apis/common": "^1.9.0",
     "@taiga-ui/addon-mobile": "^2.9.1",
+    "@taiga-ui/addon-table": "^2.9.1",
     "@taiga-ui/cdk": "^2.9.1",
     "@taiga-ui/core": "^2.9.1",
     "@taiga-ui/icons": "^2.9.1",
@@ -32,6 +33,7 @@
     "date-fns": "^2.22.1",
     "deep-object-diff": "^1.1.0",
     "graphql": "^15.5.0",
+    "ngx-infinite-scroll": "^10.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"
