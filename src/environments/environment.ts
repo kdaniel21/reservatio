@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  graphqlApiUrl: 'http://192.168.0.46:4000/graphql',
+  graphqlApiUrl: 'http://172.17.0.1:4000/graphql',
 }
 
 /*
