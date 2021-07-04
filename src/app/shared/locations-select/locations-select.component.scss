@@ -1,7 +1,0 @@
-// TODO: Temporary fix for Firefox - should be removed ASAP
-// See: https://github.com/TinkoffCreditSystems/taiga-ui/issues/482
-.tui-group_adaptive.tui-group_orientation_horizontal {
-  @media screen and (max-width: 599px) {
-    height: 120px;
-  }
-}

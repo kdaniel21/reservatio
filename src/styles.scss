@@ -16,3 +16,11 @@ tui-wrapper[data-appearance='negative'] {
     background: var(--tui-error-bg-hover);
   }
 }
+
+// TODO: Temporary workaround - should be removed ASAP
+// See: https://github.com/TinkoffCreditSystems/taiga-ui/issues/482
+.tui-group_adaptive.tui-group_orientation_horizontal {
+  @media screen and (max-width: 599px) {
+    height: 120px;
+  }
+}
