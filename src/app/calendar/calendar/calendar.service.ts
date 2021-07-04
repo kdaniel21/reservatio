@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TranslocoService } from '@ngneat/transloco'
-import { format } from 'date-fns'
+import { addDays, differenceInDays, differenceInMilliseconds, differenceInMinutes, format } from 'date-fns'
 import { BehaviorSubject, combineLatest, merge, Observable, Subject } from 'rxjs'
 import { filter, map, shareReplay, switchMap, takeUntil, tap } from 'rxjs/operators'
 import { GetReservationsGQL, GetReservationsQuery, ReservationLocationsType } from 'src/app/core/graphql/generated'
@@ -9,6 +9,7 @@ import { Loader } from 'src/app/core/loader/loader'
 import { handleRetry } from 'src/app/core/retry-error-handler/handle-retry'
 import { RetryErrorHandler } from 'src/app/core/retry-error-handler/retry-error-handler'
 import { RetryableService } from 'src/app/core/retry-error-handler/retryable.service'
+import { DateUtils } from 'src/app/core/utils/date-utilts'
 
 export interface ReservationTimePeriod {
   startDate: Date
@@ -59,7 +60,13 @@ export class CalendarService implements RetryableService, OnDestroy {
     merge(this.updateQueryParamsAction$).pipe(takeUntil(this.destroy$)).subscribe()
   }
 
-  setTimePeriod(startDate: Date, endDate: Date) {
+  setTimePeriod(startDateTime: Date, endDateTime: Date) {
+    const startDate = DateUtils.removeTime(startDateTime)
+    let endDate = DateUtils.removeTime(addDays(endDateTime, 1))
+
+    const numOfDaysDifference = differenceInDays(endDate, startDate)
+    if (numOfDaysDifference < 1) endDate = addDays(endDate, 1)
+
     this.selectedTimePeriodSubject.next({ startDate, endDate })
   }
 

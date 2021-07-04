@@ -27,10 +27,10 @@ export class CalendarDesktopComponent implements AfterViewInit {
 
   readonly numOfDisplayedDays$: Observable<number> = fromEvent(this.window, 'resize').pipe(
     startWith(''),
-    map(() => this.elementRef.nativeElement.offsetWidth),
+    map(() => this.elementRef.nativeElement.offsetWidth || this.window.innerWidth),
     map(hostElementWidth => {
       const maxAmountToDisplay = Math.floor(hostElementWidth / this.DAY_WIDTH_PX)
-      return Math.min(maxAmountToDisplay, 7)
+      return Math.max(Math.min(maxAmountToDisplay, 7), 1)
     }),
     distinctUntilChanged(),
   )
