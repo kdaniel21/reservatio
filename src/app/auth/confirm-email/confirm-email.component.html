@@ -2,7 +2,7 @@
   <ng-container *ngIf="{ isLoading: isLoading$ | async, hasError: hasError$ | async } as data">
     {{ data.errorMessage }}
     <tui-island size="l" class="tui-space_horizontal-2">
-      <h3 class="tui-island_title tui-text_h3 tui-space_bottom-4">{{ t('confirm_email_title') }}</h3>
+      <h3 class="tui-island__title tui-text_h3 tui-space_bottom-4">{{ t('confirm_email_title') }}</h3>
 
       <ng-container *ngIf="!data.hasError; else error">
         <p class="tui-island_paragraph">
