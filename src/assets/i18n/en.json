@@ -169,5 +169,13 @@
       "start_before_end": "The 'startTime' must be before the 'endTime'!",
       "incomplete": "Incomplete date or time!"
     }
+  },
+
+  "errors": {
+    "default": "Something went wrong!",
+    "network_error": "Could not reach server. Please check your internet connection and try again!",
+    "invalid_refresh_token": "We were not able to authenticate you. Please log in again!",
+    "invalid_access_token": "We were not able to authenticate you. Please log in again!",
+    "invalid_email_confirmation_token": "This email confirmation link is either invalid or expired. Please request a new one!"
   }
 }

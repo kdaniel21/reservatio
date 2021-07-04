@@ -169,5 +169,13 @@
       "start_before_end": "A kezdési időpontnak a befejezési időpont előtt kell lennie",
       "incomplete": "Hiányos időpont!"
     }
+  },
+
+  "errors": {
+    "default": "Hiba történt!",
+    "network_error": "Nem sikerült kapcsolódni a szerverhez. Kérjük ellenőrizd az internetkapcsolatodat és próbáld újra!",
+    "invalid_refresh_token": "Nem sikerült az automatikus bejelentkeztetés. Kérjük jelentkezz be újra!",
+    "invalid_access_token": "Nem sikerült az automatikus bejelentkeztetés. Kérjük jelentkezz be újra!",
+    "invalid_email_confirmation_token": "Ez az e-mail cím megerősítő link érvénytelen vagy lejárt. Kérjük igényelj egy újat!"
   }
 }

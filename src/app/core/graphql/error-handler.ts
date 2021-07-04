@@ -1,7 +1,7 @@
 import { Injector } from '@angular/core'
 import { onError } from '@apollo/client/link/error'
+import { TranslocoService } from '@ngneat/transloco'
 import { NotificationsService } from '../services/notifications.service'
-import { errorMap } from './error-map'
 
 export interface GraphqlContext extends Record<string, any> {
   avoidErrorNotification?: boolean
@@ -17,8 +17,10 @@ export const errorHandler = (injector: Injector) =>
     let errorCode: string
 
     if (graphQLErrors) errorCode = graphQLErrors[0].extensions?.code
-    else if (networkError) errorCode = 'NETWORK_ERROR'
+    else if (networkError) errorCode = 'network_error'
 
-    const errorMessage = errorMap.get(errorCode) || errorMap.get('DEFAULT')
+    const transloco = injector.get(TranslocoService)
+    const errorMessage =
+      transloco.translate(`errors.${errorCode.toLowerCase()}`) || transloco.translate('errors.default')
     notificationsService.showError(errorMessage)
   })
