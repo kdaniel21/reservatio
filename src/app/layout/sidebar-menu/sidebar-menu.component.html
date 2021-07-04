@@ -5,7 +5,7 @@
     [icon]="menuItem.icon"
     [routerLink]="menuItem.route"
     [routerLinkActive]="menuItem.route ? 'active' : ''"
-    (click)="onMenuItemClick(menuItem.text)"
+    (click)="onMenuItemClick(menuItem.translationKey)"
   >
     {{ t(menuItem.translationKey) }}
   </a>

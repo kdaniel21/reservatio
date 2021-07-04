@@ -9,7 +9,7 @@ import { AuthStateService } from 'src/app/auth/auth-state.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardMainSelectComponent {
-  readonly name$ = this.authStateService.user$.pipe(map(user => user.customer.name))
+  readonly name$ = this.authStateService.user$.pipe(map(user => user?.customer.name))
 
   constructor(private readonly authStateService: AuthStateService) {}
 }
